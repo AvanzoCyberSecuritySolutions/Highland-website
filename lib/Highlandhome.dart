@@ -312,70 +312,74 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
           SizedBox(height: 10),
 
 // Carousel or feature containers with images
-          Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceBetween, // Distribute containers across the row
-            children: [
-              // Left-aligned container
-              Container(
-                width: 20, // Set width for the left container
-                height: 300, // Set height for the left container
-                color:
-                    Color.fromARGB(255, 31, 204, 120), // Set background color
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  carousalContainer(
+          SizedBox(
+            width: MediaQuery.sizeOf(context).width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 20, // Set width for the left container
+                  height: 300, // Set height for the left container
+                  color:
+                      Color.fromARGB(255, 31, 204, 120), // Set background color
+                ),
+                Expanded(
+                  child: carousalContainer(
                     image: 'assets/img/find a doctor.png',
                     label: 'FIND A DOCTOR',
                     content: '''Lorem ipsum dolor sit amet,
-    consectetur adipiscing elit,
-    sed incididunt ut labore 
-    
-    ⊕''',
+                      consectetur adipiscing elit,
+                      sed incididunt ut labore 
+                      
+                      ⊕''',
                     backgroundColor:
                         Color.fromARGB(255, 31, 204, 120), // Set unique color
                   ),
-                  carousalContainer(
+                ),
+                Expanded(
+                  child: carousalContainer(
                     image: 'assets/img/Test result.png',
                     label: 'TEST RESULT',
                     content: '''Lorem ipsum dolor sit amet,
-    consectetur adipiscing elit, 
-    sed incididunt ut labore
-    
-    ⊕''',
+                      consectetur adipiscing elit, 
+                      sed incididunt ut labore
+                      
+                      ⊕''',
                     backgroundColor: Colors.orange, // Set unique color
                   ),
-                  carousalContainer(
+                ),
+                Expanded(
+                  child: carousalContainer(
                     image: 'assets/img/online admission.png',
                     label: 'ONLINE ADMISSION',
                     content: '''Lorem ipsum dolor sit amet,
-    consectetur adipiscing elit,
-    sed incididunt ut labore
-    
-    ⊕''',
+                      consectetur adipiscing elit,
+                      sed incididunt ut labore
+                      
+                      ⊕''',
                     backgroundColor:
                         Color.fromARGB(255, 31, 204, 120), // Set unique color
                   ),
-                  carousalContainer(
+                ),
+                Expanded(
+                  child: carousalContainer(
                     image: 'assets/img/Patient acces.png',
                     label: 'PATIENT ACCESS',
                     content: '''Lorem ipsum dolor sit amet,
-    consectetur adipiscing elit,
-    sed incididunt ut labore
-    
-    ⊕''',
+                      consectetur adipiscing elit,
+                      sed incididunt ut labore
+                      
+                      ⊕''',
                     backgroundColor: Colors.blue, // Set unique color
                   ),
-                  Container(
-                    width: 20, // Set width for the right container
-                    height: 300, // Set height for the right container
-                    color: Colors.blue, // Set background color
-                  ),
-                ],
-              )
-            ],
+                ),
+                Container(
+                  width: 20, // Set width for the right container
+                  height: 300, // Set height for the right container
+                  color: Colors.blue, // Set background color
+                ),
+              ],
+            ),
           ),
           SizedBox(
               height:
@@ -475,93 +479,81 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   ),
                 ),
 
-                // Positioned "VISION" Container (left side)
                 Positioned(
                   top: 10,
-                  left: 250, // Adjust the left margin
-                  child: Container(
-                    width: 650,
-                    height: 200,
-                    color: Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1, bottom: 40),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'VISION',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 29, 23, 23),
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Positioned "VISION" Container (left side)
+                      Container(
+                        width: 650,
+                        // height: 200,
+                        padding: EdgeInsets.all(10),
+                        color:
+                            Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'VISION',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 29, 23, 23),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '''To be a beacon of healthcare excellence, where “YOUR HEALTH, OUR CARE” is not just a
-tagline but a promise. We envision Highland Hospital as a leader in innovation and
-compassionate care, ensuring that every patient—regardless of their background—receives
-world-class, accessible healthcare. Through dedication to patient well-being, cutting-edge
-technology, and community welfare, we aim to shape a future where healthcare is a right,
-not a privilege.''',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 29, 23, 23),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
+                              SizedBox(height: 10),
+                              Text(
+                                '''To be a beacon of healthcare excellence, where “YOUR HEALTH, OUR CARE” is not just a tagline but a promise. We envision Highland Hospital as a leader in innovation and compassionate care, ensuring that every patient—regardless of their background—receives world-class, accessible healthcare. Through dedication to patient well-being, cutting-edge technology, and community welfare, we aim to shape a future where healthcare is a right, not a privilege.''',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 29, 23, 23),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-
-                // Positioned "MISSION" Container (right side)
-                Positioned(
-                  top: 10,
-                  right: 250, // Adjust the right margin
-                  child: Container(
-                    width: 650,
-                    height: 200,
-                    color: Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1, bottom: 40),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'MISSION',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                      // Positioned "MISSION" Container (right side)
+                      Container(
+                        width: 650,
+                        // height: 200,
+                        color:
+                            Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
+                        padding: EdgeInsets.all(10),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'MISSION',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR
-HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with
-empathy, integrity, and innovation. By investing in both our people and technology, we
-strive to improve the health and well-being of every individual we serve. We aim to create a
-supportive environment where every patient feels valued, ensuring accessible, high-quality
-healthcare that elevates lives and strengthens our community.''',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
+                              SizedBox(height: 10),
+                              Text(
+                                '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with empathy, integrity, and innovation. By investing in both our people and technology, we strive to improve the health and well-being of every individual we serve. We aim to create a supportive environment where every patient feels valued, ensuring accessible, high-quality healthcare that elevates lives and strengthens our community.''',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
 
@@ -610,8 +602,7 @@ healthcare that elevates lives and strengthens our community.''',
                               child: Column(children: [
                                 Center(
                                   child: Text(
-                                    '''Enter your contacts below to schedule an appointment or 
-discuss it with us in details.''',
+                                    '''Enter your contacts below to schedule an appointment or discuss it with us in details.''',
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -821,348 +812,289 @@ discuss it with us in details.''',
               ],
             ),
             Padding(
-                padding: const EdgeInsets.only(
-                  left: 50,
-                ),
-                child: Row(children: [
-                  // Left side: Column containing the "Out-Patient Services" and Health & Other Services
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 20), // Reduced large left padding
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Title "Out-Patient Services"
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 500, right: 80, bottom: 50),
-                              child: Text(
-                                'Out-Patient Services',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-
-                            // Description Box
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 400,
-                              ),
-                              child: Container(
-                                width: 500, // Set the width of the container
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(
-                                      255, 11, 201, 185), // Background color
-                                  borderRadius: BorderRadius.circular(8),
-                                  border:
-                                      Border.all(color: Colors.grey, width: 1),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 90),
-                                  child: Text(
-                                    'We provide the following features',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Health and Careers Services
-                            Padding(
-                              padding: const EdgeInsets.only(top: 70),
-                              child: Row(
-                                children: [
-                                  // Left Column: Health & Careers
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        // Health Service
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 20, left: 400),
-                                          child: Row(
-                                            children: [
-                                              // Health Icon on the Left
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                child: Container(
-                                                  color: Colors.green,
-                                                  padding: const EdgeInsets.all(
-                                                      10), // Uniform padding for the icon
-                                                  child: ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/img/health.png', // Health icon
-                                                      width: 40,
-                                                      height: 40,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      10), // Space between icon and text
-
-                                              // Health Text on the Right
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Health',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 5),
-                                                  Text(
-                                                    '''"The First Wealth 
-  is Health"''',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color: Colors.black54,
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        // Careers Service (Placed below Health)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 20, left: 400, top: 100),
-                                          child: Row(
-                                            children: [
-                                              // Careers Icon on the Left
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                child: Container(
-                                                  color: Colors.green,
-                                                  padding: const EdgeInsets.all(
-                                                      10), // Uniform padding for the icon
-                                                  child: ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/img/careers.png', // Careers icon
-                                                      width: 40,
-                                                      height: 40,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      10), // Space between icon and text
-
-                                              // Careers Text on the Right
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Careers',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 5),
-                                                  Text(
-                                                    '''"Be So good They
-Can't ignore you"''',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color: Colors.black54,
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+              padding: const EdgeInsets.only(
+                left: 50,
+              ),
+              child: Row(children: [
+                // Spacer(),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Title "Out-Patient Services"
+                      Text(
+                        'Out-Patient Services',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                  ),
-
-                  // Right side: Column containing "Surgery" and "Planning" services
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 1,
-                        left: 1,
-                        top: 190,
-                      ), // Adjust the right padding
-                      child: Row(
-                        children: [
-                          // Column for Surgery and Planning Services
-                          Column(
-                            children: [
-                              // Surgery Service
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 20, right: 10),
-                                child: Row(
-                                  children: [
-                                    // Surgery Icon on the Left
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Container(
-                                        color: Colors.green,
-                                        padding: const EdgeInsets.all(
-                                            10), // Uniform padding for the icon
-                                        child: ClipOval(
-                                          child: Image.asset(
-                                            'assets/img/Surgeryicon.png', // Planning icon
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            10), // Space between icon and text
-
-                                    // Surgery Text on the Right
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Surgery',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          '''"Truth Like Surgery
- May Hurt But It Cures"''',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black54,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // Planning Service (Placed below Surgery)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 100,
-                                    right: 10), // Reduced the top padding here
-                                child: Row(
-                                  children: [
-                                    // Planning Icon on the Left
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Container(
-                                        color: Colors.green,
-                                        padding: const EdgeInsets.all(
-                                            10), // Uniform padding for the icon
-                                        child: ClipOval(
-                                          child: Image.asset(
-                                            'assets/img/calender.png', // Planning icon
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            10), // Space between icon and text
-
-                                    // Planning Text on the Right
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Planning',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          '''"If You Can Dream it, 
-  You Can Do It."''',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black54,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                      // Description Box
+                      Container(
+                        width: 500, // Set the width of the container
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(
+                              255, 11, 201, 185), // Background color
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 90),
+                          child: Text(
+                            'We provide the following features',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                            ),
                           ),
+                        ),
+                      ),
+                      // Health and Careers Services
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Left Column: Health & Careers
+                          Expanded(
+                            child: Column(
+                              children: [
+                                // Health Service
+                                Row(
+                                  children: [
+                                    // Health Icon on the Left
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Container(
+                                        color: Colors.green,
+                                        padding: const EdgeInsets.all(
+                                            10), // Uniform padding for the icon
+                                        child: ClipOval(
+                                          child: Image.asset(
+                                            'assets/img/health.png', // Health icon
+                                            width: 40,
+                                            height: 40,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            10), // Space between icon and text
 
-                          // Image of Out Patient on the right side of Surgery and Planning
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              width: 580, // Set the width of the image
-                              height: 380, // Set the height of the image
-                              child: Image.asset(
-                                'assets/img/Out Patient.jpeg',
-                                fit: BoxFit
-                                    .contain, // Ensure the image covers the area without stretching
-                              ),
+                                    // Health Text on the Right
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Health',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          '''"The First Wealth is Health"''',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black54,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                // Careers Service (Placed below Health)
+                                Row(
+                                  children: [
+                                    // Careers Icon on the Left
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Container(
+                                        color: Colors.green,
+                                        padding: const EdgeInsets.all(
+                                            10), // Uniform padding for the icon
+                                        child: ClipOval(
+                                          child: Image.asset(
+                                            'assets/img/careers.png', // Careers icon
+                                            width: 40,
+                                            height: 40,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ), // Space between icon and text
+
+                                    // Careers Text on the Right
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Careers',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          '''"Be So good They Can't ignore you"''',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black54,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Right side: Column containing "Surgery" and "Planning" services
+                          Expanded(
+                            child: Row(
+                              children: [
+                                // Column for Surgery and Planning Services
+                                Column(
+                                  children: [
+                                    // Surgery Service
+                                    Row(
+                                      children: [
+                                        // Surgery Icon on the Left
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: Container(
+                                            color: Colors.green,
+                                            padding: const EdgeInsets.all(
+                                                10), // Uniform padding for the icon
+                                            child: ClipOval(
+                                              child: Image.asset(
+                                                'assets/img/Surgeryicon.png', // Planning icon
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                10), // Space between icon and text
+
+                                        // Surgery Text on the Right
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Surgery',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              '''"Truth Like Surgery May Hurt But It Cures"''',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black54,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+
+                                    // Planning Service (Placed below Surgery)
+                                    Row(
+                                      children: [
+                                        // Planning Icon on the Left
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: Container(
+                                            color: Colors.green,
+                                            padding: const EdgeInsets.all(
+                                                10), // Uniform padding for the icon
+                                            child: ClipOval(
+                                              child: Image.asset(
+                                                'assets/img/calender.png', // Planning icon
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // Planning Text on the Right
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Planning',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              '''"If You Can Dream it, You Can Do It."''',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black54,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Container(
+                    width: 580, // Set the width of the image
+                    height: 380, // Set the height of the image
+                    child: Image.asset(
+                      'assets/img/Out Patient.jpeg',
+                      fit: BoxFit
+                          .contain, // Ensure the image covers the area without stretching
                     ),
-                  )
-                ]))
+                  ),
+                ),
+              ]),
+            ),
           ]),
 
           // Right side: Column containing "Surgery" and "Planning" services
@@ -2237,7 +2169,7 @@ Urology & Andrology''',
     return Padding(
       padding: const EdgeInsets.all(1.0),
       child: Container(
-        width: 420, // Keeping the container width compact
+        // width: 420, // Keeping the container width compact
         height: 300, // Keeping the height reduced
         margin: EdgeInsets.symmetric(
           vertical: 8.0, // Slightly reduced vertical margin for tighter space
