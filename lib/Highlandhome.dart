@@ -327,11 +327,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   child: carousalContainer(
                     image: 'assets/img/find a doctor.png',
                     label: 'FIND A DOCTOR',
-                    content: '''Lorem ipsum dolor sit amet,
-                      consectetur adipiscing elit,
-                      sed incididunt ut labore 
-                      
-                      ⊕''',
+                    content:
+                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
                     backgroundColor:
                         Color.fromARGB(255, 31, 204, 120), // Set unique color
                   ),
@@ -340,11 +337,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   child: carousalContainer(
                     image: 'assets/img/Test result.png',
                     label: 'TEST RESULT',
-                    content: '''Lorem ipsum dolor sit amet,
-                      consectetur adipiscing elit, 
-                      sed incididunt ut labore
-                      
-                      ⊕''',
+                    content:
+                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
                     backgroundColor: Colors.orange, // Set unique color
                   ),
                 ),
@@ -352,11 +346,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   child: carousalContainer(
                     image: 'assets/img/online admission.png',
                     label: 'ONLINE ADMISSION',
-                    content: '''Lorem ipsum dolor sit amet,
-                      consectetur adipiscing elit,
-                      sed incididunt ut labore
-                      
-                      ⊕''',
+                    content:
+                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
                     backgroundColor:
                         Color.fromARGB(255, 31, 204, 120), // Set unique color
                   ),
@@ -365,11 +356,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   child: carousalContainer(
                     image: 'assets/img/Patient acces.png',
                     label: 'PATIENT ACCESS',
-                    content: '''Lorem ipsum dolor sit amet,
-                      consectetur adipiscing elit,
-                      sed incididunt ut labore
-                      
-                      ⊕''',
+                    content:
+                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
                     backgroundColor: Colors.blue, // Set unique color
                   ),
                 ),
@@ -2164,6 +2152,7 @@ Urology & Andrology''',
     required String image,
     required String label,
     required String content,
+    // required IconData icon,
     required Color backgroundColor, // Added color parameter
   }) {
     return Padding(
@@ -2188,24 +2177,34 @@ Urology & Andrology''',
               height: 60, // Image height reduced for compact fit
               fit: BoxFit.contain,
             ),
-            SizedBox(height: 4), // Space between image and label
+            SizedBox(height: 10), // Space between image and label
             Text(
               label,
+              softWrap: true,
+              maxLines: 5,
               style: TextStyle(
                 fontSize: 10, // Smaller font size for the label
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 4), // Space between label and content
-            Text(
-              content,
-              style: TextStyle(
-                fontSize: 17, // Smaller font size for content
-                fontWeight: FontWeight.normal,
-                color: ColorConstant.mainBlack,
+            SizedBox(height: 10), // Space between label and content
+            SizedBox(
+              width: 250,
+              child: Text(
+                content,
+                style: TextStyle(
+                  fontSize: 17, // Smaller font size for content
+                  fontWeight: FontWeight.normal,
+                  color: ColorConstant.mainBlack,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
+            Icon(
+              Icons.add_circle_outline_rounded,
+              color: ColorConstant.mainWhite,
             ),
           ],
         ),
