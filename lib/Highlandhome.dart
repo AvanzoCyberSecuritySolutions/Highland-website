@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/About.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
-import 'package:flutter_highland/constants/image_constant.dart';
-// Import the AboutPage
+//import 'package:flutter_highland/constants/image_constant.dart';
 
 class Highlandhome extends StatefulWidget {
   @override
@@ -44,82 +43,95 @@ class _HighlandhomeState extends State<Highlandhome> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.only(
-                left: 10), // Reduced padding to allow space for icon
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .spaceBetween, // This ensures left and right are spaced apart
-              children: [
-                // Left side: Email Icon and Text
-                Row(
-                  children: [
-                    // Email Icon
-                    Icon(
-                      Icons.mail,
-                      color: const Color.fromARGB(255, 90, 78, 78),
-                      size: 24, // Adjust size if needed
-                    ),
-                    SizedBox(width: 10), // Space between icon and text
-                    // Email Text
-                    Text(
-                      'reachus@highlandhospital.in',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16, // Adjust the font size as needed
+            title: Padding(
+              padding: const EdgeInsets.only(
+                  left: 100), // Reduced padding to allow space for icon
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceBetween, // This ensures left and right are spaced apart
+                children: [
+                  // Left side: Email Icon and Text
+                  Row(
+                    children: [
+                      // Email Icon
+                      Icon(
+                        Icons.mail,
+                        color: const Color.fromARGB(255, 90, 78, 78),
+                        size: 24, // Adjust size if needed
                       ),
-                    ),
-                  ],
-                ),
-
-                // Right side: Images
-                Row(
-                  children: [
-                    // Image 1
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Image.asset(
-                        'assets/img/twitter.png', // Update with your actual image path
-                        width: 24,
-                        height: 20,
+                      SizedBox(width: 10), // Space between icon and text
+                      // Email Text
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'reachus@highlandhospital.in',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16, // Adjust the font size as needed
+                          ),
+                        ),
                       ),
+                    ],
+                  ),
+                  // Right side: Images
+                  Padding(
+                    padding: const EdgeInsets.only(right: 120),
+                    child: Row(
+                      children: [
+                        // Image 1
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Image.asset(
+                            'assets/img/twitter.png', // Update with your actual image path
+                            width: 24,
+                            height: 20,
+                          ),
+                        ),
+                        // Image 2
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Image.asset(
+                            'assets/img/facebook.png', // Update with your actual image path
+                            width: 24,
+                            height: 20,
+                          ),
+                        ),
+                        // Image 3
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Image.asset(
+                            'assets/img/instagram.png', // Update with your actual image path
+                            width: 24,
+                            height: 20,
+                          ),
+                        ),
+                        // Image 4
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Image.asset(
+                            'assets/img/youtube.png', // Update with your actual image path
+                            width: 24,
+                            height: 20,
+                          ),
+                        ),
+                      ],
                     ),
-                    // Image 2
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Image.asset(
-                        'assets/img/facebook.png', // Update with your actual image path
-                        width: 24,
-                        height: 20,
-                      ),
-                    ),
-                    // Image 3
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Image.asset(
-                        'assets/img/instagram.png', // Update with your actual image path
-                        width: 24,
-                        height: 20,
-                      ),
-                    ),
-                    // Image 4
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Image.asset(
-                        'assets/img/youtube.png', // Update with your actual image path
-                        width: 24,
-                        height: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          backgroundColor: Color.fromARGB(255, 232, 233, 235),
-        ),
+            backgroundColor: Color(0xFFFFFFFF)),
         body: SingleChildScrollView(
             child: Column(children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 20), // Space above the border
+            width:
+                screenWidth, // Dynamic width to adapt to different screen sizes
+            height: 2, // Height of the border
+            decoration: BoxDecoration(
+              color: Color(0xFFEE9B27), // Color of the border
+            ),
+          ),
           // Menu items row at the top
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -134,7 +146,7 @@ class _HighlandhomeState extends State<Highlandhome> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 2.0, horizontal: 16.0),
                             decoration: BoxDecoration(
-                              color: Colors.orange,
+                              color: Color(0xFFEE9821),
                               borderRadius: BorderRadius.circular(2.0),
                             ),
                             child: Text(
@@ -205,7 +217,7 @@ class _HighlandhomeState extends State<Highlandhome> {
               ),
               // Button for "Our Specialties"
               Positioned(
-                top: screenHeight * 0.63, // Adjust position for proper spacing
+                top: screenHeight * 0.65, // Adjust position for proper spacing
                 left: screenWidth *
                     0.25, // Move the button a little more to the right
                 right: screenWidth *
@@ -215,18 +227,18 @@ class _HighlandhomeState extends State<Highlandhome> {
                   height: 50, // Fixed height for the button
                   padding: EdgeInsets.symmetric(vertical: 6.0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(209, 21, 183, 241),
-                    borderRadius: BorderRadius.circular(8.0),
+                    color: Color(0xFF7CB3AC),
+                    borderRadius: BorderRadius.circular(2.0),
                   ),
                   child: Center(
                     child: Text(
                       'Our Specialties',
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors
-                            .white, // Ensure text is visible on the button
-                      ),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF000000)
+                          // Ensure text is visible on the button
+                          ),
                     ),
                   ),
                 ),
@@ -256,15 +268,18 @@ class _HighlandhomeState extends State<Highlandhome> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.normal,
-                color: Colors.blue,
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.yellow,
-                decorationStyle: TextDecorationStyle.solid,
-                decorationThickness: 2.0,
-                height: 1.5,
+                color: Color(0xFF6CC1B6),
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center, // Align text to the center
             ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 10), // Space above the border
+            width: 230, // Width of the border
+            height: 2, // Height of the border
+            decoration:
+                BoxDecoration(color: Color(0xFFF1B056) // Color of the border
+                    ),
           ),
 
           // Description of the Hospital and Services
@@ -280,9 +295,10 @@ Urology, and many more. The focus of healthcare at Highland Hospital is the heal
 wellbeing of our patients, utilising the latest infrastructure and qualified medical expertise 
   available while at the same time ensuring affordability.''',
               style: TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.normal,
-                  color: Color.fromARGB(255, 24, 5, 5)),
+                fontSize: 27,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFFADADAD),
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -290,16 +306,16 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
 
           // "Know More" Button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.only(bottom: 30),
             child: Container(
-              height: 50.0, // Specify your desired height here
+              height: 45.0, // Specify your desired height here
               width: screenWidth *
                   0.2, // Specify your desired width or use screenWidth * percentage
               padding: EdgeInsets.symmetric(
                   vertical: 10.0, horizontal: screenWidth * 0),
               decoration: BoxDecoration(
-                color: Color.fromARGB(209, 21, 183, 241),
-                borderRadius: BorderRadius.circular(8.0),
+                color: Color(0xFF78CAC6),
+                borderRadius: BorderRadius.circular(2.0),
               ),
               child: Center(
                 child: Text(
@@ -320,8 +336,7 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                 Container(
                   width: 20, // Set width for the left container
                   height: 300, // Set height for the left container
-                  color:
-                      Color.fromARGB(255, 31, 204, 120), // Set background color
+                  color: Color(0xFF1FBCB1), // Set background color
                 ),
                 Expanded(
                   child: carousalContainer(
@@ -329,8 +344,7 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     label: 'FIND A DOCTOR',
                     content:
                         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
-                    backgroundColor:
-                        Color.fromARGB(255, 31, 204, 120), // Set unique color
+                    backgroundColor: Color(0xFF1FBCB1), // Set unique color
                   ),
                 ),
                 Expanded(
@@ -339,33 +353,32 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     label: 'TEST RESULT',
                     content:
                         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
-                    backgroundColor: Colors.orange, // Set unique color
+                    backgroundColor: Color(0xFFEE9821), // Set unique color
                   ),
                 ),
                 Expanded(
                   child: carousalContainer(
-                    image: 'assets/img/online admission.png',
-                    label: 'ONLINE ADMISSION',
-                    content:
-                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
-                    backgroundColor:
-                        Color.fromARGB(255, 31, 204, 120), // Set unique color
-                  ),
+                      image: 'assets/img/online admission.png',
+                      label: 'ONLINE ADMISSION',
+                      content:
+                          '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
+                      backgroundColor: Color(0xFF1BA08D) // Set unique color
+                      ),
                 ),
                 Expanded(
                   child: carousalContainer(
-                    image: 'assets/img/Patient acces.png',
-                    label: 'PATIENT ACCESS',
-                    content:
-                        '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
-                    backgroundColor: Colors.blue, // Set unique color
-                  ),
+                      image: 'assets/img/Patient acces.png',
+                      label: 'PATIENT ACCESS',
+                      content:
+                          '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed incididunt ut labore''',
+                      backgroundColor: Color(0xFF5592C8) // Set unique color
+                      ),
                 ),
                 Container(
-                  width: 20, // Set width for the right container
-                  height: 300, // Set height for the right container
-                  color: Colors.blue, // Set background color
-                ),
+                    width: 20, // Set width for the right container
+                    height: 300, // Set height for the right container
+                    color: Color(0xFF5592C8) // Set background color
+                    ),
               ],
             ),
           ),
@@ -387,7 +400,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 5,
-                      right: 1), // Adjusted padding for closer alignment
+                      right: 1,
+                      top: 100), // Adjusted padding for closer alignment
                   child: Container(
                     width: screenWidth *
                         0.45, // Adjusted width for Vision container
@@ -399,7 +413,7 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(
-                          8), // Clip the image with the same border radius
+                          10), // Clip the image with the same border radius
                       child: Image.asset(
                         'assets/img/vision.jpeg', // Your Vision image file path
                         width:
@@ -415,7 +429,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 80,
-                      right: 5), // Adjust padding for spacing on the right
+                      right: 5,
+                      top: 100), // Adjust padding for spacing on the right
                   child: Container(
                     width: screenWidth *
                         0.45, // Adjusted width for Mission container
@@ -423,11 +438,11 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     decoration: BoxDecoration(
                       color: Color.fromARGB(
                           255, 245, 149, 6), // Orange background color
-                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                      borderRadius: BorderRadius.circular(8), // Rounded corners
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(
-                          8), // Clip the image with the same border radius
+                          10), // Clip the image with the same border radius
                       child: Image.asset(
                         'assets/img/Mission.JPG', // Your Mission image file path
                         width:
@@ -455,31 +470,28 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                 // Background container inside Stack
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 10,
                     top: 10,
                     bottom: 320, // Adjust bottom to make space
-                    right: 10,
                   ),
                   child: Container(
                     width: double.infinity,
                     height: 380,
-                    color: Color.fromARGB(234, 2, 78, 34),
+                    color: Color(0xFF1FBCB1),
                   ),
                 ),
-
-                Positioned(
-                  top: 10,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Positioned "VISION" Container (left side)
-                      Container(
-                        width: 650,
-                        // height: 200,
-                        padding: EdgeInsets.all(10),
-                        color:
-                            Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Positioned "VISION" Container (left side)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 510,
+                      ),
+                      child: Container(
+                        width: 500,
+                        padding: EdgeInsets.all(19),
+                        color: Color(0xFFFFFFFF),
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -507,42 +519,45 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                           ),
                         ),
                       ),
-                      // Positioned "MISSION" Container (right side)
-                      Container(
-                        width: 650,
-                        // height: 200,
-                        color:
-                            Color.fromARGB(255, 240, 238, 238).withOpacity(0.5),
-                        padding: EdgeInsets.all(10),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'MISSION',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    ),
+                    // Add a SizedBox to create a much larger space between the containers
+                    SizedBox(
+                        width:
+                            150), // Significantly increased the width for more distance
+
+                    // Positioned "MISSION" Container (right side)
+                    Container(
+                      width: 500,
+                      padding: EdgeInsets.all(10),
+                      color: Color(0xFFFFFFFF),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'MISSION',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(height: 10),
-                              Text(
-                                '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with empathy, integrity, and innovation. By investing in both our people and technology, we strive to improve the health and well-being of every individual we serve. We aim to create a supportive environment where every patient feels valued, ensuring accessible, high-quality healthcare that elevates lives and strengthens our community.''',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with empathy, integrity, and innovation. By investing in both our people and technology, we strive to improve the health and well-being of every individual we serve. We aim to create a supportive environment where every patient feels valued, ensuring accessible, high-quality healthcare that elevates lives and strengthens our community.''',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
                               ),
-                            ],
-                          ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
 
                 // Doctor Image on the left side
@@ -566,7 +581,11 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     child: Column(children: [
                       Container(
                         height: 40,
-                        color: Colors.green,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF1BA08F), // Background color
+                          borderRadius: BorderRadius.circular(
+                              2), // Rounded corners (half of height to make it circular)
+                        ),
                         child: Center(
                           child: Text(
                             'Book an Appointment',
@@ -582,21 +601,26 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                       Container(
                           height: 300,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.yellow, width: 2),
+                            border:
+                                Border.all(color: Color(0xFFEE9821), width: 2),
                             borderRadius: BorderRadius.circular(3),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Column(children: [
                                 Center(
-                                  child: Text(
-                                    '''Enter your contacts below to schedule an appointment or discuss it with us in details.''',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 300),
+                                    child: Text(
+                                      '''Enter your contacts below to schedule an appointment or
+discuss it with us in details.''',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -613,8 +637,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                             child: Container(
                                               margin: EdgeInsets.only(right: 5),
                                               height: 40,
-                                              color: Colors.blue
-                                                  .shade50, // Background color for the container
+                                              color: Color(0xFFF2F3F5),
+                                              // Background color for the container
                                               child: TextField(
                                                 decoration: InputDecoration(
                                                   labelText:
@@ -673,8 +697,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                             child: Container(
                                               margin: EdgeInsets.only(right: 5),
                                               height: 40,
-                                              color: Colors.blue
-                                                  .shade50, // Background color for the container
+                                              color: Color(
+                                                  0xFFF2F3F5), // Background color for the container
                                               child: TextField(
                                                 decoration: InputDecoration(
                                                   labelText:
@@ -731,8 +755,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                           Expanded(
                                             child: Container(
                                               height: 40,
-                                              color: Colors.blue
-                                                  .shade50, // Background color for the container
+                                              color: Color(
+                                                  0xFFF2F3F5), // Background color for the container
                                               child: Center(
                                                 child: Padding(
                                                   padding:
@@ -769,7 +793,7 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                           horizontal:
                                               30), // Adjust padding inside the container
                                       decoration: BoxDecoration(
-                                        color: Color.fromARGB(209, 245, 162, 8),
+                                        color: Color(0xFFEE9821),
                                         borderRadius:
                                             BorderRadius.circular(8.0),
                                         border: Border.all(
@@ -800,9 +824,7 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 50,
-              ),
+              padding: const EdgeInsets.only(left: 50, bottom: 20),
               child: Row(children: [
                 // Spacer(),
                 Expanded(
@@ -811,256 +833,316 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // Title "Out-Patient Services"
-                      Text(
-                        'Out-Patient Services',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50),
+                        child: Text(
+                          'Out-Patient Services',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF494949),
+                          ),
                         ),
                       ),
-                      // Description Box
                       Container(
-                        width: 500, // Set the width of the container
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(
-                              255, 11, 201, 185), // Background color
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey, width: 1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 90),
-                          child: Text(
-                            'We provide the following features',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
+                        margin: const EdgeInsets.only(top: 8, left: 40),
+                        width: 70, // Space between title and border
+                        height: 5, // Height of the border
+                        color: Colors.black, // Color of the border
+                      ),
+                      // Description Box
+                      Padding(
+                        padding: const EdgeInsets.only(left: 70),
+                        child: Container(
+                          width: 420,
+                          height: 40, // Set the width of the container
+                          decoration: BoxDecoration(
+                            color: Color(0xFF1BA08F), // Background color
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 50, top: 5),
+                            child: Text(
+                              'We provide the following features',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
                       // Health and Careers Services
                       Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           // Left Column: Health & Careers
                           Expanded(
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align items to the left
                               children: [
                                 // Health Service
-                                Row(
-                                  children: [
-                                    // Health Icon on the Left
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Container(
-                                        color: Colors.green,
-                                        padding: const EdgeInsets.all(
-                                            10), // Uniform padding for the icon
-                                        child: ClipOval(
-                                          child: Image.asset(
-                                            'assets/img/health.png', // Health icon
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.cover,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20,
+                                      bottom: 10,
+                                      left:
+                                          210), // Added top and bottom padding for spacing
+                                  child: Row(
+                                    children: [
+                                      // Health Icon on the Left
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Container(
+                                          color: Color(0xFF3FAE9E),
+                                          padding: const EdgeInsets.all(
+                                              10), // Uniform padding for the icon
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              'assets/img/health.png', // Health icon
+                                              width: 40,
+                                              height: 40,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            10), // Space between icon and text
+                                      SizedBox(
+                                          width:
+                                              10), // Space between icon and text
 
-                                    // Health Text on the Right
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Health',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                      // Health Text on the Right
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Health',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          '''"The First Wealth is Health"''',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black54,
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '''"The First Wealth 
+  is Health"''',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black54,
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 // Careers Service (Placed below Health)
-                                Row(
-                                  children: [
-                                    // Careers Icon on the Left
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Container(
-                                        color: Colors.green,
-                                        padding: const EdgeInsets.all(
-                                            10), // Uniform padding for the icon
-                                        child: ClipOval(
-                                          child: Image.asset(
-                                            'assets/img/careers.png', // Careers icon
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.cover,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 70,
+                                      bottom: 20,
+                                      left:
+                                          210), // Added top and bottom padding for spacing
+                                  child: Row(
+                                    children: [
+                                      // Careers Icon on the Left
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Container(
+                                          color: Color(0xFF3FAE9E),
+                                          padding: const EdgeInsets.all(
+                                              10), // Uniform padding for the icon
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              'assets/img/careers.png', // Careers icon
+                                              width: 40,
+                                              height: 40,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ), // Space between icon and text
+                                      SizedBox(
+                                          width:
+                                              10), // Space between icon and text
 
-                                    // Careers Text on the Right
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Careers',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                      // Careers Text on the Right
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Careers',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          '''"Be So good They Can't ignore you"''',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black54,
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '''"Be So good They 
+  Can't ignore you"''',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black54,
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
+
                           // Right side: Column containing "Surgery" and "Planning" services
                           Expanded(
                             child: Row(
                               children: [
                                 // Column for Surgery and Planning Services
-                                Column(
-                                  children: [
-                                    // Surgery Service
-                                    Row(
-                                      children: [
-                                        // Surgery Icon on the Left
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: Container(
-                                            color: Colors.green,
-                                            padding: const EdgeInsets.all(
-                                                10), // Uniform padding for the icon
-                                            child: ClipOval(
-                                              child: Image.asset(
-                                                'assets/img/Surgeryicon.png', // Planning icon
-                                                width: 40,
-                                                height: 40,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                10), // Space between icon and text
-
-                                        // Surgery Text on the Right
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // Align items to the left
+                                    children: [
+                                      // Surgery Service
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 20,
+                                            bottom: 10,
+                                            left:
+                                                80), // Added top and bottom padding for spacing
+                                        child: Row(
                                           children: [
-                                            Text(
-                                              'Surgery',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
+                                            // Surgery Icon on the Left
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              child: Container(
+                                                color: Color(0xFF3FAE9E),
+                                                padding: const EdgeInsets.all(
+                                                    10), // Uniform padding for the icon
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    'assets/img/Surgeryicon.png', // Surgery icon
+                                                    width: 40,
+                                                    height: 40,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              '''"Truth Like Surgery May Hurt But It Cures"''',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black54,
-                                              ),
-                                              textAlign: TextAlign.left,
+                                            SizedBox(
+                                                width:
+                                                    10), // Space between icon and text
+
+                                            // Surgery Text on the Right
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Surgery',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Text(
+                                                  '''"Truth Like Surgery 
+May Hurt But It Cures"''',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
 
-                                    // Planning Service (Placed below Surgery)
-                                    Row(
-                                      children: [
-                                        // Planning Icon on the Left
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: Container(
-                                            color: Colors.green,
-                                            padding: const EdgeInsets.all(
-                                                10), // Uniform padding for the icon
-                                            child: ClipOval(
-                                              child: Image.asset(
-                                                'assets/img/calender.png', // Planning icon
-                                                width: 40,
-                                                height: 40,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        // Planning Text on the Right
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                      // Planning Service (Placed below Surgery)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 70,
+                                            bottom: 20,
+                                            left:
+                                                80), // Added top and bottom padding for spacing
+                                        child: Row(
                                           children: [
-                                            Text(
-                                              'Planning',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
+                                            // Planning Icon on the Left
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              child: Container(
+                                                color: Color(0xFF3FAE9E),
+                                                padding: const EdgeInsets.all(
+                                                    10), // Uniform padding for the icon
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    'assets/img/calender.png', // Planning icon
+                                                    width: 40,
+                                                    height: 40,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              '''"If You Can Dream it, You Can Do It."''',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black54,
-                                              ),
-                                              textAlign: TextAlign.left,
+                                            SizedBox(
+                                                width:
+                                                    10), // Space between icon and text
+
+                                            // Planning Text on the Right
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Planning',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Text(
+                                                  '''"If You Can Dream it,
+ You Can Do It."''',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -1070,10 +1152,10 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(right: 200),
                   child: Container(
                     width: 580, // Set the width of the image
-                    height: 380, // Set the height of the image
+                    height: 400, // Set the height of the image
                     child: Image.asset(
                       'assets/img/Out Patient.jpeg',
                       fit: BoxFit
@@ -1094,77 +1176,77 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
               children: [
                 // The container that holds the background color
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 1800),
+                  padding: const EdgeInsets.only(bottom: 1700),
                   child: Container(
                     width: double.infinity,
-                    height: 350, // Set the height of the container
-                    color: const Color.fromARGB(
-                        255, 151, 137, 12), // Background color of the container
+                    height: 250, // Set the height of the container
+                    color:
+                        Color(0xFFEE9821), // Background color of the container
                   ),
                 ),
 
                 // QR Code image overlaying the container
 
                 // Row for the images outside the container (Father & Son, Phone, MOM & girl)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .spaceEvenly, // Align images with space between
-                  children: [
-                    // Left image (Father & Son)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 300, bottom: 1220), // Adjust as necessary
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/img/Father & Son-01.png',
-                            width: 200, // Image width
-                            height: 600, // Image height
-                            fit: BoxFit.contain, // Ensure image scales properly
-                          ),
-                        ],
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 970, bottom: 1220), // Adjust as necessary
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 100),
+                        child: Image.asset(
+                          'assets/img/Father & Son-01.png',
+                          width: 200, // Image width
+                          height: 600, // Image height
+                          fit: BoxFit.contain, // Ensure image scales properly
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
 
-                    // Column for other images (Phone and MOM & girl)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 2), // Padding on the right side for spacing
-                      child: Stack(
+                // Column for other images (Phone and MOM & girl)
+                Padding(
+                  padding: const EdgeInsets.only(right: 100),
+                  child: Row(
+                    children: [
+                      Stack(
                         children: [
                           // Phone image outside of container
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 10,
-                                bottom: 1400,
-                                right: 1050), // Adjust positioning as needed
+                                bottom: 1300,
+                                left: 400), // Adjust positioning as needed
                             child: Image.asset(
                               'assets/img/Phone-01.png',
                               width: 250, // Image width
-                              height: 450, // Image height
+                              height: 350, // Image height
                               fit: BoxFit.contain,
                             ),
                           ),
                           // QR code image over the Phone image
-                          Positioned(
-                            top:
-                                180, // Adjust QR code position over the Phone image
-                            left:
-                                420, // Adjust position to be on the right side of the phone image
-                            child: Column(
-                              children: [
-                                // QR Code Image
-                                Image.asset(
+                          Column(
+                            children: [
+                              // QR Code Image
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 900, top: 110),
+                                child: Image.asset(
                                   'assets/img/qr.PNG',
                                   width: 150, // QR image width
                                   height: 200, // QR image height
                                   fit: BoxFit.contain, // Ensure image fits well
                                 ),
-                                SizedBox(
-                                    height:
-                                        10), // Add space between QR code and text
-                                // Text below the QR code
-                                Text(
+                              ),
+                              // Text below the QR code
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10,
+                                    left:
+                                        900), // Add some space between image and text
+                                child: Text(
                                   '''Download Our 
   Mobile App''',
                                   style: TextStyle(
@@ -1174,45 +1256,47 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                         .bold, // Bold text for emphasis
                                     color: Colors.black, // Text color
                                   ),
+                                  textAlign:
+                                      TextAlign.center, // Center align the text
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
 
                           // MOM & girl image outside of container
                           Padding(
-                            padding: const EdgeInsets.only(top: 150, left: 700),
+                            padding: const EdgeInsets.only(top: 80, left: 1300),
                             child: Image.asset(
                               'assets/img/MOM & girl-01.png',
                               width: 180, // Image width
-                              height: 220, // Image height
+                              height: 270, // Image height
                               fit: BoxFit.contain,
                             ),
                           ),
                           // QR code image over the MOM & girl image
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Stack(
                   children: [
                     // Main large container at the bottom
                     Padding(
-                      padding: const EdgeInsets.only(top: 250),
+                      padding: const EdgeInsets.only(top: 40),
                       child: Container(
                         width: double.infinity,
                         height:
                             900, // Fixed height but can adjust based on design needs
-                        color: const Color.fromARGB(255, 19, 236, 182),
+                        color: Color(0xFF1FBCB1),
                       ),
                     ),
 
                     // Row for small containers (Health Tips, Latest News, Visiting Hours)
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 500,
-                        top: 290,
+                        left: 220,
+                        top: 70,
                       ),
                       child: Row(
                         mainAxisAlignment:
@@ -1221,30 +1305,59 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                           Flexible(
                             flex: 1,
                             child: Container(
-                              height: 180,
-                              width: 300,
+                              height: 195,
+                              width: 380,
                               color: const Color.fromARGB(255, 231, 162, 14),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'HEALTH TIPS',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 80),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween, // Ensures the content is spaced out
+                                      children: [
+                                        Text(
+                                          'HEALTH TIPS',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 110),
+                                          child: Image.asset(
+                                            'assets/img/healthi.png', // Replace with your image file path
+                                            width: 40, // Adjust size as needed
+                                            height: 40, // Adjust size as needed
+                                            fit: BoxFit
+                                                .contain, // Ensure the image scales correctly
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '''exercitation ullamco laboris 
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure 
-  dolor in reprehenderit in 
-  voluptate velit esseproident''',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
+                                  SizedBox(
+                                    height: 10,
                                   ),
+                                  Text(
+                                    '''        exercitation ullamco laboris 
+          nisi ut aliquip ex ea commodo 
+    consequat. Duis aute irure 
+dolor in reprehenderit in 
+      voluptate velit esse proident''',
+
+                                    textAlign:
+                                        TextAlign.center, // Center the text
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      height:
+                                          1.5, // Adjust line height for better spacing
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -1252,29 +1365,54 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                           Flexible(
                             flex: 1,
                             child: Container(
-                              height: 180,
-                              width: 300,
-                              color: const Color.fromARGB(255, 15, 124, 79),
+                              height: 195,
+                              width: 380,
+                              color: Color(0xFF1BA08F),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'LATEST NEWS',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 80),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween, // Spreads the text and image to the edges
+                                      children: [
+                                        Text(
+                                          'LATEST NEWS',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 110),
+                                          child: Image.asset(
+                                            'assets/img/Latet.png', // Replace with your image file path
+                                            width:
+                                                50, // Adjust the width as needed
+                                            height:
+                                                40, // Adjust the height as needed
+                                            fit: BoxFit
+                                                .contain, // Ensures the image scales proportionally
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    '''exercitation ullamco laboris
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure
-  dolor in reprehenderit in
-  voluptate velit esseproident''',
+                                    '''        exercitation ullamco laboris 
+          nisi ut aliquip ex ea commodo 
+    consequat. Duis aute irure 
+dolor in reprehenderit in 
+      voluptate velit esse proident''',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1283,25 +1421,135 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                           Flexible(
                             flex: 1,
                             child: Container(
-                              height: 180,
-                              width: 300,
+                              height: 195,
+                              width: 380,
                               color: const Color.fromARGB(255, 7, 135, 221),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'VISITING HOURS',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom:
+                                            60), // Reduced padding from 60 to 20
+                                    child: Row(
+                                      children: [
+                                        // Image or Icon on the left
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              right:
+                                                  5), // Adjust space between image and text
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 20),
+                                            child: Image.asset(
+                                              'assets/img/Visiting Hours.png', // Your image asset path
+                                              width: 70, // Adjust image size
+                                              height: 50, // Adjust image size
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 4),
+                                        // Text next to the image
+                                        Text(
+                                          'VISITING HOURS',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '10:00 am',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  ),
+                                  // Add the "time" text or other widgets here
+
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 40,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              '10', // First part of the time
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 50,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width:
+                                                    4), // Small space between "10" and "00"
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: Text(
+                                                '''00
+am''', // Second part of the time
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      18, // Smaller font size for "00"
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width:
+                                                    10), // Space between the time and image
+                                            Image.asset(
+                                              'assets/img/arrow.png', // Arrow image path
+                                              width:
+                                                  50, // Adjust the width of the image
+                                              height:
+                                                  50, // Adjust the height of the image
+                                            ),
+                                            SizedBox(
+                                                height:
+                                                    20), // Space between the first row and second row
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 40),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(),
+                                                    child: Text(
+                                                      '7', // First part of the time
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 50,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width:
+                                                          4), // Small space between "7" and "30"
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5),
+                                                    child: Text(
+                                                      '''30
+pm''', // Second part of the time
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            18, // Smaller font size for "30"
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -1312,98 +1560,205 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
 
                     // "SERVICES" Text Positioned
                     Padding(
-                      padding: const EdgeInsets.only(left: 520, top: 520),
-                      child: Text(
-                        'Services',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold),
+                      padding: const EdgeInsets.only(left: 220, top: 270),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 60, // Short left border
+                            height: 2, // Border height
+                            color: const Color.fromARGB(
+                                255, 231, 162, 14), // Border color
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal:
+                                    10), // Space between text and borders
+                            child: Text(
+                              'Services',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 1200, // Longer right border
+                            height: 2, // Border height
+                            color: const Color.fromARGB(
+                                255, 231, 162, 14), // Border color
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 1310, top: 328),
+                      child: Container(
+                        width: 150, // Set the width of the container for pi2
+                        height: 350, // Set the height of the container for pi2
+                        child: Image.asset(
+                          'assets/img/pi1.jpg', // Image path
+                          fit: BoxFit
+                              .cover, // Ensures the image covers the entire container
+                        ),
                       ),
                     ),
 
                     // Main Row for images (HEALTH TIPS, LATEST NEWS, VISITING HOURS)
                     Padding(
                         padding: const EdgeInsets.only(
-                            top: 550, left: 400, right: 400),
+                            top: 320, left: 50, right: 300),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               // First image with text overlay
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 600,
-                                    height: 300,
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        Image.asset(
-                                          'assets/img/pi1.jpg', // Replace with your image file path
-                                          width: 600,
-                                          height: 300,
-                                          fit: BoxFit
-                                              .cover, // Ensures the image covers the entire area
-                                        ),
-                                        // Text box overlay
-                                        Positioned(
-                                          left:
-                                              20, // Positioning the text box from the left
-                                          bottom:
-                                              20, // Positioning the text box from the bottom
-                                          child: Container(
-                                            color: Colors.white10.withOpacity(
-                                                0.5), // Dark background for the text box
-                                            padding: EdgeInsets.all(8),
-                                            child: Text(
-                                              '''EMERGENCY / 24-HOUR
-  SERVICES''', // Text you want to display
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width:
+                                      400, // Set a fixed width for the image container
+                                  height:
+                                      350, // Set the height for the container
+                                  child: Stack(
+                                    fit: StackFit
+                                        .expand, // Ensure the image fills the container
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/pi1.jpg', // Image path
+                                        fit: BoxFit
+                                            .cover, // Make the image cover the entire container
+                                      ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 30),
+                                            child: Container(
+                                              width:
+                                                  40, // Width of the button (circle size)
+                                              height:
+                                                  30, // Height of the button (circle size)
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape
+                                                    .circle, // Make it a circle
+                                                color: Colors
+                                                    .orange, // Background color of the circle
                                               ),
-                                              textAlign: TextAlign.center,
+                                              child: Icon(
+                                                Icons.play_arrow, // Play icon
+                                                color: Colors
+                                                    .white, // Icon color (white)
+                                                size:
+                                                    30, // Size of the icon (adjust to your preference)
+                                              ),
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      // Text box overlay
+                                      Positioned(
+                                        left:
+                                            70, // Positioning the text box from the left
+                                        bottom:
+                                            10, // Positioning the text box from the bottom
+                                        child: Container(
+                                          color: Color(
+                                              0xFFFFFFFF), // Background color for the text box
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            '''EMERGENCY / 24-HOUR
+SERVICES''', // Text you want to display
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
 
                               // Second image with text overlay
-                              Expanded(
-                                child: Padding(
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 400, // Set the width of the container
+                                  height:
+                                      350, // Set the height of the container
+                                  child: Stack(
+                                    fit: StackFit
+                                        .expand, // Ensure that the image expands to fill the container
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/pi2.jpg', // Image path
+                                        fit: BoxFit
+                                            .cover, // Ensure the image covers the entire container
+                                      ),
+
+                                      // Text box overlay
+                                      Positioned(
+                                        left:
+                                            70, // Positioning the text box from the left
+                                        bottom:
+                                            20, // Positioning the text box from the bottom
+                                        child: Container(
+                                          color: Color(
+                                              0xFFFFFFFF), // Background color for the text box
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            '''SURGICAL AND MEDICAL 
+                              ICU''', // Text you want to display
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // Third image with text overlay
+                              Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    width: 600,
-                                    height: 300,
+                                    width: 400,
+                                    height: 350,
                                     child: Stack(
                                       fit: StackFit.expand,
                                       children: [
                                         Image.asset(
-                                          'assets/img/pi2.jpg', // Replace with your image file path
-                                          width: 600,
+                                          'assets/img/pi3.jpg', // Replace with your image file path
+                                          width: 900,
                                           height: 300,
                                           fit: BoxFit
                                               .cover, // Ensures the image covers the entire area
                                         ),
+
                                         // Text box overlay
                                         Positioned(
                                           left:
-                                              20, // Positioning the text box from the left
+                                              230, // Positioning the text box from the left
                                           bottom:
                                               20, // Positioning the text box from the bottom
                                           child: Container(
-                                            color: Colors.white10.withOpacity(
-                                                0.5), // Dark background for the text box
+                                            color: Color(
+                                                0xFFFFFFFF), // Dark background for the text box
                                             padding: EdgeInsets.all(8),
                                             child: Text(
-                                              '''SURGICAL AND MEDICAL 
-  ICU''', // Text you want to display
+                                              'LABORATORY', // Text you want to display
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -1413,319 +1768,248 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
 
-                              // Third image with text overlay
-                              Expanded(
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: 600,
-                                        height: 300,
-                                        child: Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            Image.asset(
-                                              'assets/img/pi3.jpg', // Replace with your image file path
-                                              width: 600,
-                                              height: 300,
-                                              fit: BoxFit
-                                                  .cover, // Ensures the image covers the entire area
-                                            ),
-                                            // Text box overlay
-                                            Positioned(
-                                              left:
-                                                  20, // Positioning the text box from the left
-                                              bottom:
-                                                  20, // Positioning the text box from the bottom
-                                              child: Container(
-                                                color: Colors.white10.withOpacity(
-                                                    0.5), // Dark background for the text box
-                                                padding: EdgeInsets.all(8),
-                                                child: Text(
-                                                  'LABORATORY', // Text you want to display
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 500,
+                                            top: 290,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .start, // Change this line
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: Color(0xFFEE9821),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'HEALTH TIPS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '''exercitation ullamco laboris 
+                                nisi ut aliquip ex ea commodo 
+                                consequat. Duis aute irure 
+                                dolor in reprehenderit in 
+                                voluptate velit esseproident''',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  textAlign: TextAlign.center,
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 500,
-                                                top: 290,
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: const Color.fromARGB(
+                                                      255, 15, 124, 79),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'LATEST NEWS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '''exercitation ullamco laboris
+                                nisi ut aliquip ex ea commodo 
+                                consequat. Duis aute irure
+                                dolor in reprehenderit in
+                                voluptate velit esseproident''',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .start, // Change this line
-                                                children: [
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              231,
-                                                              162,
-                                                              14),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'HEALTH TIPS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '''exercitation ullamco laboris 
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure 
-  dolor in reprehenderit in 
-  voluptate velit esseproident''',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14),
-                                                          ),
-                                                        ],
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: const Color.fromARGB(
+                                                      255, 7, 135, 221),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'VISITING HOURS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 15, 124, 79),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'LATEST NEWS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '''exercitation ullamco laboris
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure
-  dolor in reprehenderit in
-  voluptate velit esseproident''',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14),
-                                                          ),
-                                                        ],
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '10:00 am',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 7, 135, 221),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'VISITING HOURS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '10:00 am',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 500,
-                                                top: 290,
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .start, // Change this line
-                                                children: [
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              231,
-                                                              162,
-                                                              14),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'HEALTH TIPS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '''exercitation ullamco laboris 
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure 
-  dolor in reprehenderit in 
-  voluptate velit esseproident''',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 15, 124, 79),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'LATEST NEWS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '''exercitation ullamco laboris
-  nisi ut aliquip ex ea commodo 
-  consequat. Duis aute irure
-  dolor in reprehenderit in
-  voluptate velit esseproident''',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 300,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 7, 135, 221),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'VISITING HOURS',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            '10:00 am',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      )))
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 500,
+                                            top: 290,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .start, // Change this line
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: const Color.fromARGB(
+                                                      255, 231, 162, 14),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'HEALTH TIPS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '''exercitation ullamco laboris 
+                                nisi ut aliquip ex ea commodo 
+                                consequat. Duis aute irure 
+                                dolor in reprehenderit in 
+                                voluptate velit esseproident''',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: const Color.fromARGB(
+                                                      255, 15, 124, 79),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'LATEST NEWS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '''exercitation ullamco laboris
+                                nisi ut aliquip ex ea commodo 
+                                consequat. Duis aute irure
+                                dolor in reprehenderit in
+                                voluptate velit esseproident''',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Flexible(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 180,
+                                                  width: 300,
+                                                  color: Color(0xFF5592C8),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'VISITING HOURS',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        '10:00 am',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
                             ])),
 
 // Emergency Text (aligned to the right of Location)
@@ -1736,8 +2020,8 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                 Padding(
                   padding: const EdgeInsets.only(
                     left:
-                        50, // Adjust the left padding to control the overall position
-                    top: 790,
+                        30, // Adjust the left padding to control the overall position
+                    top: 580,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment
@@ -1747,24 +2031,24 @@ wellbeing of our patients, utilising the latest infrastructure and qualified med
                       Padding(
                         padding: const EdgeInsets.only(
                             left:
-                                430), // Space between the first and second column
+                                230), // Space between the first and second column
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             // Row for image and text in HEALTH TIPS
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 40),
+                              padding: const EdgeInsets.only(bottom: 20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment
                                     .start, // Align items to the start
                                 children: [
                                   // Image for HEALTH TIPS
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 90),
+                                    padding: const EdgeInsets.only(bottom: 85),
                                     child: Image.asset(
                                       'assets/img/Location.png', // Replace with your actual image path
-                                      width: 40, // Adjust size as needed
-                                      height: 40, // Adjust size as needed
+                                      width: 60, // Adjust size as needed
+                                      height: 60, // Adjust size as needed
                                     ),
                                   ),
                                   SizedBox(
@@ -1810,8 +2094,9 @@ India.''',
                       // Second Column: LATEST NEWS
                       Padding(
                         padding: const EdgeInsets.only(
-                            left:
-                                90), // Space between the second and third column
+                            left: 50,
+                            right:
+                                100), // Space between the second and third column
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -1822,11 +2107,11 @@ India.''',
                               children: [
                                 // Image for LATEST NEWS
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 120),
+                                  padding: const EdgeInsets.only(bottom: 100),
                                   child: Image.asset(
                                     'assets/img/Call.png', // Replace with your actual image path
-                                    width: 40, // Adjust size as needed
-                                    height: 40, // Adjust size as needed
+                                    width: 60, // Adjust size as needed
+                                    height: 60, // Adjust size as needed
                                   ),
                                 ),
                                 SizedBox(
@@ -1872,7 +2157,7 @@ India.''',
                       // Third Column: VISITING HOURS
                       Padding(
                         padding: const EdgeInsets.only(
-                          right: 450,
+                          right: 350,
                           bottom: 70,
                         ), // Adjust right padding as needed
                         child: Column(
@@ -1888,8 +2173,8 @@ India.''',
                                   padding: const EdgeInsets.only(bottom: 40),
                                   child: Image.asset(
                                     'assets/img/E-mail.png', // Replace with your actual image path
-                                    width: 40, // Adjust size as needed
-                                    height: 40, // Adjust size as needed
+                                    width: 60, // Adjust size as needed
+                                    height: 60, // Adjust size as needed
                                   ),
                                 ),
                                 SizedBox(
@@ -1931,18 +2216,17 @@ India.''',
                   children: [
                     // Main large container at the bottom
                     Padding(
-                      padding: const EdgeInsets.only(top: 1400),
+                      padding: const EdgeInsets.only(top: 1350),
                       child: Container(
-                        width: double.infinity,
-                        height:
-                            500, // Fixed height but can adjust based on design needs
-                        color: const Color.fromARGB(255, 169, 231, 241),
-                      ),
+                          width: double.infinity,
+                          height:
+                              500, // Fixed height but can adjust based on design needs
+                          color: Color(0xFFEAEBED)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 300,
-                        top: 1430,
+                        left: 50,
+                        top: 1360,
                       ), // Use uniform padding for better spacing
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment
@@ -2124,18 +2408,11 @@ Urology & Andrology''',
                             width: double.infinity,
                             height:
                                 50, // Fixed height but can adjust based on design needs
-                            color: const Color.fromARGB(255, 11, 185, 142),
+                            color: Color(0xFF1BA08D),
                             child: Center(
                               // This centers the text inside the container
                               child: Text(
                                 ' © Highland Hospitals.All Rights Reserved', // Replace with the desired text
-                                style: TextStyle(
-                                  color:
-                                      Colors.white, // Set text color to white
-                                  fontSize: 25, // Adjust the font size
-                                  fontWeight: FontWeight
-                                      .bold, // Optionally, bold the text
-                                ),
                               ),
                             ),
                           ),
