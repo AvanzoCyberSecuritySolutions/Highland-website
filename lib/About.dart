@@ -23,7 +23,6 @@ class _AboutState extends State<About> {
 
   // Method to handle menu item tap
   void onMenuItemTapped(String menuItem) {
-    // Handle navigation or any other logic here
     print('Tapped: $menuItem');
   }
 
@@ -31,32 +30,29 @@ class _AboutState extends State<About> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
 
-    // Calculate padding based on screen width and height
-    double horizontalPadding = screenWidth * 0.05; // 5% of screen width
-    double verticalPadding = screenHeight * 0.02;
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true, // This centers the title
+          centerTitle: true,
           title: Text(
             'Highland Hospital',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 26,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-
-          backgroundColor: Color(0xFF3FAE9E), // Customize the app bar color
-          elevation: 6, // Slightly elevated for a more modern look
+          backgroundColor: Color(0xFF3FAE9E),
+          elevation: 12, // Added more elevation
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+          ),
         ),
         body: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(20.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(height: 20), // Space between social media and divider
-
+              // Menu Navigation with Better Design
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -76,19 +72,17 @@ class _AboutState extends State<About> {
                                 child: Text(
                                   menuItems[index],
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                               )
                             : Text(
                                 menuItems[index],
                                 style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 1, 5, 10),
-                                ),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 1, 5, 10)),
                               ),
                       ),
                     );
@@ -96,216 +90,296 @@ class _AboutState extends State<About> {
                 ),
               ),
               SizedBox(height: 20),
-              // Paragraphs
 
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                width: screenWidth,
-                height: 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFEE9B27), // Color of the border
-                ),
+              // Divider
+              Divider(
+                thickness: 2,
+                color: Color(0xFFEE9B27),
               ),
-// Paragraphs
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0), // Add some padding to the left and right
-                child: _buildParagraph(
-                  content:
-                      '''Founded by Dr. C P Abdulla Rahman and Mrs. Y Razia Rahman, Highland Hospital in Mangalore has been a cornerstone of healthcare excellence for over three decades. Built on the ethos of “YOUR HEALTH, OUR CARE,” the hospital embodies a commitment to delivering compassionate and accessible healthcare services to all. From its humble beginnings, Highland has grown into a trusted healthcare provider, blending cutting-edge medical technology with personalized care that puts patients at the center of everything we do.''',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0), // Add some padding to the left and right
-                child: _buildParagraph(
-                  content:
-                      '''Our multidisciplinary team of healthcare professionals, driven by a shared mission of improving lives, provides world-class treatment across a wide range of medical specialties. Whether it’s preventive care, advanced surgeries, or rehabilitation services, Highland Hospital is dedicated to ensuring that every patient receives the highest standard of care in a comfortable and supportive environment.''',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0), // Add some padding to the left and right
-                child: _buildParagraph(
-                  content:
-                      '''Our journey doesn’t stop at medical care. Highland Hospital has been deeply involved in philanthropic initiatives that ensure healthcare is accessible to underserved communities, making a positive impact on countless lives. These initiatives, inspired by the founders’ vision, continue to grow under the leadership of Dr. C P Abdulla Yasser, ensuring that our commitment to community welfare remains unwavering.''',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0), // Add some padding to the left and right
-                child: _buildParagraph(
-                  content:
-                      '''Today, Highland Hospital stands as a beacon of trust and innovation, recognized for its contributions to healthcare and its role in uplifting the community. As we look to the future, we are continually evolving, driven by a passion for excellence, empathy, and integrity. Through every service and every interaction, we strive to create a healthcare ecosystem that not only treats illness but fosters long-term health and well-being. Our dedication to “YOUR HEALTH, OUR CARE” ensures that Highland Hospital remains a sanctuary for healing, hope, and compassionate care, not just for Mangalore, but for all who seek our services.''',
-                ),
-              ),
+              SizedBox(height: 20),
 
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // You can add more content here if needed
-                  ],
+              // Single Card containing all the paragraphs
+              Card(
+                elevation: 6.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    width:
-                        MediaQuery.of(context).size.width, // Full screen width
-                    child: Row(
-                      children: [
-                        // Image Section
-                        Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.5, // 30% of the screen width
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Square image
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/img/Dr.c.p.abdul rahman.jpg"), // Replace with your asset path
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                8), // Optional: Rounded corners
-                          ),
-                        ),
-                        const SizedBox(
-                            width: 16), // Spacing between image and text
-                        // Title and Content Section
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Message from the Chairman, Dr. C P Abdulla Rahman",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                  height:
-                                      8), // Spacing between title and content
-                              Text(
-                                '''“At Highland Hospital, ‘YOUR HEALTH, OUR CARE’ embodies our commitment to creating acompassionate, inclusive healthcare environment for everyone who walks through ourdoors. Founded with a vision to deliver high-quality, accessible care, we have dedicated over30 years to meeting the evolving needs of our community. Every patient experience isshaped by our guiding values of integrity, respect, and empathy, upheld by a skilled teamwho share our dedication to healing and hope. It is a privilege to serve Mangalore andbeyond, and we remain deeply committed to enhancing the health and wellness of ourcommunity with every step forward. Highland Hospital is more than a healthcare institution;it is a legacy of care, compassion, and unwavering dedication to the well-being of eachpatient who entrusts us with their health."''',
-                                style:
-                                    TextStyle(fontSize: 18, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
-              SizedBox(height: 30),
-
-              // Second container with image on the right and custom size
-
-              SizedBox(height: 30),
-
-              // Third container with image on the left and custom size using MediaQuery
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width, // Full screen width
-                  child: Row(
+                margin: EdgeInsets.symmetric(vertical: 12.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Title and Content Section
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Message from the Managing Director, Dr. C P Abdulla Yasser",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                                height: 8), // Spacing between title and content
-                            Text(
-                              '''“As Managing Director of Highland Hospital, I am honored to carry forward the legacy that‘YOUR HEALTH, OUR CARE’ represents. Each day, we work tirelessly to blend innovativemedical practices with a human touch, recognizing that healthcare is not solely abouttreatments—it is about trust, dignity, and partnership. Our commitment to excellence isdriven by a dedication to improve not only outcomes but also patient experiences. HighlandHospital is a place where cutting-edge technology meets compassion, and where our valuesof empathy, integrity, and quality drive everything we do. We envision a healthcareenvironment where every individual, regardless of circumstance, can feel safe, cared for,and respected. With a relentless focus on this mission, we continue to build on our legacy toserve our patients and community with unmatched dedication.”''',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.grey),
-                            ),
-                          ],
-                        ),
+                      // Paragraph 1
+                      Text(
+                        '''Founded by Dr. C P Abdulla Rahman and Mrs. Y Razia Rahman, Highland Hospital in Mangalore has been a cornerstone of healthcare excellence for over three decades. Built on the ethos of “YOUR HEALTH, OUR CARE,” the hospital embodies a commitment to delivering compassionate and accessible healthcare services to all. From its humble beginnings, Highland has grown into a trusted healthcare provider, blending cutting-edge medical technology with personalized care that puts patients at the center of everything we do.''',
+                        style: TextStyle(
+                            fontSize: 24, color: Colors.grey[700], height: 1.6),
                       ),
-                      const SizedBox(
-                          width: 16), // Spacing between text and image
-                      // Image Section
-                      Container(
-                        width: MediaQuery.of(context).size.width *
-                            0.5, // 50% of the screen width
-                        height: MediaQuery.of(context).size.width *
-                            0.4, // Image height
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage(
-                                "assets/img/Dr.c.p.abdulla yasser.jpg"), // Replace with your asset path
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                              8), // Optional: Rounded corners
-                        ),
+                      SizedBox(height: 16), // Space between paragraphs
+
+                      // Paragraph 2
+                      Text(
+                        '''Our multidisciplinary team of healthcare professionals, driven by a shared mission of improving lives, provides world-class treatment across a wide range of medical specialties. Whether it’s preventive care, advanced surgeries, or rehabilitation services, Highland Hospital is dedicated to ensuring that every patient receives the highest standard of care in a comfortable and supportive environment.''',
+                        style: TextStyle(
+                            fontSize: 24, color: Colors.grey[700], height: 1.6),
+                      ),
+                      SizedBox(height: 16), // Space between paragraphs
+
+                      // Paragraph 3
+                      Text(
+                        '''Our journey doesn’t stop at medical care. Highland Hospital has been deeply involved in philanthropic initiatives that ensure healthcare is accessible to underserved communities, making a positive impact on countless lives. These initiatives, inspired by the founders’ vision, continue to grow under the leadership of Dr. C P Abdulla Yasser, ensuring that our commitment to community welfare remains unwavering.''',
+                        style: TextStyle(
+                            fontSize: 24, color: Colors.grey[700], height: 1.6),
+                      ),
+                      SizedBox(height: 16), // Space between paragraphs
+
+                      // Paragraph 4
+                      Text(
+                        '''Today, Highland Hospital stands as a beacon of trust and innovation, recognized for its contributions to healthcare and its role in uplifting the community. As we look to the future, we are continually evolving, driven by a passion for excellence, empathy, and integrity. Through every service and every interaction, we strive to create a healthcare ecosystem that not only treats illness but fosters long-term health and well-being. Our dedication to “YOUR HEALTH, OUR CARE” ensures that Highland Hospital remains a sanctuary for healing, hope, and compassionate care, not just for Mangalore, but for all who seek our services.''',
+                        style: TextStyle(
+                            fontSize: 24, color: Colors.grey[700], height: 1.6),
                       ),
                     ],
                   ),
                 ),
               ),
+
+              SizedBox(height: 20),
+
+// Chairman Message with Image Section
               Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Container(
-                    width:
-                        MediaQuery.of(context).size.width, // Full screen width
-                    child: Row(
-                      children: [
-                        // Image Section
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.grey[
+                            100], // Light background color for the container
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8.0,
+                            spreadRadius: 4.0,
+                          ),
+                        ],
+                      ),
+                      child: Row(children: [
+                        // Image Section with Color Overlay and Shadow
                         Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.5, // 30% of the screen width
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Square image
+                          width: 180,
+                          height: 270,
                           decoration: BoxDecoration(
-                            image: const DecorationImage(
+                            image: DecorationImage(
                               image: AssetImage(
-                                  "assets/img/Mr.Mohammed yoonus.jpg"), // Replace with your asset path
+                                  "assets/img/Dr.c.p.abdul rahman.jpg"),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.circular(
-                                8), // Optional: Rounded corners
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black26, blurRadius: 6)
+                            ],
                           ),
                         ),
-                        const SizedBox(
-                            width: 16), // Spacing between image and text
+                        SizedBox(width: 20),
                         // Title and Content Section
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
+                              // Title with a gradient text color effect
                               Text(
-                                "Message from the CEO, Mr. Mohammed Yoonus",
+                                "Message from the Chairman, Dr. C P Abdulla Rahman",
                                 style: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey[800],
+                                  letterSpacing: 1.2,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black26,
+                                      blurRadius: 4,
+                                      offset: Offset(1.5, 1.5),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(
-                                  height:
-                                      8), // Spacing between title and content
+                              SizedBox(height: 12),
+                              // Content Section with background color variation
                               Text(
-                                '''“At Highland Hospital, ‘YOUR HEALTH, OUR CARE’ reflects our relentless pursuit ofoperational excellence and our dedication to patient-centered care. As CEO, I believe thatevery facet of our hospital’s operations should serve to elevate the patient experience,making healthcare efficient, compassionate, and accessible to all. Our team is focused onimplementing advanced technologies and evidence-based practices, while continuallystriving to maintain the warmth and respect our patients deserve. We invest in both ourpeople and our resources to uphold Highland Hospital’s reputation as a trusted healthcareprovider. By nurturing an environment of support and collaboration, we aim to transformhealthcare delivery, ensuring each patient experiences a seamless, caring journey towardbetter health. This is the Highland promise, a commitment to quality, respect, and anunwavering focus on the well-being of our patients and community.”''',
-                                style:
-                                    TextStyle(fontSize: 18, color: Colors.grey),
+                                '''“At Highland Hospital, ‘YOUR HEALTH, OUR CARE’ embodies our commitment to creating a compassionate, inclusive healthcare environment for everyone who walks through our doors. Founded with a vision to deliver high-quality, accessible care, we have dedicated over 30 years to meeting the evolving needs of our community. Every patient experience is shaped by our guiding values of integrity, respect, and empathy, upheld by a skilled team who share our dedication to healing and hope. It is a privilege to serve Mangalore and beyond, and we remain deeply committed to enhancing the health and wellness of our community with every step forward. Highland Hospital is more than a healthcare institution; it is a legacy of care, compassion, and unwavering dedication to the well-being of each patient who entrusts us with their health."''',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey[700],
+                                  height: 1.6,
+                                ),
                               ),
                             ],
                           ),
+                        )
+                      ]))),
+
+              SizedBox(height: 20),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.grey[100],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8.0,
+                        spreadRadius: 4.0,
+                      ),
+                    ],
+                  ),
+
+                  // Third container with image on the left and custom size using MediaQuery
+
+                  width: MediaQuery.of(context).size.width, // Full screen width
+                  child: Row(
+                    children: [
+                      // Title and Content Section
+                      SizedBox(width: 20),
+                      // Title and Content Section
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment
+                                  .centerRight, // Align text to the right
+                              child: Text(
+                                "Message from the Managing Director, Dr. C P Abdulla Yasser",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey[800],
+                                  letterSpacing: 1.2,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black26,
+                                      blurRadius: 4,
+                                      offset: Offset(1.5, 1.5),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            // Content Section with background color variation
+                            Text(
+                              '''“As Managing Director of Highland Hospital, I am honored to carry forward the legacy that ‘YOUR HEALTH, OUR CARE’ represents. Each day, we work tirelessly to blend innovative medical practices with a human touch, recognizing that healthcare is not solely about treatments—it is about trust, dignity, and partnership. Our commitment to excellence is driven by a dedication to improve not only outcomes but also patient experiences. Highland Hospital is a place where cutting-edge technology meets compassion, and where our values of empathy, integrity, and quality drive everything we do. We envision a healthcare environment where every individual, regardless of circumstance, can feel safe, cared for, and respected. With a relentless focus on this mission, we continue to build on our legacy to serve our patients and community with unmatched dedication.”''',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey[700],
+                                height: 1.6,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                      Container(
+                        width: 180,
+                        height: 270,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                "assets/img/Dr.c.p.abdulla yasser.jpg"),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black26, blurRadius: 6)
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                          width: 16), // Spacing between text and image
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.grey[100],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8.0,
+                        spreadRadius: 4.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      // Image Section with Shadow
+                      Container(
+                        width: 180,
+                        height: 270,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                AssetImage("assets/img/Mr.Mohammed yoonus.jpg"),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black26, blurRadius: 6)
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      // Title and Content Section
+                      SizedBox(width: 20),
+                      // Title and Content Section
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Title with a gradient text color effect
+                            Text(
+                              "Message from the CEO, Mr. Mohammed Yoonus",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueGrey[800],
+                                letterSpacing: 1.2,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                    offset: Offset(1.5, 1.5),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            // Content Section with background color variation
+                            Text(
+                              '''“At Highland Hospital, ‘YOUR HEALTH, OUR CARE’ reflects our relentless pursuit of operational excellence and our dedication to patient-centered care. As CEO, I believe that every facet of our hospital’s operations should serve to elevate the patient experience, making healthcare efficient, compassionate, and accessible to all. Our team is focused on implementing advanced technologies and evidence-based practices, while continually striving to maintain the warmth and respect our patients deserve. We invest in both our people and our resources to uphold Highland Hospital’s reputation as a trusted healthcare provider. By nurturing an environment of support and collaboration, we aim to transform healthcare delivery, ensuring each patient experiences a seamless, caring journey toward better health. This is the Highland promise, a commitment to quality, respect, and an unwavering focus on the well-being of our patients and community.”''',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey[700],
+                                height: 1.6,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+// Below part with health tips, news, and visiting hours
               SizedBox(height: 30),
 
 // Below part with health tips, news, and visiting hours
@@ -314,7 +388,7 @@ class _AboutState extends State<About> {
                 Container(
                   width: double.infinity,
                   height:
-                      200, // Fixed height but can adjust based on design needs
+                      330, // Fixed height but can adjust based on design needs
                   color: const Color(0xFF1FBCB1),
                 ),
                 Row(
@@ -350,7 +424,10 @@ class _AboutState extends State<About> {
                                     ),
                                     SizedBox(height: 5),
                                     Text(
-                                      '''“Mother Theresa Road, Kankanady,Highland Hospitals, Mangaluru, Karnataka 575002, India."''',
+                                      '''“ Mother Theresa Road,
+  Kankanady, Highland Hospitals,
+  Mangaluru, Karnataka 575002, 
+  India."''',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -454,12 +531,11 @@ class _AboutState extends State<About> {
                     )
                   ],
                 ),
-
                 Stack(
                   children: [
                     // Main large container at the bottom
                     Padding(
-                      padding: const EdgeInsets.only(top: 190),
+                      padding: const EdgeInsets.only(top: 220),
                       child: Container(
                           width: double.infinity,
                           height:
@@ -469,7 +545,7 @@ class _AboutState extends State<About> {
                     Padding(
                       padding: const EdgeInsets.only(
                         left: 50,
-                        top: 200,
+                        top: 230,
                       ), // Use uniform padding for better spacing
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment
