@@ -1,8 +1,14 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_highland/Highlandhome.dart';
+import 'package:flutter_highland/BookingPatientController.dart';
+import 'package:flutter_highland/newbookingappointcontroller.dart';
+import 'package:flutter_highland/newbookings.dart';
+import 'package:provider/provider.dart'; // Import provider package
+import 'Feedback_controller.dart'; // Ensure this path is correct
+import 'Highlandhome.dart'; // Ensure this path is correct
+// Import the NewBookings page
 
+// ScaleSize class to adjust text scaling
 class ScaleSize {
   static double textScaleFactor(BuildContext context,
       {double maxTextScaleFactor = 1}) {
@@ -13,13 +19,24 @@ class ScaleSize {
 }
 
 void main() {
-  runApp(const MainScreen());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FeedbackController()),
+        ChangeNotifierProvider(create: (_) => Newbookingappointcontroller()),
+        Provider<BookingPatientController>(
+          create: (_) => BookingPatientController(),
+        ),
+      ],
+      child: const MainScreen(),
+    ),
+  );
 }
 
+// MainScreen widget to setup MaterialApp and routes
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
@@ -29,16 +46,17 @@ class MainScreen extends StatelessWidget {
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(ScaleSize.textScaleFactor(context)),
+              textScaleFactor: textScaleFactor,
             ),
             child: child!,
           );
         },
         routes: {
           '/home': (context) => Highlandhome(),
+          '/new-bookings': (context) =>
+              NewBookings(), // Add route for NewBookings
         },
-        initialRoute: '/',
-        home: Highlandhome(),
+        initialRoute: '/home', // Set initial route to '/home'
         debugShowCheckedModeBanner: false, // Disable the debug banner
       );
     });

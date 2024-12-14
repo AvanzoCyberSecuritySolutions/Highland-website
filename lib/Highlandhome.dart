@@ -1,9 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/About.dart';
-import 'package:flutter_highland/constants/color_constant.dart';
-//import 'package:flutter_highland/constants/image_constant.dart';
+import 'package:flutter_highland/HomeDashboard.dart';
+import 'package:flutter_highland/bookappoint_register.dart';
+import 'package:flutter_highland/constants/Color_Constant.dart';
+import 'package:flutter_highland/FeedbackForm.dart';
+import 'package:flutter_highland/contacts.dart';
+
+// Import FeedbackForm
+// Ensure this path is correct
 
 class Highlandhome extends StatefulWidget {
   @override
@@ -20,7 +24,6 @@ class _HighlandhomeState extends State<Highlandhome> {
     'Careers',
     'News',
     'Feedback',
-    'Nursing',
     'International - Patient',
     'CONTACT',
   ];
@@ -39,6 +42,20 @@ class _HighlandhomeState extends State<Highlandhome> {
         context,
         MaterialPageRoute(builder: (context) => About()),
       );
+    } else if (menuItem == 'Feedback') {
+      // Navigate to Feedback page when "Feedback" is tapped
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FeedbackForm()),
+      );
+    } else if (menuItem == 'Departments') {
+      // Navigate to Departments page when "Departments" is tapped
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                HomeDashboard()), // Navigate to the Departments page
+      );
     }
     // Add more conditions to handle other menu items if needed
   }
@@ -52,9 +69,8 @@ class _HighlandhomeState extends State<Highlandhome> {
     return Scaffold(
       appBar: AppBar(
           title: Padding(
-            padding: EdgeInsets.only(
-                left: screenWidth *
-                    .08), // Reduced padding to allow space for icon
+            padding: EdgeInsets.only(left: screenWidth * .08),
+            // Reduced padding to allow space for icon
             child: Row(
               mainAxisAlignment: MainAxisAlignment
                   .spaceBetween, // This ensures left and right are spaced apart
@@ -135,10 +151,20 @@ class _HighlandhomeState extends State<Highlandhome> {
           children: [
             Container(
               margin:
-                  const EdgeInsets.only(bottom: 20), // Space above the border
+                  const EdgeInsets.only(bottom: 0), // Space above the border
               width:
                   screenWidth, // Dynamic width to adapt to different screen sizes
-              height: 2, // Height of the border
+              height: 20, // Height of the border
+              decoration: BoxDecoration(
+                color: Color(0xFF1FBCB1), // Color of the border
+              ),
+            ),
+            Container(
+              margin:
+                  const EdgeInsets.only(bottom: 0), // Space above the border
+              width:
+                  screenWidth, // Dynamic width to adapt to different screen sizes
+              height: 3, // Height of the border
               decoration: BoxDecoration(
                 color: Color(0xFFEE9B27), // Color of the border
               ),
@@ -148,31 +174,47 @@ class _HighlandhomeState extends State<Highlandhome> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(menuItems.length, (index) {
                 return Flexible(
-                  child: GestureDetector(
-                    onTap: () => onMenuItemTapped(menuItems[index]),
-                    child: menuItems[index] == 'CONTACT'
-                        ? Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2.0, horizontal: 16.0),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFEE9821),
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                            child: Text(
-                              menuItems[index],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          )
-                        : Text(
-                            menuItems[index],
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 1, 5, 10)),
+                  child: InkWell(
+                    onTap: () {
+                      if (menuItems[index] == 'CONTACT') {
+                        // Navigate to the Contacts page when 'CONTACT' is tapped
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Contacts(), // Replace with your Contacts page widget
                           ),
+                        );
+                      } else {
+                        // Handle other menu items here
+                        onMenuItemTapped(menuItems[index]);
+                      }
+                    },
+                    borderRadius:
+                        BorderRadius.circular(4), // Rounded corners on hover
+                    splashColor: Color(0xFFEE9821), // Ripple color
+                    hoverColor: Color(0xFFEE9821), // Background color on hover
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      child: Text(
+                        menuItems[index],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: menuItems[index] == 'CONTACT'
+                              ? Colors.white
+                              : Color.fromARGB(255, 1, 5, 10),
+                        ),
+                      ),
+                      decoration: menuItems[index] == 'CONTACT'
+                          ? BoxDecoration(
+                              color: Color(0xFFEE9821),
+                              borderRadius: BorderRadius.circular(4.0),
+                            )
+                          : null, // Default text style for other items
+                    ),
                   ),
                 );
               }),
@@ -627,19 +669,19 @@ class _HighlandhomeState extends State<Highlandhome> {
                                           ),
                                           // Row for Name and State
                                           bookAnAppointmentFields(
-                                            firstFieldLabel: "Name : ",
+                                            firstFieldLabel: 'First Name',
                                             firstFieldController:
                                                 nameController,
-                                            secondFieldLabel: "State : ",
+                                            secondFieldLabel: 'Last Name',
                                             secondFieldController:
                                                 stateController,
                                           ),
                                           // Row for Email and Doctor (left and right inside one input box)
                                           bookAnAppointmentFields(
-                                              firstFieldLabel: "Email : ",
+                                              firstFieldLabel: 'Email',
                                               firstFieldController:
                                                   emailController,
-                                              secondFieldLabel: "Doctor : ",
+                                              secondFieldLabel: 'Doctor',
                                               secondFieldController:
                                                   doctorController),
                                           Container(
@@ -661,7 +703,7 @@ class _HighlandhomeState extends State<Highlandhome> {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          'Phone Number:', // Display the text as plain text
+                                                          'Phone Number', // Display the text as plain text
                                                           style: TextStyle(
                                                             fontSize:
                                                                 16, // Adjust the font size if necessary
@@ -777,39 +819,62 @@ class _HighlandhomeState extends State<Highlandhome> {
                                           //     height:
                                           //         5), // Adjust the height if necessary
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                top:
-                                                    10), // Reduce padding if necessary
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10,
-                                                  horizontal:
-                                                      30), // Adjust padding inside the container
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFEE9821),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                border: Border.all(
-                                                  color: Colors.yellow,
-                                                ),
-                                              ),
-                                              width: containerConstraints
-                                                      .maxWidth *
-                                                  .8, // Adjust the width of the container
-                                              height: containerConstraints
-                                                      .maxHeight *
-                                                  .15, // Adjust the height of the container
-                                              child: Center(
-                                                child: Text(
-                                                  'Book Now',
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color.fromARGB(
-                                                        255, 8, 8, 8),
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                // Navigate to the next page with data
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        bookappoint_register(
+                                                      firstName:
+                                                          nameController.text,
+                                                      lastName:
+                                                          stateController.text,
+                                                      email:
+                                                          emailController.text,
+                                                      doctor:
+                                                          doctorController.text,
+                                                      phone:
+                                                          phoneController.text,
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
+                                                );
+                                              }, // Reduce padding if necessary
+                                              child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal:
+                                                          30), // Adjust padding inside the container
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFFEE9821),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    border: Border.all(
+                                                      color: Colors.yellow,
+                                                    ),
+                                                  ),
+                                                  width: containerConstraints
+                                                          .maxWidth *
+                                                      .8, // Adjust the width of the container
+                                                  height: containerConstraints
+                                                          .maxHeight *
+                                                      .15, // Adjust the height of the container
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Book Now',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255, 8, 8, 8),
+                                                      ),
+                                                    ),
+                                                  )),
                                             ),
                                           ),
                                         ])))
@@ -2189,7 +2254,9 @@ class _HighlandhomeState extends State<Highlandhome> {
               child: LayoutBuilder(builder: (context, serviceConstraints) {
                 return Column(
                   children: [
-                    SizedBox(height: serviceConstraints.maxHeight * .1),
+                    SizedBox(
+                      height: serviceConstraints.maxHeight * .1,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -2535,16 +2602,39 @@ class _HighlandhomeState extends State<Highlandhome> {
                 // Main large container at the bottom
                 Container(
                   width: double.infinity,
-                  height:
-                      50, // Fixed height but can adjust based on design needs
+                  height: 50, // Adjust height as needed
                   color: Color(0xFF1BA08D),
-                  child: Center(
-                    // This centers the text inside the container
-                    child: Text(
-                      ' © Highland Hospitals.All Rights Reserved', // Replace with the desired text
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment
+                        .spaceBetween, // Places the text at the opposite sides
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 18.0), // Padding to the left side
+                        child: Text(
+                          '© Highland Hospitals. All Rights Reserved',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 18.0), // Padding to the right side
+                        child: Text(
+                          'Developed by Avanzo Cyber Security Solutions Pvt.Ltd.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
           ],
@@ -2578,7 +2668,7 @@ class _HighlandhomeState extends State<Highlandhome> {
       width: serviceConstraints.maxWidth * .25,
       color: backGroundColor,
       padding: EdgeInsets.only(
-        left: serviceConstraints.maxWidth * .025,
+        left: serviceConstraints.maxWidth * .02,
       ),
       alignment: Alignment.center,
       child: Column(
@@ -2600,7 +2690,7 @@ class _HighlandhomeState extends State<Highlandhome> {
             ],
           ),
           SizedBox(
-            width: serviceConstraints.maxWidth * .2,
+            width: serviceConstraints.maxWidth * .3,
             child: Text(
               content,
               maxLines: 6,
