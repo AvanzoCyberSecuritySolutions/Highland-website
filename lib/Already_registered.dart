@@ -815,25 +815,35 @@ class _NewBookingsState extends State<NewBookings> {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
+      
+  body: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: SingleChildScrollView(
+      
+      child: Center(  // Center the whole form
+        child: Padding(
+          padding: const EdgeInsets.only(top: 150),
           child: Container(
-            constraints: BoxConstraints(maxWidth: 600),
+            
+            constraints: BoxConstraints(maxWidth: 600),  // Limit the width
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,  // Vertically center the children
+                crossAxisAlignment: CrossAxisAlignment.center,  // Horizontally center the children
                 children: [
+                  
+                  // Centering the TextFormField widget
                   TextFormField(
                     controller: patientidcontroller,
                     focusNode: _focusNode,
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      
                       labelText: 'Patient Id',
                       prefixIcon: Icon(
                         Icons.person,
-                        color: ColorConstant.mainBlue,
+                         color: Color(0xFF1FBCB1),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -862,18 +872,17 @@ class _NewBookingsState extends State<NewBookings> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 20.0),
+                  // Department Dropdown
                   DropdownButtonFormField<String>(
                     value: _selectedDepartment,
                     hint: const Text('Select Department'),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.local_hospital,
-                        color: ColorConstant.mainBlue,
+                         color: Color(0xFF1FBCB1),
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -893,17 +902,6 @@ class _NewBookingsState extends State<NewBookings> {
                       await functionprovider.departmentAndDoctorSelection(
                           dept: _selectedDepartment!);
                       _selectedDoctor = varprovider.doctorList[0];
-                      // await functionprovider.doctors(_selectedDepartment);
-
-                      // _selectedDoctor = varprovider.doctorList.isNotEmpty
-                      //     ? varprovider.doctorList[0]
-                      //     : null;
-                      // _selectedDoctorId = varprovider.doctorList.isNotEmpty
-                      //     ? varprovider.doctorIdList[0]
-                      //     : null;
-                      // selectingTimeslots(
-                      //     varprovider: varprovider,
-                      //     functionprovider: functionprovider);
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -913,19 +911,16 @@ class _NewBookingsState extends State<NewBookings> {
                     },
                   ),
                   const SizedBox(height: 20.0),
+                  // Doctor Dropdown
                   DropdownButtonFormField<String>(
                     value: _selectedDoctor,
                     hint: const Text('Select Doctor'),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.medical_services,
-                        color: ColorConstant.mainBlue,
+                         color: Color(0xFF1FBCB1),
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                      // suffix: TextButton(
-                      //     onPressed: () {},
-                      //     child: const Text("check availability")),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -944,20 +939,6 @@ class _NewBookingsState extends State<NewBookings> {
                       });
                       await functionprovider.departmentAndDoctorSelection(
                           dept: _selectedDepartment);
-                      // int itemid = 0;
-                      // for (var i = 0; i < varprovider.doctorList.length; i++) {
-                      //   if (varprovider.doctorList[i] == _selectedDoctor) {
-                      //     itemid = i;
-                      //   }
-                      // }
-                      // _selectedDoctorId = varprovider.doctorIdList[itemid];
-                      // selectingTimeslots(
-                      //     varprovider: varprovider,
-                      //     functionprovider: functionprovider);
-                      // _dateController.clear();
-                      // picked = null;
-                      // varprovider.timeList.clear();
-                      // varprovider.selectedtimeList.clear();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -966,17 +947,16 @@ class _NewBookingsState extends State<NewBookings> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 20.0),
+                  // Reason TextField
                   TextFormField(
                     controller: _reasonController,
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       labelText: 'Reason (Optional)',
                       prefixIcon: Icon(
                         Icons.edit,
-                        color: ColorConstant.mainBlue,
+                        color: Color(0xFF1FBCB1),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -986,15 +966,16 @@ class _NewBookingsState extends State<NewBookings> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
+                  
+                  // Date TextField
                   TextFormField(
                     controller: _dateController,
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       labelText: 'Date',
                       prefixIcon: Icon(
                         Icons.timer,
-                        color: ColorConstant.mainBlue,
+                        color: Color(0xFF1FBCB1),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -1015,179 +996,8 @@ class _NewBookingsState extends State<NewBookings> {
                         varprovider: varprovider),
                   ),
                   const SizedBox(height: 20.0),
-
-                  // ElevatedButton(
-                  //   onPressed: () {},
-                  //   child: Text(
-                  //     "Book your slot",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: const Color(0xff0ea69f),
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(8.0),
-                  //     ),
-                  //     padding: const EdgeInsets.symmetric(
-                  //         horizontal: 50.0, vertical: 15.0),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 20.0),
-                  // DropdownButtonFormField<String>(
-                  //   value: _selectedTimeSlot,
-                  //   hint: const Text('Select Time Slot'),
-                  //   decoration: InputDecoration(
-                  //     contentPadding:
-                  //         EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  //     filled: true,
-                  //     fillColor: Colors.white,
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8.0),
-                  //     ),
-                  //   ),
-                  //   items: varprovider.timeList.map((String value) {
-                  //     return DropdownMenuItem<String>(
-                  //       value: value,
-                  //       child: Text(value),
-                  //     );
-                  //   }).toList(),
-                  //   onChanged: (newValue) {
-                  //     setState(() {
-                  //       _selectedTimeSlot = newValue;
-                  //     });
-                  //   },
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'Please select a time slot';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
-                  //  -----------------------------------------------------------------------------
-                  // List.generate(
-                  //           doctorsList[index]['doctor_time'].length,
-                  //           (index2) {
-                  //             bool isSelected = selectedTimesList[index][
-                  //                     doctorsList[index]['doctor_time']
-                  //                         [index2]] ??
-                  //                 false; // Check if time is selected
-                  //             return InkWell(
-                  //               onTap: () {
-
-                  //               },
-                  //               child: Container(
-                  //                 padding: EdgeInsets.all(7),
-                  //                 decoration: BoxDecoration(
-                  //                   color: isSelected
-                  //                       ? Colors.red[700] // Selected color
-                  //                       : Colors.green, // Default color
-                  //                   border: Border.all(color: Colors.black),
-                  //                   borderRadius:
-                  //                       BorderRadius.all(Radius.circular(7)),
-                  //                 ),
-                  //                 child: Text(
-                  //                   doctorsList[index]['doctor_time'][index2],
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           },
-                  //         ),
-                  Visibility(
-                    visible: varprovider.timeList.isNotEmpty,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        timeSlotHelp(
-                            fillColor: ColorConstant.selectedTextColor,
-                            borderColor: ColorConstant.selectedTimeSlotColor,
-                            label: "Available"),
-                        timeSlotHelp(
-                            fillColor: ColorConstant.selectedTimeSlotColor,
-                            borderColor: ColorConstant.selectedTimeSlotColor,
-                            label: "Selected"),
-                        timeSlotHelp(
-                            fillColor: ColorConstant.bookedTimeSlotColor,
-                            borderColor: ColorConstant.bookedTimeSlotColor,
-                            label: "Booked"),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  Wrap(
-                    children: List.generate(
-                      // varprovider.timeList.length,
-                      varprovider.timeList.length,
-                      (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            //
-                            // print(selectedindex);
-                            // print(varprovider.selectedtimeList[selectedindex!]);
-                            //
-                            // // ------------------------------------------
-                            varprovider.selectedtimeList
-                                    .contains(varprovider.timeList[index])
-                                ? setState(() {
-                                    selectedindex = index;
-                                  })
-                                : setState(() {
-                                    selectedindex = null;
-                                  });
-                            log(varprovider.timeList[selectedindex!]);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 3),
-                            child: Container(
-                              padding: EdgeInsets.all(7),
-                              // color: ColorConstants.bookedTimeSlotColor,
-                              decoration: BoxDecoration(
-                                color: varprovider.selectedtimeList
-                                        .contains(varprovider.timeList[index])
-                                    ? selectedindex == index
-                                        ? ColorConstant.selectedTimeSlotColor
-                                        : ColorConstant.transparent
-                                    : ColorConstant.bookedTimeSlotColor,
-                                // color: isSelected
-                                //     ? Colors.red[700] // Selected color
-                                //     : Colors.green, // Default color
-                                border: Border.all(
-                                    width: 3,
-                                    color: varprovider.selectedtimeList
-                                            .contains(
-                                                varprovider.timeList[index])
-                                        ? selectedindex == index
-                                            ? ColorConstant
-                                                .selectedTimeSlotColor
-                                            : ColorConstant
-                                                .selectedTimeSlotColor
-                                        : ColorConstant.bookedTimeSlotColor),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(7)),
-                              ),
-                              child: Text(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: varprovider.selectedtimeList
-                                            .contains(
-                                                varprovider.timeList[index])
-                                        ? selectedindex == index
-                                            ? ColorConstant.selectedTextColor
-                                            : ColorConstant
-                                                .selectedTimeSlotColor
-                                        : ColorConstant.selectedTextColor),
-                                varprovider.doctorTimelistModel.slots?[index]
-                                        .time ??
-                                    '',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  // ------------------------------------------------------------------------------------------
-                  const SizedBox(height: 20.0),
+                  
+                  // Submit Button
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -1203,7 +1013,6 @@ class _NewBookingsState extends State<NewBookings> {
                             doc_lastname: _selectedDoctor!.split(' ').last,
                             reason: _reasonController.text.trim(),
                             date: _dateController.text.trim(),
-                            // timeeee
                             start_time: varprovider.doctorTimelistModel
                                     .slots?[selectedindex!].time ??
                                 '',
@@ -1213,8 +1022,7 @@ class _NewBookingsState extends State<NewBookings> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text(
-                                          "You are successfully appointed"),
+                                      title: Text("You are successfully appointed"),
                                       actions: [
                                         TextButton(
                                           child: Text("Back"),
@@ -1226,39 +1034,27 @@ class _NewBookingsState extends State<NewBookings> {
                                             firstnamecontroller.clear();
                                             lastnamecontroller.clear();
                                             phnumbercontroller.clear();
-                                            // varprovider.deptList.clear();
+                                            varprovider.deptList.clear();
                                             varprovider.doctorIdList.clear();
                                             varprovider.doctorList.clear();
                                             varprovider.timeList.clear();
-                                            varprovider.selectedtimeList
-                                                .clear();
+                                            varprovider.selectedtimeList.clear();
                                             _selectedDepartment = null;
                                             _selectedDoctor = null;
                                             _selectedDoctorId = null;
                                             selectedindex = null;
-
+          
                                             setState(() {});
                                             Navigator.pop(context);
-                                            // Navigator.pushReplacement(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //       builder: (context) =>
-                                            //           // HomeDashboard(),=====================================================
-                                            //           Dashboardsecondscreen(
-                                            //               userName: "Avanzo",
-                                            //               empId: "001",
-                                            //               des: "Admin"),
-                                            //     ));
                                           },
-                                        )
+                                        ),
                                       ],
                                     );
                                   },
                                 )
                               : ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content:
-                                        const Text('Appointment not Booked'),
+                                    content: const Text('Appointment not Booked'),
                                     backgroundColor: ColorConstant.mainRed,
                                   ),
                                 );
@@ -1281,9 +1077,15 @@ class _NewBookingsState extends State<NewBookings> {
                 ],
               ),
             ),
+          
+          
+                  
+                ),
+        ),
+            ),
           ),
         ),
-      ),
+      
     );
   }
 

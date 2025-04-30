@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For formatting the date
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'Feedback_controller.dart'; // Ensure this is the correct path to your FeedbackController file
-import 'constants/color_constant.dart'; // Ensure this is the correct path to your ColorConstant file
+import 'Feedback_controller.dart';
+import 'constants/color_constant.dart'; // Adjust this path if needed
 
 class FeedbackForm extends StatefulWidget {
+  const FeedbackForm({super.key});
+
   @override
   _FeedbackFormState createState() => _FeedbackFormState();
 }
@@ -20,295 +22,317 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   bool responseUpload = false;
 
+  static bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 650;
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 650 &&
+      MediaQuery.of(context).size.width < 1100;
+  static bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 1100;
+
+  @override
+  void dispose() {
+    patientidContoller.dispose();
+    nameController.dispose();
+    phnContoller.dispose();
+    emailController.dispose();
+    feedbackController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildInfoSection(
+      BuildContext context, String formattedDate, bool isMobile) {
+    final Size size = MediaQuery.of(context).size;
+    final double imageWidth = isMobile ? size.width * 0.7 : size.width * 0.3;
+    final double imageHeight =
+        isMobile ? size.height * 0.25 : size.height * 0.3;
+
+    return Column(
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        if (!isMobile) SizedBox(height: size.height * 0.1),
+        Text(
+          'We value your feedback!',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          style: TextStyle(
+            fontSize: isMobile ? 28 : 36,
+            fontWeight: FontWeight.bold,
+            color: ColorConstant.mainOrange,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: isMobile ? size.width * 0.7 : 390,
+          height: 5,
+          color: const Color(0xFF1BA08F),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Date: $formattedDate',
+          style: const TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+        const SizedBox(height: 20),
+        Image.asset(
+          'assets/img/Artboard Highland.png',
+          width: imageWidth,
+          height: imageHeight,
+          fit: BoxFit.contain,
+        ),
+        if (isMobile) const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildFormSection(BuildContext context, String formattedDate,
+      FeedbackController feedbackProvider, bool isMobile) {
+    final double formFieldWidth = isMobile ? double.infinity : 500;
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment:
+            isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        children: [
+          //const SizedBox(height: 10),
+          SizedBox(
+            width: formFieldWidth,
+            child: TextFormField(
+              controller: patientidContoller,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelText: 'Patient ID',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person_add_alt_1_sharp,
+                    color: Color(0xFF1BA08F)),
+              ),
+              validator: (value) => (value == null || value.isEmpty)
+                  ? 'Patient ID is required'
+                  : null,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: formFieldWidth,
+            child: TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person, color: Color(0xFF1BA08F)),
+              ),
+              validator: (value) =>
+                  (value == null || value.isEmpty) ? 'Name is required' : null,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: formFieldWidth,
+            child: TextFormField(
+              controller: phnContoller,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelText: 'Mobile No',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.phone, color: Color(0xFF1BA08F)),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Mobile No is required';
+                }
+                if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                  return 'Enter a valid 10-digit mobile number';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: formFieldWidth,
+            child: TextFormField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email, color: Color(0xFF1BA08F)),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Email is required';
+                }
+                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) {
+                  return 'Enter a valid email address';
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(height: 16),
+          SizedBox(
+            width: MediaQuery.of(context).size.width *
+                0.93, // 80% of the screen width
+            child: TextFormField(
+              controller: feedbackController,
+              decoration: InputDecoration(
+                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelText: 'Feedback',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(
+                  Icons.feedback,
+                  color: Color(0xFF1BA08F),
+                ),
+              ),
+              maxLines: 9,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Feedback cannot be empty';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Checkbox(
+                value: responseUpload,
+                activeColor: const Color(0xFF1BA08F),
+                onChanged: (value) {
+                  setState(() {
+                    responseUpload = value!;
+                  });
+                },
+              ),
+              const Flexible(
+                child: Text(
+                  "Would you like to upload this response to our official website?",
+                  style: TextStyle(fontSize: 17),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+
+                try {
+                  int statusCode = await feedbackProvider.feedbackSaving(
+                    patientid: patientidContoller.text,
+                    name: nameController.text,
+                    email: emailController.text,
+                    phn: phnContoller.text,
+                    feedback: feedbackController.text,
+                    date: formattedDate,
+                  );
+
+                  Navigator.pop(context);
+
+                  if (statusCode == 200 || statusCode == 201) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Thank you for your valuable feedback!'),
+                        backgroundColor: Color(0xFF1BA08F),
+                      ),
+                    );
+                    patientidContoller.clear();
+                    nameController.clear();
+                    emailController.clear();
+                    phnContoller.clear();
+                    feedbackController.clear();
+                    setState(() {
+                      responseUpload = false;
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text('Submission failed. Status code: $statusCode'),
+                        backgroundColor: ColorConstant.mainRed,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('An error occurred: ${e.toString()}'),
+                      backgroundColor: ColorConstant.mainRed,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Text('Submit'),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Color(0xFF1BA08F),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var feedbackProvider =
+    final feedbackProvider =
         Provider.of<FeedbackController>(context, listen: false);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    Size size = MediaQuery.sizeOf(context);
+    final bool mobile = isMobile(context);
+    final bool tablet = isTablet(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Feedback Form',
-          style: TextStyle(
-            color: Colors.white, // Set the text color to red
-          ),
-        ),
+        title:
+            const Text('Feedback Form', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.black), // <-- Change here
         centerTitle: true,
-        backgroundColor: Color(0xFF1BA08F),
+        backgroundColor: const Color(0xFF1BA08F),
       ),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: (mobile || tablet)
+              ? Column(
+                  children: [
+                    _buildInfoSection(context, formattedDate, mobile),
+                    const SizedBox(height: 30),
+                    _buildFormSection(
+                        context, formattedDate, feedbackProvider, mobile),
+                  ],
+                )
+              : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Expanded(
                       flex: 1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text(
-                            'We value your feedback!',
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: ColorConstant.mainOrange,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            width: 390,
-                            height: 5,
-                            color: Color(0xFF1BA08F),
-                          ),
-
-                          SizedBox(height: 10),
-                          Text(
-                            'Date: $formattedDate',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-// Add your image asset here
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              MediaQuery.of(context).size.width *
-                                  0.01, // 1% of screen width for left
-                              MediaQuery.of(context).size.height *
-                                  0.09, // 2% of screen height for top
-                              MediaQuery.of(context).size.width *
-                                  0.012, // 1% of screen width for right
-                              MediaQuery.of(context).size.height *
-                                  0.01, // 2% of screen height for bottom
-                            ),
-                            child: Image.asset(
-                              'assets/img/Artboard Highland.png', // Replace with your image path
-                              width: MediaQuery.of(context).size.width *
-                                  0.5, // 50% of screen width
-                              height: MediaQuery.of(context).size.height *
-                                  0.3, // 30% of screen height
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: _buildInfoSection(context, formattedDate, mobile),
                     ),
-                    SizedBox(width: 50),
+                    const SizedBox(width: 50),
                     Expanded(
                       flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(height: 20),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 500,
-                                  child: TextFormField(
-                                    controller: patientidContoller,
-                                    decoration: InputDecoration(
-                                      labelText: 'Patient ID',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.person_add_alt_1_sharp,
-                                        color: Color(0xFF1BA08F),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Patient ID is required';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: 500,
-                                  child: TextFormField(
-                                    controller: nameController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Name',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.person,
-                                        color: Color(0xFF1BA08F),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Name is required';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: 500,
-                                  child: TextFormField(
-                                    controller: phnContoller,
-                                    decoration: InputDecoration(
-                                      labelText: 'Mobile No',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.phone,
-                                        color: Color(0xFF1BA08F),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Mobile No is required';
-                                      }
-                                      if (!RegExp(r'^\d{10}$')
-                                          .hasMatch(value)) {
-                                        return 'Enter a valid 10-digit mobile number';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: 500,
-                                  child: TextFormField(
-                                    controller: emailController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.email,
-                                        color: Color(0xFF1BA08F),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Email is required';
-                                      }
-                                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$')
-                                          .hasMatch(value)) {
-                                        return 'Enter a valid email address';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.5, // 80% of the screen width
-                                  child: TextFormField(
-                                    controller: feedbackController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Feedback',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.feedback,
-                                        color: Color(0xFF1BA08F),
-                                      ),
-                                    ),
-                                    maxLines: 9,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Feedback cannot be empty';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                      value: responseUpload,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          responseUpload = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      "Would you like to upload this response to our official website?",
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      int statusCode =
-                                          await feedbackProvider.feedbackSaving(
-                                        patientid: patientidContoller.text,
-                                        name: nameController.text,
-                                        email: emailController.text,
-                                        phn: phnContoller.text,
-                                        feedback: feedbackController.text,
-                                        date: formattedDate,
-                                      );
-
-                                      if (statusCode == 201) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Thank you for your valuable feedback!'),
-                                            backgroundColor: Color(0xFF1BA08F),
-                                          ),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Please correct the errors in the form before submitting.'),
-                                            backgroundColor:
-                                                ColorConstant.mainRed,
-                                          ),
-                                        );
-                                      }
-
-                                      patientidContoller.clear();
-                                      nameController.clear();
-                                      emailController.clear();
-                                      phnContoller.clear();
-                                      feedbackController.clear();
-                                    }
-                                  },
-                                  child: Text('Submit'),
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Color(0xFF1BA08F),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      child: SingleChildScrollView(
+                        child: _buildFormSection(
+                            context, formattedDate, feedbackProvider, mobile),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

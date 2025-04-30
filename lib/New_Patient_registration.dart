@@ -9,7 +9,7 @@ import 'package:flutter_highland/constants/Color_Constant.dart';
 // import 'package:hms_web_project/presentation/dashboard_screen/controller/new_booking_controller.dart';
 import 'package:flutter_highland/AppUtils.dart';
 import 'package:flutter_highland/newbookingappointcontroller.dart';
-import 'package:flutter_highland/newbookings.dart';
+import 'package:flutter_highland/Already_registered.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer';
 import 'package:provider/provider.dart';
@@ -21,15 +21,16 @@ class bookappoint_register extends StatefulWidget {
   final String firstName;
   final String lastName;
   final String email;
-  final String doctor;
+  final String address;
   final String phone;
 
   const bookappoint_register({
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.doctor,
+    required this.address,
     required this.phone,
+    // ignore: non_constant_identifier_names
     Key? key,
   }) : super(key: key);
 
@@ -100,7 +101,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     'Other',
   ];
 
-  final List<String> _doctors = [];
+  //final List<String> _address = [];
 
   bool visible = false;
 
@@ -120,7 +121,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     firstnamecontroller = TextEditingController(text: widget.firstName);
     lastnamecontroller = TextEditingController(text: widget.lastName);
     emailController = TextEditingController(text: widget.email);
-    doctorToBeConsultedController = TextEditingController(text: widget.doctor);
+    addressController = TextEditingController(text: widget.address);
     phoneNumberController = TextEditingController(text: widget.phone);
     callFuction();
   }
@@ -131,7 +132,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     firstnamecontroller.dispose();
     lastnamecontroller.dispose();
     emailController.dispose();
-    doctorToBeConsultedController.dispose();
+    addressController.dispose();
     phoneNumberController.dispose();
     super.dispose();
   }

@@ -2,11 +2,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/BookingPatientController.dart';
 import 'package:flutter_highland/newbookingappointcontroller.dart';
-import 'package:flutter_highland/newbookings.dart';
-import 'package:provider/provider.dart'; // Import provider package
-import 'Feedback_controller.dart'; // Ensure this path is correct
-import 'Highlandhome.dart'; // Ensure this path is correct
-// Import the NewBookings page
+import 'package:flutter_highland/Already_registered.dart';
+import 'package:provider/provider.dart';
+import 'Feedback_controller.dart';
+import 'Highlandhome.dart';
+import 'Responsive.dart'; // Import your responsive helper
 
 // ScaleSize class to adjust text scaling
 class ScaleSize {
@@ -33,32 +33,66 @@ void main() {
   );
 }
 
-// MainScreen widget to setup MaterialApp and routes
+// ✅ MainScreen widget with Global Responsiveness
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      final textScaleFactor = ScaleSize.textScaleFactor(context);
-      return MaterialApp(
-        title: 'Highland',
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaleFactor: textScaleFactor,
-            ),
-            child: child!,
-          );
-        },
-        routes: {
-          '/home': (context) => Highlandhome(),
-          '/new-bookings': (context) =>
-              NewBookings(), // Add route for NewBookings
-        },
-        initialRoute: '/home', // Set initial route to '/home'
-        debugShowCheckedModeBanner: false, // Disable the debug banner
-      );
-    });
+    final textScaleFactor = ScaleSize.textScaleFactor(context);
+
+    return MaterialApp(
+      title: 'Highland',
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: textScaleFactor,
+          ),
+          child: child!,
+        );
+      },
+      theme: ThemeData(
+        fontFamily: 'Filson Pro',
+      ),
+      debugShowCheckedModeBanner: false,
+
+      // ✅ Use Responsive Wrapper for All Pages
+      home: Responsive(
+        mobile: MobileLayout(),
+        tablet: TabletLayout(),
+        desktop: DesktopLayout(),
+      ),
+    );
+  }
+}
+
+// ✅ Different Layouts (Applies Responsiveness to All Pages)
+class MobileLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(title: Text("Highland (Mobile)")),
+      body: Highlandhome(),
+    );
+  }
+}
+
+class TabletLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(title: Text("Highland (Tablet)")),
+      body: Highlandhome(),
+    );
+  }
+}
+
+class DesktopLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //  appBar: AppBar(title: Text("Highland (Desktop)")),
+      body: Highlandhome(),
+    );
   }
 }

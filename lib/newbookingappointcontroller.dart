@@ -21,6 +21,9 @@ class Newbookingappointcontroller with ChangeNotifier {
   List<String> timeList = [];
   List<Map<String, dynamic>> listOfDoctors = [];
 
+  bool _isLoadingDoctors = false; // Private variable for loading state
+  bool get isLoadingDoctors => _isLoadingDoctors; // Public getter for UI
+
   List<String> selectedtimeList = [];
   bool? isSuccessful;
 

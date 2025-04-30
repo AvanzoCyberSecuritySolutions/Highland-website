@@ -16,4 +16,6 @@ class ColorConstant {
   static const Color transparent = Colors.transparent; // Example
 
   static Color mainGreen = Colors.green;
+
+  static var accentOrange;
 }
