@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 // Placeholders - Replace with your actual page imports
 import 'package:flutter_highland/About.dart';
-import 'package:flutter_highland/Highland_departments.dart';
-import 'package:flutter_highland/New_Patient_registration.dart';
+import 'package:flutter_highland/Highlanddepartments.dart';
+
+import 'package:flutter_highland/NewPatientregistration.dart';
+
 import 'package:flutter_highland/FeedbackForm.dart';
+import 'package:flutter_highland/Patientregistration.dart';
 import 'package:flutter_highland/Responsive.dart';
 import 'package:flutter_highland/constants/Color_Constant.dart';
 import 'package:flutter_highland/contacts.dart';
-import 'package:flutter_highland/Patient_registration.dart';
+
 import 'package:flutter_highland/Already_registered.dart';
 // Responsive helpers
 
