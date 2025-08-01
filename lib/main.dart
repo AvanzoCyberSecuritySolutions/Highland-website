@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/BookingPatientController.dart';
+import 'package:flutter_highland/Feedback_Controller.dart';
+import 'package:flutter_highland/Highlandhome.dart';
+import 'package:flutter_highland/Responsive.dart';
 import 'package:flutter_highland/newbookingappointcontroller.dart';
-import 'package:flutter_highland/Already_registered.dart';
+
 import 'package:provider/provider.dart';
-import 'Feedback_controller.dart';
-import 'Highlandhome.dart';
-import 'Responsive.dart'; // Import your responsive helper
 
 // ScaleSize class to adjust text scaling
 class ScaleSize {
