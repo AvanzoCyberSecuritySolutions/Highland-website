@@ -4,13 +4,12 @@ import 'package:flutter_highland/About.dart';
 import 'package:flutter_highland/Highland_departments.dart';
 import 'package:flutter_highland/New_Patient_registration.dart';
 import 'package:flutter_highland/FeedbackForm.dart';
+import 'package:flutter_highland/Responsive.dart';
+import 'package:flutter_highland/constants/Color_Constant.dart';
 import 'package:flutter_highland/contacts.dart';
 import 'package:flutter_highland/Patient_registration.dart';
 import 'package:flutter_highland/Already_registered.dart';
 // Responsive helpers
-import 'package:flutter_highland/responsive.dart';
-// Constants (if used)
-import 'package:flutter_highland/constants/Color_Constant.dart';
 
 // --- CoreLogo Class --- (Ensure this is defined)
 class CoreLogo extends StatelessWidget {
