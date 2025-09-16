@@ -6,8 +6,9 @@ FROM debian:latest AS build-env
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y \
-        curl git wget unzip libgconf-2-4 gdb libglu1-mesa fonts-droid-fallback python3 && \
+        curl git wget unzip gdb libglu1-mesa fonts-droid-fallback python3 && \
     apt-get clean
+
 
 # Clone Flutter SDK
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
