@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // Assuming Highlandhome is needed for navigation back or context
-import 'package:flutter_highland/Highlandhome.dart';
+
+import 'package:flutter_highland/highland_home.dart';
 // Import other necessary pages if navigation is added later
 // import 'package:flutter_highland/constants/Color_Constant.dart'; // If needed
 

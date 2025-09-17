@@ -1,9 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_highland/Highlandhome.dart';
 import 'package:flutter_highland/booking_patient_controller.dart';
-import 'package:flutter_highland/feedbackController.dart';
+import 'package:flutter_highland/feedback_controller.dart';
+
+import 'package:flutter_highland/highland_home.dart';
 
 import 'package:flutter_highland/newbookingappointcontroller.dart';
 import 'package:flutter_highland/responsive.dart';
@@ -24,7 +25,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => feedbackController()),
+        ChangeNotifierProvider(create: (_) => FeedbackController()),
         ChangeNotifierProvider(create: (_) => Newbookingappointcontroller()),
         Provider<BookingPatientController>(
           create: (_) => BookingPatientController(),

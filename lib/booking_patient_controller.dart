@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/AppUtils.dart';
-import 'package:flutter_highland/DoctorTimelistModel.dart';
-import 'package:flutter_highland/Doctorsmodelclass.dart';
+import 'package:flutter_highland/doctors_modelclass.dart';
+import 'package:flutter_highland/doctortimelist_model.dart';
 
 // ▼▼▼ CORRECTED IMPORTS ▼▼▼
 
