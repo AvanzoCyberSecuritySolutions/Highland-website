@@ -25,14 +25,7 @@
 # WORKDIR /app
 # COPY . .
 
-# # Get dependencies and build
-# RUN flutter pub get
-# RUN flutter build web --release
 
-# # -------------------
-# # Stage 2: Serve via NGINX
-# # -------------------
-# FROM nginx:1.21.1-alpine
 
 # # Clean default html directory
 # RUN rm -rf /usr/share/nginx/html/*
