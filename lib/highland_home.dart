@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 // Placeholders - Replace with your actual page imports
 import 'package:flutter_highland/About.dart';
-import 'package:flutter_highland/Highlanddepartments.dart';
 
 import 'package:flutter_highland/FeedbackForm.dart';
+import 'package:flutter_highland/highland_departments.dart';
 
 import 'package:flutter_highland/responsive.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
