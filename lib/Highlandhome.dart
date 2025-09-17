@@ -4,13 +4,14 @@ import 'package:flutter_highland/About.dart';
 import 'package:flutter_highland/Highlanddepartments.dart';
 
 import 'package:flutter_highland/FeedbackForm.dart';
-import 'package:flutter_highland/Patientregistration.dart';
-import 'package:flutter_highland/Responsive.dart';
-import 'package:flutter_highland/constants/Color_Constant.dart';
+
+import 'package:flutter_highland/responsive.dart';
+import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/contacts.dart';
 
 import 'package:flutter_highland/Already_registered.dart';
 import 'package:flutter_highland/new_patient_registration.dart';
+import 'package:flutter_highland/patient_registration.dart';
 // Responsive helpers
 
 // --- CoreLogo Class --- (Ensure this is defined)
