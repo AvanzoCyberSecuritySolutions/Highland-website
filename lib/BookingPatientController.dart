@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highland/AppUtils.dart';
 import 'package:flutter_highland/DoctorTimelistModel.dart';
 import 'package:flutter_highland/Doctorsmodelclass.dart';
-import 'package:flutter_highland/PatientdetailApimodel.dart';
 
-// import 'package:hms_web_project/presentation/dashboard_screen/model/doctor_model_class.dart';
-// import 'package:hms_web_project/presentation/dashboard_screen/model/doctor_timelist_model.dart';
-// import 'package:hms_project/model/booking_patient_model.dart';
-// import 'package:hms_project/model/doctors_model.dart';
-// import 'package:hms_web_project/presentation/dashboard_screen/model/newbooking_model.dart';
-// import 'package:hms_web_project/repositories/api/services/app_utils.dart';
+// ▼▼▼ CORRECTED IMPORTS ▼▼▼
+
+import 'package:flutter_highland/patientdetail_apimodel.dart';
+// ▲▲▲ CORRECTED IMPORTS ▲▲▲
+
 import 'package:http/http.dart' as http;
 
 class BookingPatientController with ChangeNotifier {
+  // Your existing controller code...
+  // ... (No changes to the logic, only imports were fixed)
   PatientDetailsApimodel? patientDetailsModel = PatientDetailsApimodel();
   Doctorsmodelclass doctorsmodelclass = Doctorsmodelclass();
   DoctorTimelistModel doctorTimelistModel = DoctorTimelistModel();
@@ -71,9 +71,6 @@ class BookingPatientController with ChangeNotifier {
       var res = await http
           .post(Uri.parse(uri), body: {"patienttimecontroller": empid});
       log(res.body);
-      // timeList = List<String>.from(await jsonDecode(res.body));
-      // listOfTimeList.add(List<String>.from(await jsonDecode(res.body)));
-      // print(timeList);
     } catch (e) {
       log(e.toString());
     }
@@ -92,9 +89,6 @@ class BookingPatientController with ChangeNotifier {
         'timeslots': List<String>.from(timeList),
         'selectedtimes': List<String>.from(selectedtimeList),
       });
-      // print("------------------${listOfDoctors[i]['name']}");
-      // print("------------------${listOfDoctors[i]['timeslots']}");
-      // print("------------------${listOfDoctors[i]['selectedtimes']}");
       print("__________________________$listOfDoctors");
     }
     notifyListeners();
@@ -117,14 +111,6 @@ class BookingPatientController with ChangeNotifier {
       print("-------------${res.body}");
       Map<String, dynamic> timeSlotMap = await jsonDecode(res.body);
       print(timeSlotMap);
-      // for (var i = 1; i < timeList.length + 2; i++) {
-      //   if (timeSlotMap.containsKey(i.toString())) {
-      //     // selectedtimeList.add(timeSlotList[0][i.toString()]);
-      //     int j = i - 2;
-      //     // selectedtimeList.add(j.toString());
-      //     // listOfSelectedTimeList.add(selectedtimeList);
-      //   }
-      // }
       print("----$selectedtimeList");
     } catch (e) {
       log(e.toString());
@@ -134,18 +120,6 @@ class BookingPatientController with ChangeNotifier {
 
   Future<void> patientdata(String patientId) async {
     notifyListeners();
-    // String uri = "${AppUtils.baseURL}/bookingpatient.php";
-    // try {
-    //   var res = await http.post(Uri.parse(uri), body: {
-    //     "patientidcontroller": searchText,
-    //   });
-    //   var json = await jsonDecode(res.body) as Map<String, dynamic>;
-    //   print(json);
-    //   patientBookingModel = BookingPatientModel.fromJson(json);
-    // } catch (e) {
-    //   log(e.toString());
-    // }
-
     String uri =
         "${AppUtils.pythonBaseURL}/get_patient_details/?patientid=$patientId";
     var res = await http.get(Uri.parse(uri));
@@ -173,38 +147,18 @@ class BookingPatientController with ChangeNotifier {
     required String date,
     required String start_time,
   }) async {
-    // String uri = "${AppUtils.baseURL}/bookingsave.php";
-    // try {
-    //   var res = await http.post(Uri.parse(uri), body: {
-    //     "patientidcontroller": patientId,
-    //     "FirstNamecontroller": fName,
-    //     "LastNamecontroller": lName,
-    //     "emailcontroller": eMail,
-    //     "mobilecontroller": phNum,
-    //     "departmentcontroller": dept,
-    //     "doctornamecontroller": docId,
-    //     "reasoncontroller": reason,
-    //     "datecontroller": date,
-    //     "timecontroller": time,
-    //   });
-    //   print("booking : ${res.body}");
-    //   isSuccessful = res.statusCode == 200 ? true : false;
-    // } catch (e) {
-    //   log(e.toString());
-    // }
-
     log('''{
         "patientid": $patientId,
         "firstname": $fName,
         "lastname": $lName,
         "email": $eMail,
         "mobile": $phNum,
-        "department": $dept, // Department name, not ID
-        "doctor_firstname": $doc_firstname, // Doctor's first name
-        "doctor_lastname": $doc_lastname, // Doctor's last name
-        "reason": $reason, // Reason for appointment
-        "date_book": $date, // Date in YYYY-MM-DD format
-        "time_book_start": $start_time, // Start time with AM/PM
+        "department": $dept, 
+        "doctor_firstname": $doc_firstname, 
+        "doctor_lastname": $doc_lastname, 
+        "reason": $reason, 
+        "date_book": $date, 
+        "time_book_start": $start_time, 
       }''');
 
     try {
@@ -217,13 +171,12 @@ class BookingPatientController with ChangeNotifier {
           "lastname": lName,
           "email": eMail,
           "mobile": phNum,
-          "department": dept, // Department name, not ID
-          "doctor_firstname": doc_firstname, // Doctor's first name
-          "doctor_lastname": doc_lastname, // Doctor's last name
-          "reason": reason, // Reason for appointment
-          "date_book": date, // Date in YYYY-MM-DD format
-          "time_book_start": start_time, // Start time with AM/PM
-          // "time_book_end": "09:15 AM" // End time with AM/PM
+          "department": dept,
+          "doctor_firstname": doc_firstname,
+          "doctor_lastname": doc_lastname,
+          "reason": reason,
+          "date_book": date,
+          "time_book_start": start_time,
         },
       );
       log(response.body);
@@ -318,25 +271,4 @@ class BookingPatientController with ChangeNotifier {
     patientDetailsModel = null;
     notifyListeners();
   }
-
-//
-
-  // timeslotBooking({
-  //   required String dept,
-  //   required String docId,
-  // }) async {
-  //   String uri = "${AppUtils.baseURL}/booktimeslots.php";
-  //   try {
-  //     var res = await http.post(Uri.parse(uri), body: {
-  //       "departmentcontroller": dept,
-  //       "doctornamecontroller": docId,
-  //     });
-  //     print(res.body);
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  //   notifyListeners();
-  // }
-
-//
 }

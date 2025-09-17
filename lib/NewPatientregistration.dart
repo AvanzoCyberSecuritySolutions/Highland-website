@@ -4,20 +4,17 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/AppUtils.dart';
-import 'package:flutter_highland/constants/Color_Constant.dart';
-//import 'package:hms_web_project/constants/image_constants.dart';
-// import 'package:hms_web_project/presentation/dashboard_screen/controller/new_booking_controller.dart';
-import 'package:flutter_highland/AppUtils.dart';
+// ▼▼▼ CORRECTED IMPORT (filename should be lowercase) ▼▼▼
+import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/newbookingappointcontroller.dart';
-import 'package:flutter_highland/Already_registered.dart';
+// ▼▼▼ CORRECTED IMPORT (filename should be lowercase) ▼▼▼
+import 'package:flutter_highland/already_registered.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class bookappoint_register extends StatefulWidget {
-  // const bookappoint_register({super.key, required String firstName, required String lastName, required String email, required String doctor, required String phone, required this.firstName, required this.lastName, required this.email, required this.doctor, required this.phone});
-
   final String firstName;
   final String lastName;
   final String email;
@@ -30,7 +27,6 @@ class bookappoint_register extends StatefulWidget {
     required this.email,
     required this.address,
     required this.phone,
-    // ignore: non_constant_identifier_names
     Key? key,
   }) : super(key: key);
 
@@ -68,7 +64,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
   String? _selectedDoctor;
   String? _selectedDoctorEmpId;
   String? imageName;
-  // bool _showPatientCard = false;
   bool _termsAccepted = false;
 
   final List<String> _genders = ['Male', 'Female', 'Other'];
@@ -101,16 +96,12 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     'Other',
   ];
 
-  //final List<String> _address = [];
-
   bool visible = false;
 
   String? selectedNationality;
   bool showAdditionalFields = false;
 
   callFuction() async {
-    // await Provider.of<BookingPatientController>(context, listen: false)
-    //     .department();
     await Provider.of<Newbookingappointcontroller>(context, listen: false)
         .departmentAndDoctorSelection();
   }
@@ -128,7 +119,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
 
   @override
   void dispose() {
-    // Dispose all controllers to free resources
     firstnamecontroller.dispose();
     lastnamecontroller.dispose();
     emailController.dispose();
@@ -155,31 +145,24 @@ class _bookappoint_registerState extends State<bookappoint_register> {
   List<Uint8List> pickedFiles = [];
   Uint8List? profileImage;
   String? profileName;
+
   Future<void> pickFile({required bool allowMultiple}) async {
-    // ---------------------------------------------File Picker
-    // FilePickerResult? result =
-    //     await FilePicker.platform.pickFiles();
-    // if (result != null) {
-    //   files = File(result.files.single.path!);
-    // }
     if (allowMultiple == true) {
       final result = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: allowMultiple);
 
       if (result != null && result.files.isNotEmpty) {
-        List<Uint8List?> fileBytes = result.files
-            .map(
-              (path) => path.bytes,
-            )
+        List<Uint8List> fileBytes = result.files
+            .where((file) => file.bytes != null)
+            .map((file) => file.bytes!)
             .toList();
-        List<String?> fileName = result.files
-            .map(
-              (path) => path.name,
-            )
+        List<String> fileName = result.files
+            .where((file) => file.name != null)
+            .map((file) => file.name!)
             .toList();
-        // final fileName = result.files.first.name;
-        pickedFiles = List<Uint8List>.from(fileBytes);
-        fileNames = List<String>.from(fileName);
+
+        pickedFiles = fileBytes;
+        fileNames = fileName;
         log(fileNames.toString());
         setState(() {
           visible = true;
@@ -193,30 +176,22 @@ class _bookappoint_registerState extends State<bookappoint_register> {
         final fileName = result.files.single.name;
         profileImage = fileBytes;
         profileName = fileName;
-        log(fileName);
+        log(fileName ?? 'No filename');
         setState(() {});
       }
     }
-    // upload file
-    // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
   }
 
   Future<void> uploadImage(Uint8List imageBytes, String fileName) async {
     final uri = Uri.parse("${AppUtils.baseURL}/test.php");
-
-    // Create MultipartRequest for uploading the image
     var request = http.MultipartRequest('POST', uri);
-
-    // Create MultipartFile from bytes
     var pic = http.MultipartFile.fromBytes(
-      'image', // Field name for the image on the server
-      imageBytes, // File as byte array
-      filename: fileName, // Original file name
+      'image',
+      imageBytes,
+      filename: fileName,
     );
 
-    request.files.add(pic); // Add the file to the request
-
-    // Send the request
+    request.files.add(pic);
     var response = await request.send();
 
     if (response.statusCode == 200) {
@@ -229,16 +204,13 @@ class _bookappoint_registerState extends State<bookappoint_register> {
   Future<void> uploadFiles(
       List<Uint8List> files, List<String> fileNames) async {
     final uri = Uri.parse("${AppUtils.baseURL}/testdoc.php");
-
     var request = http.MultipartRequest('POST', uri);
     log("file length : ${files.length}");
-    // Loop through the selected files and add each to the request
     for (int i = 0; i < files.length; i++) {
-      // log(i.toString());
       var multipartFile = http.MultipartFile.fromBytes(
-        'files[]', // Field name for multiple files on server side
-        files[i], // File as bytes (Uint8List)
-        filename: fileNames[i], // Original file name
+        'files[]',
+        files[i],
+        filename: fileNames[i],
       );
       log("multipart file :${multipartFile.filename}");
       request.files.add(multipartFile);
@@ -248,8 +220,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
 
     log(response.statusCode.toString());
     log("after for loop");
-    // Send the request
-
     if (response.statusCode == 200) {
       print('All Files Uploaded Successfully');
     } else {
@@ -258,10 +228,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
   }
 
   void _showPatientCardDialog() {
-    // Retrieve values before clearing the controllers
-    // String fullName = "${firstnamecontroller.text} ${lastnamecontroller.text}";
-    // String address = addressController.text;
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -271,22 +237,11 @@ class _bookappoint_registerState extends State<bookappoint_register> {
             style: TextStyle(
                 color: ColorConstant.mainBlue, fontWeight: FontWeight.bold),
           ),
-          // content: SizedBox(
-          //   width: 600,
-          //   child: PatientCards(
-          //     name: fullName,
-          //     patientId: "12345",
-          //     address: address,
-          //     dateOfRegistration: currentdateController.text,
-          //   ),
-          // ),
           actions: [
             ElevatedButton(
               onPressed: () {
                 print("Print button pressed");
-
                 _clearControllers();
-
                 Navigator.of(context).pop();
               },
               child: Text("Print"),
@@ -295,8 +250,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
         );
       },
     );
-
-    // Clear the controllers after showing the dialog
     _clearControllers();
   }
 
@@ -319,35 +272,11 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     remarkscontroller.clear();
     selectedRelationship = null;
     contactController.clear();
-    // _selectedDoctorEmpId = null;
   }
 
   Future<void> insertrecord() async {
     try {
       String uri = "${AppUtils.pythonBaseURL}/add_patient_registration-post/";
-      // var res = await http.post(Uri.parse(uri), body: {
-      //   "firstname": firstnamecontroller.text.trim(),
-      //   "lastname": lastnamecontroller.text.trim(),
-      //   "dob": dobController.text.trim(),
-      //   "occupationController": occupationController.text.trim(),
-      //   "fatherHusbandNameController": fatherHusbandNameController.text.trim(),
-      //   "nationalityController": nationalityController.text.trim(),
-      //   "addressController": addressController.text.trim(),
-      //   "phoneNumberController": phoneNumberController.text.trim(),
-      //   "mobileController": mobileController.text.trim(),
-      //   "emailController": emailController.text.trim(),
-      //   "empcode": _selectedDoctorEmpId,
-      //   "idDocumentProvidedController":
-      //       idDocumentProvidedController.text.trim(),
-      //   "departmentController": departmentController.text.trim(),
-      //   "genderController": genderController.text.trim(),
-      //   "bloodGroupController": bloodGroupController.text.trim(),
-      //   "maritalStatusController": maritalStatusController.text.trim(),
-      //   "remarkscontroller": remarkscontroller.text.trim(),
-      //   "imagecontroller": imageName ?? '',
-      //   "relativetypecontroller": selectedRelationship,
-      //   "relativecontactnumbercontroller": contactController.text.trim(),
-      // });
       log(dobController.text.trim());
       log(firstnamecontroller.text.trim());
       log(lastnamecontroller.text.trim());
@@ -366,7 +295,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
       log(selectedRelationship.toString());
       log(_selectedDoctor.toString());
 
-// -----------------------------------------
       final headers = {'Content-Type': 'application/json'};
       var res = await http.post(
         Uri.parse(uri),
@@ -391,39 +319,12 @@ class _bookappoint_registerState extends State<bookappoint_register> {
             "remarks": remarkscontroller.text.trim(),
             "docname": _selectedDoctor
           },
-
-          // {
-          //   "firstname": "maxx",
-          //   "lastname": "Doe",
-          //   "department": "Cardiology",
-          //   "dob": "1990-01-01",
-          //   "email": "johndoe123@gmail.com",
-          //   "phnumber": "1234567890",
-          //   "gender": "Male",
-          //   "occupation": "Engineer",
-          //   "bloodgroup": "O+",
-          //   "maritialstatus": "Single",
-          //   "address": "23 Street Name",
-          //   "mobnumber": "9876543210",
-          //   "nationality": "Indian",
-          //   "documentsubmitted": "Passport",
-          //   "relativetype": "sibling",
-          //   "remarks": "nothing",
-          //   "docname": "Smrithi"
-          // },
         ),
       );
 
-// -----------------------------------
       if (res.statusCode == 201) {
         print("Record inserted");
-        // await uploadImage(profileImage!, profileName!);
-        // await uploadFiles(pickedFiles, fileNames);
         _showPatientCardDialog();
-        // Navigator.pushAndRemoveUntil(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => const HomePage()),
-        //     (route) => false);
       } else {
         print("Failed to insert record");
         log(res.statusCode.toString());
@@ -482,7 +383,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
       });
     }
   }
-// --------------------------
 
   String? _validateNatnotEmpty(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -494,7 +394,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    // Format the date
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     currentdateController.text = formattedDate;
     var functionprovider =
@@ -503,8 +402,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("New Patient Registration"),
-          backgroundColor:
-              Color(0xFF1BA08F), // You can customize the app bar color
+          backgroundColor: Color(0xFF1BA08F),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -516,6 +414,8 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // The rest of your UI code is very long and has no errors.
+                    // It is included here for completeness.
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
@@ -523,14 +423,12 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                           await pickFile(allowMultiple: false);
                         },
                         child: Container(
-                          height: 100, width: 100,
+                          height: 100,
+                          width: 100,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
                             shape: BoxShape.circle,
                           ),
-                          // backgroundImage: profileImage != null
-                          //     ?
-                          //     : null,
                           clipBehavior: Clip.antiAlias,
                           child: profileImage == null
                               ? const Icon(
@@ -561,15 +459,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                         ),
                       ),
                       validator: _validateNotEmpty,
-                      // onChanged: (value) {
-                      //   setState(() {
-                      //     // value = firstnamecontroller.text;
-                      //     // value = value.toUpperCase();
-                      //     // firstnamecontroller.text = value;
-                      //     firstnamecontroller.text =
-                      //         firstnamecontroller.text.toUpperCase();
-                      //   });
-                      // },
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
@@ -596,10 +485,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                       child: AbsorbPointer(
                         child: TextFormField(
                           controller: dobController,
-                          // decoration: const InputDecoration(
-                          //   labelText: 'Date of Birth',
-                          //   border: OutlineInputBorder(),
-                          // ),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
@@ -737,24 +622,16 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                         onChanged: (newValue) async {
                           setState(() {
                             _selectedDepartment = newValue;
+                            _selectedDoctor =
+                                null; // Reset doctor on department change
                           });
-                          // _doctors.clear();
-                          // await functionprovider.doctors(_selectedDepartment);
-                          // if (varprovider.doctorsmodelclass.list!.isNotEmpty) {
-                          //   for (var i = 0;
-                          //       i < varprovider.doctorsmodelclass.list!.length;
-                          //       i++) {
-                          //     _doctors.add(
-                          //         varprovider.doctorsmodelclass.list?[i].name ??
-                          //             "");
-                          //   }
-                          // }
                           await functionprovider.departmentAndDoctorSelection(
                               dept: _selectedDepartment);
-                          _selectedDoctor = varprovider.doctorList[0];
-                          // _selectedDoctor = _doctors[0];
-                          // _selectedDoctorEmpId =
-                          //     varprovider.doctorsmodelclass.list?[0].empcode ?? "";
+                          if (varprovider.doctorList.isNotEmpty) {
+                            setState(() {
+                              _selectedDoctor = varprovider.doctorList[0];
+                            });
+                          }
                           print(_selectedDoctor);
                         }),
                     const SizedBox(height: 16.0),
@@ -781,21 +658,9 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                         );
                       }).toList(),
                       onChanged: (String? newValue) async {
-                        setState(() {});
-                        _selectedDoctor = newValue;
-                        // doctorToBeConsultedController.text = newValue ?? '';
-
-                        int itemid = 0;
-                        await functionprovider.departmentAndDoctorSelection(
-                            dept: _selectedDepartment);
-                        // await functionprovider.doctors(_selectedDepartment);
-                        // for (var i = 0; i < _doctors.length; i++) {
-                        //   if (_doctors[i] == newValue) {
-                        //     itemid = i;
-                        //   }
-                        // }
-                        // _selectedDoctorEmpId = _doctors[itemid];
-                        setState(() {});
+                        setState(() {
+                          _selectedDoctor = newValue;
+                        });
                       },
                       validator: _validateDropdown,
                     ),
@@ -819,92 +684,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                       validator: _validateNotEmpty,
                     ),
                     const SizedBox(height: 16.0),
-                    // TextFormField(
-                    //   controller: fatherHusbandNameController,
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    //     labelText: 'Father/Husband Name/Relative',
-                    //     prefixIcon: Icon(
-                    //       Icons.family_restroom,
-                    //       color: ColorConstants.mainBlue,
-                    //     ),
-                    //     filled: true,
-                    //     fillColor: Colors.white.withOpacity(0.8),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(8.0),
-                    //     ),
-                    //   ),
-                    //   validator: _validateNotEmpty,
-                    // ),
-                    // ------------------------------------------
-
-                    // DropdownButtonFormField<String>(
-                    //   value: selectedRelationship,
-                    //   onChanged: (String? newValue) {
-                    //     setState(() {
-                    //       selectedRelationship = newValue;
-                    //     });
-                    //   },
-                    //   items: relationshipList
-                    //       .map<DropdownMenuItem<String>>((String value) {
-                    //     return DropdownMenuItem<String>(
-                    //       value: value,
-                    //       child: Text(value),
-                    //     );
-                    //   }).toList(),
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    //     border: OutlineInputBorder(),
-                    //     labelText: 'Relationship',
-                    //     prefixIcon: Icon(
-                    //       Icons.family_restroom,
-                    //       color: Color(0xFF1BA08F),
-                    //     ),
-                    //     filled: true,
-                    //     fillColor: Colors.white.withOpacity(0.8),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16.0),
-
-                    // TextFormField(
-                    //   controller: contactController,
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    //     labelText: 'contact number',
-                    //     prefixIcon: Icon(
-                    //       Icons.phone,
-                    //       color: Color(0xFF1BA08F),
-                    //     ),
-                    //     filled: true,
-                    //     fillColor: Colors.white.withOpacity(0.8),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(8.0),
-                    //     ),
-                    //   ),
-                    //   validator: _validatePhoneNumber,
-                    // ),
-                    const SizedBox(height: 16.0),
-                    // TextFormField(
-                    //   controller: nationalityController,
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    //     labelText: 'Nationality',
-                    //     prefixIcon: Icon(
-                    //       Icons.flag,
-                    //       color: ColorConstants.mainBlue,
-                    //     ),
-                    //     filled: true,
-                    //     fillColor: Colors.white.withOpacity(0.8),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(8.0),
-                    //     ),
-                    //   ),
-                    //   validator: _validateNotEmpty,
-                    // ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -984,18 +763,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                             validator: _validateNotEmpty,
                           ),
                         ],
-                        // SizedBox(height: 30),
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     if (_formKey.currentState?.validate() ?? false) {
-                        //       ScaffoldMessenger.of(context).showSnackBar(
-                        //         SnackBar(
-                        //             content: Text('Form submitted successfully!')),
-                        //       );
-                        //     }
-                        //   },
-                        //   child: Text('Submit'),
-                        // ),
                       ],
                     ),
                     const SizedBox(height: 16.0),
@@ -1103,7 +870,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-
                     TextFormField(
                       controller: contactController,
                       decoration: InputDecoration(
@@ -1161,7 +927,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                       validator: _validateNotEmpty,
                     ),
                     const SizedBox(height: 16.0),
-
                     TextFormField(
                       controller: currentdateController,
                       decoration: InputDecoration(
@@ -1178,9 +943,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      // validator: _validateEmail,
                     ),
-
                     Visibility(
                       visible: visible,
                       child: Column(
@@ -1188,12 +951,12 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                           Center(
                             child: Image.asset(
                               "assets/images/file.png",
-                              height: MediaQuery.sizeOf(context).height * .1,
+                              height: MediaQuery.of(context).size.height * .1,
                             ),
                           ),
                           Text(fileNames.length > 1
                               ? "${fileNames[0]}.etc."
-                              : fileNames.length > 0
+                              : fileNames.isNotEmpty
                                   ? fileNames[0]
                                   : ""),
                         ],
@@ -1207,7 +970,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                         },
                         child: Container(
                           height: 50,
-                          width: MediaQuery.sizeOf(context).width * .5,
+                          width: MediaQuery.of(context).size.width * .5,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Color(0xFF1BA08F),
@@ -1239,19 +1002,17 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                         ),
                         onPressed: _termsAccepted
                             ? () async {
-                                // Perform your record insertion logic
-                                await insertrecord();
-
-                                // Navigate to the next page
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NewBookings(), // Replace with your next page widget
-                                  ),
-                                );
+                                if (_formKey.currentState!.validate()) {
+                                  await insertrecord();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NewBookings(),
+                                    ),
+                                  );
+                                }
                               }
-                            : null, // Disable button when terms are not accepted
+                            : null,
                         child: const Text(
                           'Submit',
                           style: TextStyle(color: Colors.black),
@@ -1259,8 +1020,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                       ),
                     ),
                   ],
-                  //   ),
-                  // ),
                 ),
               ),
             ),
