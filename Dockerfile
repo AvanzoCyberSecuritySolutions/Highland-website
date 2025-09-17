@@ -1,17 +1,30 @@
 # -------------------
 # Stage 1: Build Flutter Web
 # -------------------
+FROM debian:latest AS build-env
 
-# Use a well-maintained, official Flutter image with a specific version tag.
-# 'hey_zap/flutter:3.19.5' is a valid and stable image.
-FROM heyzap/flutter:3.19.5 AS build-env
+# Install necessary system dependencies
+RUN apt-get update && \
+    apt-get install -y curl git wget unzip gdb libglu1-mesa fonts-droid-fallback python3 && \
+    apt-get clean
 
-# Set the working directory inside the container
+# Clone the Flutter SDK from the official repository
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+
+# Add Flutter to the system's PATH environment variable
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+
+# Pre-warm the Flutter tool and enable web support
+# Running 'flutter doctor' downloads necessary components
+RUN flutter doctor -v
+RUN flutter config --enable-web
+
+# Set the working directory for the application
 WORKDIR /app
 
 # --- OPTIMIZED CACHING ---
 # 1. Copy only the dependency files first.
-# This layer will be cached and only re-run if pubspec.yaml changes.
+# This step is cached and only re-runs if pubspec.yaml or pubspec.lock changes.
 COPY pubspec.yaml pubspec.lock ./
 RUN flutter pub get
 
@@ -20,19 +33,17 @@ RUN flutter pub get
 COPY . .
 
 # 3. Build the web application.
-# The --no-wasm-dry-run flag suppresses WebAssembly warnings that aren't errors.
-RUN flutter build web --release --no-wasm-dry-run
-
+RUN flutter build web --release
 
 # -------------------
 # Stage 2: Serve via NGINX
 # -------------------
 FROM nginx:1.21.1-alpine
 
-# Clean default NGINX directory
+# Clean the default NGINX web root directory
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy the built web application from the 'build-env' stage
+# Copy the built web app from the 'build-env' stage to the NGINX directory
 COPY --from=build-env /app/build/web /usr/share/nginx/html
 
 # Expose port 80 for web traffic
