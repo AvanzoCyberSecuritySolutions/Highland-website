@@ -1,74 +1,42 @@
-# # -------------------
-# # Stage 1: Build Flutter Web
-# # -------------------
-# FROM debian:latest AS build-env
-
-# # Install dependencies
-# RUN apt-get update && \
-#     apt-get install -y \
-#         curl git wget unzip libgconf-2-4 gdb libglu1-mesa fonts-droid-fallback python3 && \
-#     apt-get clean
-
-# # Clone Flutter SDK
-# RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-
-# # Set Flutter paths
-# ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
-
-# # Enable web support
-# RUN flutter doctor -v && \
-#     flutter channel stable && \
-#     flutter upgrade && \
-#     flutter config --enable-web
-
-# # Copy project files
-# WORKDIR /app
-# COPY . .
-
-
-
-# # Clean default html directory
-# RUN rm -rf /usr/share/nginx/html/*
-
-# # Copy web build to NGINX html directory
-# COPY --from=build-env /app/build/web /usr/share/nginx/html
-
-# # Expose port
-# EXPOSE 80
-
-# # Start NGINX
-# CMD ["nginx", "-g", "daemon off;"]
 # -------------------
 # Stage 1: Build Flutter Web
 # -------------------
-# Use a specific Flutter version for more consistent builds
-FROM cirrusci/flutter:3.19.6 AS build-env
 
-# Copy only the dependency file first to leverage Docker cache
+# Use a well-maintained, official Flutter image with a specific version tag.
+# 'hey_zap/flutter:3.19.5' is a valid and stable image.
+FROM heyzap/flutter:3.19.5 AS build-env
+
+# Set the working directory inside the container
 WORKDIR /app
-COPY pubspec.yaml ./
+
+# --- OPTIMIZED CACHING ---
+# 1. Copy only the dependency files first.
+# This layer will be cached and only re-run if pubspec.yaml changes.
+COPY pubspec.yaml pubspec.lock ./
 RUN flutter pub get
 
-# Now copy the rest of the project files
+# 2. Now, copy the rest of your project source code.
+# If you only change your Dart code, the slow 'flutter pub get' step is skipped.
 COPY . .
 
-# Build the web application
-# The --no-wasm-dry-run flag is added to avoid warnings that don't stop the build
+# 3. Build the web application.
+# The --no-wasm-dry-run flag suppresses WebAssembly warnings that aren't errors.
 RUN flutter build web --release --no-wasm-dry-run
+
 
 # -------------------
 # Stage 2: Serve via NGINX
 # -------------------
 FROM nginx:1.21.1-alpine
 
-# Clean default html directory
+# Clean default NGINX directory
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy web build from the build stage to NGINX html directory
+# Copy the built web application from the 'build-env' stage
 COPY --from=build-env /app/build/web /usr/share/nginx/html
 
-# Expose port
+# Expose port 80 for web traffic
 EXPOSE 80
 
-# Start NGINX
+# Start NGINX in the foreground so the container stays running
 CMD ["nginx", "-g", "daemon off;"]
