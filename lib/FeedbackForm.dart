@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_highland/Feedback_controller.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
-
+import 'package:flutter_highland/feedback_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -29,8 +27,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
   static bool isTablet(BuildContext context) =>
       MediaQuery.of(context).size.width >= 650 &&
       MediaQuery.of(context).size.width < 1100;
-  static bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 1100;
 
   @override
   void dispose() {
@@ -96,13 +92,12 @@ class _FeedbackFormState extends State<FeedbackForm> {
         crossAxisAlignment:
             isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          //const SizedBox(height: 10),
           SizedBox(
             width: formFieldWidth,
             child: TextFormField(
               controller: patientidContoller,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelStyle: TextStyle(fontSize: 18),
                 labelText: 'Patient ID',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person_add_alt_1_sharp,
@@ -119,7 +114,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
             child: TextFormField(
               controller: nameController,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelStyle: TextStyle(fontSize: 18),
                 labelText: 'Name',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person, color: Color(0xFF1BA08F)),
@@ -135,7 +130,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
               controller: phnContoller,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelStyle: TextStyle(fontSize: 18),
                 labelText: 'Mobile No',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.phone, color: Color(0xFF1BA08F)),
@@ -158,7 +153,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
+                labelStyle: TextStyle(fontSize: 18),
                 labelText: 'Email',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.email, color: Color(0xFF1BA08F)),
@@ -174,20 +169,16 @@ class _FeedbackFormState extends State<FeedbackForm> {
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           SizedBox(
-            width: MediaQuery.of(context).size.width *
-                0.93, // 80% of the screen width
+            width: MediaQuery.of(context).size.width * 0.93,
             child: TextFormField(
               controller: feedbackController,
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 18),
                 labelText: 'Feedback',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  Icons.feedback,
-                  color: Color(0xFF1BA08F),
-                ),
+                prefixIcon: Icon(Icons.feedback, color: Color(0xFF1BA08F)),
               ),
               maxLines: 9,
               validator: (value) {
@@ -236,7 +227,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     email: emailController.text,
                     phn: phnContoller.text,
                     feedback: feedbackController.text,
-                    date: formattedDate,
+                    date: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                   );
 
                   Navigator.pop(context);
@@ -276,11 +267,11 @@ class _FeedbackFormState extends State<FeedbackForm> {
                 }
               }
             },
-            child: Text('Submit'),
+            child: const Text('Submit'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor: Color(0xFF1BA08F),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              backgroundColor: const Color(0xFF1BA08F),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
           ),
         ],
@@ -292,6 +283,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   Widget build(BuildContext context) {
     final feedbackProvider =
         Provider.of<FeedbackController>(context, listen: false);
+
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     final bool mobile = isMobile(context);
@@ -301,7 +293,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
       appBar: AppBar(
         title:
             const Text('Feedback Form', style: TextStyle(color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.black), // <-- Change here
+        iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: true,
         backgroundColor: const Color(0xFF1BA08F),
       ),
