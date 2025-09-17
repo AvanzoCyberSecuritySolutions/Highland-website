@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_highland/BookingPatientController.dart';
 
 import 'package:flutter_highland/Highlandhome.dart';
+import 'package:flutter_highland/booking_patient_controller.dart';
 import 'package:flutter_highland/feedbackController.dart';
 
 import 'package:flutter_highland/newbookingappointcontroller.dart';
