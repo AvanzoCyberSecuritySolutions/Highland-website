@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/AppUtils.dart';
 // ▼▼▼ CORRECTED IMPORT (filename should be lowercase) ▼▼▼
 import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/newbookingappointcontroller.dart';
-// ▼▼▼ CORRECTED IMPORT (filename should be lowercase) ▼▼▼
+// ▼▼▼ THIS IS THE LINE TO FIX THE CURRENT ERROR ▼▼▼
 import 'package:flutter_highland/already_registered.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer';
@@ -35,6 +34,7 @@ class bookappoint_register extends StatefulWidget {
 }
 
 class _bookappoint_registerState extends State<bookappoint_register> {
+  // ... rest of your code (no other changes are needed)
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController firstnamecontroller = createUpperCaseController();
@@ -414,8 +414,7 @@ class _bookappoint_registerState extends State<bookappoint_register> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // The rest of your UI code is very long and has no errors.
-                    // It is included here for completeness.
+                    // The rest of your UI code has no errors and is included for completeness.
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
@@ -1027,7 +1026,6 @@ class _bookappoint_registerState extends State<bookappoint_register> {
         ));
   }
 }
-
 // PatientCards widget
 // class PatientCards extends StatelessWidget {
 //   final String name;
