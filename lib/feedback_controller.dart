@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_highland/AppUtils.dart';
-import 'package:flutter_highland/sampleviewfeedbackapimodel.dart';
+import 'package:flutter_highland/sample_view_feedback_api_model.dart.dart';
 
 import 'package:http/http.dart' as http;
 

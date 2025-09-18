@@ -5,8 +5,8 @@ import 'package:flutter_highland/booking_patient_controller.dart';
 import 'package:flutter_highland/feedback_controller.dart';
 
 import 'package:flutter_highland/highland_home.dart';
+import 'package:flutter_highland/newbooking_appoint_controller.dart';
 
-import 'package:flutter_highland/newbookingappointcontroller.dart';
 import 'package:flutter_highland/responsive.dart';
 
 import 'package:provider/provider.dart';
