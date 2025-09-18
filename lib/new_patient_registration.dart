@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_highland/AppUtils.dart';
+import 'package:flutter_highland/apputils.dart';
+
 // ▼▼▼ CORRECTED IMPORT (filename should be lowercase) ▼▼▼
 import 'package:flutter_highland/constants/color_constant.dart';
 

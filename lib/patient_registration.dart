@@ -5,11 +5,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_highland/already_registered.dart';
+import 'package:flutter_highland/apputils.dart';
 // Ensure these imports are correct for your project structure
-import 'package:flutter_highland/AppUtils.dart';
+
 import 'package:flutter_highland/constants/color_constant.dart';
 
-import 'package:flutter_highland/Already_registered.dart'; // Or the correct navigation target
+// Or the correct navigation target
 import 'package:flutter_highland/newbooking_appoint_controller.dart';
 import 'package:flutter_highland/responsive.dart'; // Import the Responsive widget
 
