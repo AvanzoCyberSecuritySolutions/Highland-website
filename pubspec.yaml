@@ -35,17 +35,24 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
-  intl: ^0.17.0
-  http: ^1.2.2
-  mailer: ^6.3.0
-  file_picker: ^8.1.5
-  google_maps_flutter: ^2.1.1
-  google_maps_flutter_web: ^0.3.0
-  geolocator: ^13.0.2
+  intl: ^0.19.0
+  http: ^1.2.1
+  mailer: ^6.1.0
+
+  # Device & Permissions
+  file_picker: ^8.0.3
+  geolocator: ^12.0.0
+  permission_handler: ^11.3.1
+
+  # UI & Asset Packages
   marquee: ^2.3.0
   flutter_svg: ^2.0.17
-  permission_handler: ^11.4.0
-  google_places_flutter: ^2.1.1
+  
+  # Maps Packages (CRITICAL FIX)
+  google_maps_flutter: ^2.6.1 # LEAVE THIS. IT'S CORRECT.
+  # The google_maps_flutter_web line is now completely gone.
+
+  # Other packages
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
   
