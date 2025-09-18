@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_highland/AppUtils.dart';
+import 'package:flutter_highland/apputils.dart';
+
 //import 'package:hms_web_project/presentation/dashboard_screen/model/doctor_model_class.dart';
 //import 'package:hms_web_project/presentation/dashboard_screen/model/doctor_timelist_model.dart';
 // import 'package:hms_project/model/booking_patient_model.dart';
 // import 'package:hms_project/model/doctors_model.dart';
 // import 'package:hms_web_project/presentation/dashboard_screen/model/newbooking_model.dart';
-import 'package:flutter_highland/AppUtils.dart';
+
 import 'package:http/http.dart' as http;
 
 class Newbookingappointcontroller with ChangeNotifier {
