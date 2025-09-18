@@ -8,8 +8,9 @@ import 'package:flutter/widgets.dart';
 // Ensure these imports are correct for your project structure
 import 'package:flutter_highland/AppUtils.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
-import 'package:flutter_highland/newbookingappointcontroller.dart';
+
 import 'package:flutter_highland/Already_registered.dart'; // Or the correct navigation target
+import 'package:flutter_highland/newbooking_appoint_controller.dart';
 import 'package:flutter_highland/responsive.dart'; // Import the Responsive widget
 
 import 'package:intl/intl.dart';
