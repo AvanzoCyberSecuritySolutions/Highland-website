@@ -45,7 +45,7 @@ dependencies:
   marquee: ^2.3.0
   flutter_svg: ^2.0.17
   permission_handler: ^11.4.0
-  google_places_flutter: ^2.1.0
+  google_places_flutter: ^2.1.1
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
   
