@@ -19,27 +19,80 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
 
-  <!-- iOS meta tags & icons -->
+  <!-- Add viewport meta tag for responsive design -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <!-- Primary Meta Tags for the entire site (what Google sees first) -->
+  <!-- This replaces the old <meta name="description" content="A new Flutter project."> -->
+  <title>Highland - Your Premier Healthcare Partner</title>
+  <meta name="description"
+    content="Discover comprehensive healthcare services, book appointments, and get feedback at Highland. Providing top-tier patient care and medical solutions.">
+
+  <!-- Canonical URL (Important for avoiding duplicate content issues) -->
+  <!-- Replace with your actual base domain, e.g., "https://highland.com/" -->
+  <link rel="canonical" href="https://highland.com/">
+
+  <!-- iOS meta tags & icons (preserved from your original code) -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="flutter_highland">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
+  <!-- Favicon (preserved and enhanced with additional sizes) -->
   <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
 
-  <title>flutter_highland</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph / Facebook / LinkedIn Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://highland.com/"> <!-- Replace with your actual base URL -->
+  <meta property="og:title" content="Highland - Your Premier Healthcare Partner">
+  <meta property="og:description"
+    content="Discover comprehensive healthcare services, book appointments, and get feedback at Highland. Providing top-tier patient care and medical solutions.">
+  <meta property="og:image" content="https://highland.com/assets/highland_logo_social.png">
+  <!-- Absolute URL to a high-quality social sharing image -->
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://highland.com/"> <!-- Replace with your actual base URL -->
+  <meta name="twitter:title" content="Highland - Your Premier Healthcare Partner">
+  <meta name="twitter:description"
+    content="Discover comprehensive healthcare services, book appointments, and get feedback at Highland. Providing top-tier patient care and medical solutions.">
+  <meta name="twitter:image" content="https://highland.com/assets/highland_logo_social.png">
+  <!-- Absolute URL to a high-quality social sharing image -->
+
+  <!-- Flutter's main script -->
+  <!-- Replaced original script src="flutter_bootstrap.js" async -->
+  <script defer src="main.dart.js" type="application/javascript"></script>
+
 </head>
 
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- This is where your Flutter app will be mounted by main.dart.js -->
+  <div id="flutter_app_container"></div>
 
-  <!-- Load the Google Maps API with your API key -->
+  <!-- Your Google Maps API script (preserved) -->
+  <!-- Note: The `initMap` callback function needs to be defined in your Flutter app or another script -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOIu_fEdQ_ZjtsoG9LAaqHEfLGvJC0bLg&callback=initMap"
     async defer></script>
+
+  <!-- Flutter's bootstrap script -->
+  <!-- This handles loading the Flutter engine and running your app -->
+  <script>
+    window.addEventListener('load', function () {
+      _flutter.loader.loadEntrypoint({
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            appRunner.runApp();
+          });
+        }
+      });
+    });
+  </script>
 
 </body>
 
