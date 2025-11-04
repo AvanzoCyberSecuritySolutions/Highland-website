@@ -294,7 +294,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
       appBar: AppBar(
         title:
             const Text('Feedback Form', style: TextStyle(color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         centerTitle: true,
         backgroundColor: const Color(0xFF1BA08F),
       ),

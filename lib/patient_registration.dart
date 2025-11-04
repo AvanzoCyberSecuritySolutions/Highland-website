@@ -672,7 +672,7 @@ class _New_register2State extends State<New_register2> {
         appBar: AppBar(
           title: const Text("Patient Registration"),
           backgroundColor: Color(0xFF1BA08F),
-          foregroundColor: Colors.black,
+          foregroundColor: Colors.white,
         ),
         // --- Use Responsive Widget ---
         body: Responsive(

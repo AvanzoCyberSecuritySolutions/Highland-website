@@ -55,6 +55,7 @@ dependencies:
   # Other packages
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
+  url_launcher: ^6.3.2
   
   
  

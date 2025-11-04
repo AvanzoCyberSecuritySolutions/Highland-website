@@ -82,7 +82,7 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Contact Us'),
         backgroundColor: kAppBarColor, // Use defined color
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       // Use SafeArea to avoid system UI overlaps
       body: SafeArea(

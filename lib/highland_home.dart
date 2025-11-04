@@ -10,9 +10,9 @@ import 'package:flutter_highland/responsive.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/contacts.dart';
 
-
 import 'package:flutter_highland/new_patient_registration.dart';
 import 'package:flutter_highland/patient_registration.dart';
+import 'package:flutter_highland/url_launcher_connection.dart';
 // Responsive helpers
 
 // --- CoreLogo Class --- (Ensure this is defined)
@@ -429,15 +429,8 @@ class _HighlandhomeState extends State<Highlandhome>
             ),
             Padding(
               padding: EdgeInsets.only(right: screenWidth * .012),
-              child: Row(
-                children: [
-                  _buildSocialIcon(
-                      'assets/img/twitter.png', 24), // Re-using common helper
-                  _buildSocialIcon('assets/img/facebook.png', 24),
-                  _buildSocialIcon('assets/img/instagram.png', 24),
-                  _buildSocialIcon('assets/img/youtube.png', 24),
-                ],
-              ),
+              // Replace the entire Row with your new widget
+              child: HighlandSocialBar(iconSize: 24),
             ),
           ],
         ),
@@ -2078,16 +2071,7 @@ consectetur adipiscing elit,
               ),
             ),
           if (isMobile) CoreLogo(),
-          if (isTablet)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildSocialIcon('assets/img/twitter.png', iconSize),
-                _buildSocialIcon('assets/img/facebook.png', iconSize),
-                _buildSocialIcon('assets/img/instagram.png', iconSize),
-                _buildSocialIcon('assets/img/youtube.png', iconSize),
-              ],
-            ),
+          if (isTablet) HighlandSocialBar(iconSize: iconSize),
         ],
       ),
       backgroundColor: Color(0xFFFFFFFF),
@@ -3916,23 +3900,24 @@ consectetur adipiscing elit,
             ),
     );
   }
+}
 
-  // ===========================================================================
-  // COMMON HELPER WIDGETS (Used by multiple layouts)
-  // ===========================================================================
-  Widget _buildSocialIcon(String assetPath, double size) {
-    return Padding(
-      padding: EdgeInsets.only(left: size > 20 ? 10 : 5),
-      child: Image.asset(
-        assetPath,
-        width: size,
-        height: size,
-        errorBuilder: (context, error, stackTrace) =>
-            Icon(Icons.error_outline, size: size, color: Colors.grey),
-      ),
-    );
-  }
-} // End of _HighlandhomeState
+// ===========================================================================
+// COMMON HELPER WIDGETS (Used by multiple layouts)
+// ===========================================================================
+//   Widget _buildSocialIcon(String assetPath, double size) {
+//     return Padding(
+//       padding: EdgeInsets.only(left: size > 20 ? 10 : 5),
+//       child: Image.asset(
+//         assetPath,
+//         width: size,
+//         height: size,
+//         errorBuilder: (context, error, stackTrace) =>
+//             Icon(Icons.error_outline, size: size, color: Colors.grey),
+//       ),
+//     );
+//   }
+// } // End of _HighlandhomeState
 
 // ===========================================================================
 // PLACEHOLDER WIDGETS (Replace with actual implementations)
