@@ -146,11 +146,12 @@ class MainScreen extends StatelessWidget {
     final textScaleFactor = ScaleSize.textScaleFactor(context);
 
     return MaterialApp(
-      title: 'Highland - Your Premier Healthcare Partner', // General app title
+      title:
+          'Highland Hospital Research and Diagnostic Centre', // General app title
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaleFactor: textScaleFactor,
+            textScaler: TextScaler.linear(textScaleFactor),
           ),
           child: child!,
         );
