@@ -105,7 +105,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highland/seo_web/about_us_page_wrapper.dart';
 import 'package:flutter_highland/seo_web/seo_helper.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-
 import 'package:flutter_highland/booking_patient_controller.dart';
 import 'package:flutter_highland/feedback_controller.dart';
 import 'package:flutter_highland/highland_home.dart';
@@ -147,7 +146,7 @@ class MainScreen extends StatelessWidget {
     final textScaleFactor = ScaleSize.textScaleFactor(context);
 
     return MaterialApp(
-      title: 'Highland', // General app title
+      title: 'Highland - Your Premier Healthcare Partner', // General app title
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
