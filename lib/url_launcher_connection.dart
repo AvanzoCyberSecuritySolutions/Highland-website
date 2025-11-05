@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 class HighlandSocialBar extends StatelessWidget {
   final double iconSize;
 
-  const HighlandSocialBar({super.key, this.iconSize = 16});
+  const HighlandSocialBar({super.key, this.iconSize = 18});
 
   // Helper method to open a URL in a new tab (for web) or external browser (for mobile)
   Future<void> _launchURL(String url) async {
@@ -22,15 +22,37 @@ class HighlandSocialBar extends StatelessWidget {
   }
 
   // Common helper to build clickable social icon
+  // Widget _buildSocialIcon(String assetPath, String url) {
+  //   return InkWell(
+  //     onTap: () => _launchURL(url),
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+  //       child: SizedBox(
+  //         height: iconSize,
+  //         width: iconSize,
+  //         child: Image.asset(
+  //           assetPath,
+  //           fit: BoxFit.contain,
+  //           color: Colors.orange, // 🔶 Tint color applied
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildSocialIcon(String assetPath, String url) {
     return InkWell(
       onTap: () => _launchURL(url),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Image.asset(
-          assetPath,
+        child: SizedBox(
           height: iconSize,
           width: iconSize,
+          child: Image.asset(
+            assetPath,
+            fit: BoxFit.contain,
+            color:
+                const Color(0xFF0EA69F), // ✅ Custom teal-green color (#0EA69F)
+          ),
         ),
       ),
     );
@@ -45,19 +67,19 @@ class HighlandSocialBar extends StatelessWidget {
       child: Row(
         children: [
           _buildSocialIcon(
-            'assets/img/twitter.png',
+            'assets/img/twitter2.png',
             'https://x.com/HHospital_mng',
           ),
           _buildSocialIcon(
-            'assets/img/facebook.png',
+            'assets/img/facebook1.png',
             'https://www.facebook.com/highlandhospitalmangalore',
           ),
           _buildSocialIcon(
-            'assets/img/instagram.png',
+            'assets/img/instagram1.png',
             'https://www.instagram.com/highlandhospital.mng/#',
           ),
           _buildSocialIcon(
-            'assets/img/linkedin.png',
+            'assets/img/linkedin2.png',
             'https://www.linkedin.com/company/highlandhospital-mng',
           ),
         ],

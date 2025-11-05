@@ -13,6 +13,7 @@ import 'package:flutter_highland/contacts.dart';
 import 'package:flutter_highland/new_patient_registration.dart';
 import 'package:flutter_highland/patient_registration.dart';
 import 'package:flutter_highland/url_launcher_connection.dart';
+import 'package:url_launcher/url_launcher.dart';
 // Responsive helpers
 
 // --- CoreLogo Class --- (Ensure this is defined)
@@ -430,7 +431,7 @@ class _HighlandhomeState extends State<Highlandhome>
             Padding(
               padding: EdgeInsets.only(right: screenWidth * .012),
               // Replace the entire Row with your new widget
-              child: HighlandSocialBar(iconSize: 24),
+              child: HighlandSocialBar(iconSize: 22),
             ),
           ],
         ),
@@ -439,6 +440,13 @@ class _HighlandhomeState extends State<Highlandhome>
       automaticallyImplyLeading: false,
       elevation: 1.0,
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Widget _buildDesktopMenuBar(BuildContext context, double menuTextSize) {
@@ -759,7 +767,7 @@ consectetur adipiscing elit,
                               'VISION',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 29, 23, 23),
-                                fontSize: 17,
+                                fontSize: 19,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -770,7 +778,7 @@ consectetur adipiscing elit,
                                   '''To be a beacon of healthcare excellence, where “YOUR HEALTH, OUR CARE” is not just a tagline but a promise. We envision Highland Hospital as a leader in innovation and compassionate care, ensuring that every patient—regardless of their background—receives world-class, accessible healthcare. Through dedication to patient well-being, cutting-edge technology, and community welfare, we aim to shape a future where healthcare is a right, not a privilege.''',
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 29, 23, 23),
-                                    fontSize: 14,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -795,7 +803,7 @@ consectetur adipiscing elit,
                               'MISSION',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 19,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -806,7 +814,7 @@ consectetur adipiscing elit,
                                   '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with empathy, integrity, and innovation. By investing in both our people and technology, we strive to improve the health and well-being of every individual we serve. We aim to create a supportive environment where every patient feels valued, ensuring accessible, high-quality healthcare that elevates lives and strengthens our community.''',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 14,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -1192,71 +1200,215 @@ consectetur adipiscing elit,
     );
   }
 
+  // Widget _buildServicesAndContactSectionDesktopOriginal(
+  //     BuildContext context, double screenHeight, double screenWidth) {
+  //   // Replication based on original structure - might need height adjustments
+  //   // Removed the explicit height: screenHeight on the outer container
+  //   return Container(
+  //     width: screenWidth,
+  //     color: Color(0xFF1FBCB1),
+  //     padding: EdgeInsets.symmetric(vertical: 40),
+  //     child: Column(
+  //       children: [
+  //         SizedBox(
+  //           height: 20,
+  //         ),
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 50.0),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               _buildDesktopHealthTipBox(
+  //                   title: "Health Tips",
+  //                   image: 'assets/img/healthi.png',
+  //                   content:
+  //                       '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
+  //                   backgroundColor: Color.fromARGB(255, 231, 162, 14),
+  //                   width: 450,
+  //                   height: 275),
+  //               //SizedBox(width: 10),
+  //               _buildDesktopHealthTipBox(
+  //                   title: "Latest News",
+  //                   image: 'assets/img/Latest.png',
+  //                   content:
+  //                       '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
+  //                   backgroundColor: Color(0xFF3FAE9E),
+  //                   width: 450,
+  //                   height: 275),
+  //               // SizedBox(width: 10),
+  //               _buildDesktopPatientCountBox(width: 380, height: 195),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(height: 70),
+  //         Padding(
+  //           padding: EdgeInsets.symmetric(horizontal: 50),
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 height: 2,
+  //               ),
+  //               Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 15),
+  //                 child: Text("Services",
+  //                     style: TextStyle(
+  //                         fontSize: 33,
+  //                         color: Colors.black,
+  //                         fontWeight: FontWeight.bold)),
+  //               ),
+  //               // Expanded(
+  //               //   child: Container(height: 2, color: Color(0xFFF1B056)),
+  //               // ),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(height: 20),
+  //         Padding(
+  //           padding: EdgeInsets.symmetric(horizontal: 50),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               _buildDesktopServiceImage(
+  //                   'assets/img/highlandservice.jpg', '', 0),
+  //               _buildDesktopServiceImage('assets/img/pi2.jpg', '', 0),
+  //               _buildDesktopServiceImage('assets/img/pi3.jpg', '', 0),
+  //             ],
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.symmetric(horizontal: 80, vertical: 30),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               // Using the original ContactColumn which is now Desktop specific
+  //               _originalContactColumn(
+  //                   icon: Icons.location_on,
+  //                   title: 'Location',
+  //                   description:
+  //                       'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.'),
+  //               _originalContactColumn(
+  //                   icon: Icons.phone,
+  //                   title: 'Emergency 24x7',
+  //                   description: '0824-4235555'),
+  //               _originalContactColumn(
+  //                   icon: Icons.email,
+  //                   title: 'Email',
+  //                   description: 'reachus@highlandhospital.in'),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildServicesAndContactSectionDesktopOriginal(
       BuildContext context, double screenHeight, double screenWidth) {
-    // Replication based on original structure - might need height adjustments
-    // Removed the explicit height: screenHeight on the outer container
+    // Helper to open links
+    Future<void> _launchURL(String url) async {
+      final Uri uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    // Clickable Contact Column
+    Widget _originalContactColumn({
+      required IconData icon,
+      required String title,
+      required String description,
+      required VoidCallback onTap,
+    }) {
+      return InkWell(
+        onTap: onTap,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: const Color(0xFF0EA69F), size: 30),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                description,
+                style: const TextStyle(color: Colors.black54, fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: screenWidth,
-      color: Color(0xFF1FBCB1),
-      padding: EdgeInsets.symmetric(vertical: 40),
+      color: const Color(0xFF1FBCB1),
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildDesktopHealthTipBox(
-                    title: "Health Tips",
-                    image: 'assets/img/healthi.png',
-                    content:
-                        '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
-                    backgroundColor: Color.fromARGB(255, 231, 162, 14),
-                    width: 450,
-                    height: 275),
-                //SizedBox(width: 10),
+                  title: "Health Tips",
+                  image: 'assets/img/healthi.png',
+                  content:
+                      '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
+                  backgroundColor: const Color.fromARGB(255, 231, 162, 14),
+                  width: 450,
+                  height: 275,
+                ),
                 _buildDesktopHealthTipBox(
-                    title: "Latest News",
-                    image: 'assets/img/Latest.png',
-                    content:
-                        '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
-                    backgroundColor: Color(0xFF3FAE9E),
-                    width: 450,
-                    height: 275),
-                // SizedBox(width: 10),
+                  title: "Latest News",
+                  image: 'assets/img/Latest.png',
+                  content:
+                      '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
+                  backgroundColor: const Color(0xFF3FAE9E),
+                  width: 450,
+                  height: 275,
+                ),
                 _buildDesktopPatientCountBox(width: 380, height: 195),
               ],
             ),
           ),
-          SizedBox(height: 70),
+          const SizedBox(height: 70),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Row(
               children: [
-                Container(
-                  height: 2,
+                Container(height: 2),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "Services",
+                    style: TextStyle(
+                      fontSize: 33,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text("Services",
-                      style: TextStyle(
-                          fontSize: 33,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold)),
-                ),
-                // Expanded(
-                //   child: Container(height: 2, color: Color(0xFFF1B056)),
-                // ),
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1268,26 +1420,36 @@ consectetur adipiscing elit,
               ],
             ),
           ),
+
+// ✅ Contact Section (icon left, text right)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 80, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Using the original ContactColumn which is now Desktop specific
                 _originalContactColumn(
-                    icon: Icons.location_on,
-                    title: 'Location',
-                    description:
-                        'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.'),
+                  icon: Icons.location_on,
+                  title: 'Location',
+                  description:
+                      'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.',
+                  onTap: () =>
+                      _launchURL('https://goo.gl/maps/DRhLwo1NhYh1NRwc9'),
+                ),
                 _originalContactColumn(
-                    icon: Icons.phone,
-                    title: 'Emergency 24x7',
-                    description: '0824-4235555'),
+                  icon: Icons.phone,
+                  title: 'Emergency 24x7',
+                  description: '0824-4235555',
+                  onTap: () => _launchURL('tel:08244235555'),
+                ),
                 _originalContactColumn(
-                    icon: Icons.email,
-                    title: 'Email',
-                    description: 'reachus@highlandhospital.in'),
+                  icon: Icons.email,
+                  title: 'Email',
+                  description: 'reachus@highlandhospital.in',
+                  onTap: () => _launchURL(
+                    'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry',
+                  ),
+                ),
               ],
             ),
           ),
@@ -1366,63 +1528,6 @@ consectetur adipiscing elit,
   }
 
   // --- Original Contact Column Helper (Desktop) ---
-  Widget _originalContactColumn({
-    required IconData icon,
-    required String title,
-    required String description,
-  }) {
-    // Replicating structure from original desktop layout
-    // Using Flexible to allow columns to share space within their parent Row
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 20.0, horizontal: 10), // Add padding
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start, // Align content left
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Center icon vertically with text
-          children: [
-            Image.asset(
-              _getIconAssetPath(icon), // Use helper to get image path
-              width: 60, // Fixed size from original
-              height: 60,
-              errorBuilder: (c, e, s) =>
-                  Icon(icon, size: 40, color: Colors.black54), // Fallback
-            ),
-            const SizedBox(width: 15),
-            // Use Expanded for the text Column to take remaining space
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.min, // Prevent taking infinite height
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors
-                          .black, // Black text on green bg (as per original visual)
-                      fontSize: 20, // Original size
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.black, // Black text on green bg
-                      fontSize: 14, // Original size
-                      height: 1.3, // Improve line spacing
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // --- Helper to get asset path (keep this inside the State class or make top-level) ---
   String _getIconAssetPath(IconData icon) {
@@ -2033,10 +2138,6 @@ consectetur adipiscing elit,
           height: 1.5),
     );
   }
-
-  // ===========================================================================
-  // RESPONSIVE HELPER WIDGETS (Called by Mobile/Tablet builders - Keep Unchanged)
-  // ===========================================================================
 
   PreferredSizeWidget _buildMobileTabletAppBar(
       BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
