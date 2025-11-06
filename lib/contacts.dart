@@ -147,14 +147,14 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Contact us Title
-        const Text(
-          'Contact us',
-          style: TextStyle(
-            color: Color.fromARGB(255, 15, 12, 12),
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        // const Text(
+        //   'Contact us',
+        //   style: TextStyle(
+        //     color: Color.fromARGB(255, 15, 12, 12),
+        //     fontSize: 24,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
         SizedBox(height: 20),
 // Name input field
         Padding(
