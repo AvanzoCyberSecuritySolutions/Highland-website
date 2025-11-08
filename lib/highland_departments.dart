@@ -1093,58 +1093,58 @@ class _HomeDashboardState extends State<HomeDashboard>
   }
 
   // --- Helper: Scrolling Marquee for Desktop (No Change) ---
-  Widget _buildDisclaimerMarquee() {
-    const double titleSize = 18.0; // Adjusted size
-    const double bodySize = 16.0; // Adjusted size
+  // Widget _buildDisclaimerMarquee() {
+  //   const double titleSize = 18.0; // Adjusted size
+  //   const double bodySize = 16.0; // Adjusted size
 
-    return SizedBox(
-      height: 40,
-      child: ClipRect(
-        child: SlideTransition(
-          position: _scrollAnimation,
-          child: Row(
-            // Ensures the Row is wide enough to scroll off-screen before repeating
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(width: 30), // Initial padding before first text
-              Text('Disclaimer: ',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: titleSize,
-                      fontWeight: FontWeight.bold)),
-              Text('We do not charge for hiring!',
-                  style: TextStyle(color: Colors.black, fontSize: bodySize)),
-              SizedBox(width: 50), // Spacing between repetitions
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  //   return SizedBox(
+  //     height: 40,
+  //     child: ClipRect(
+  //       child: SlideTransition(
+  //         position: _scrollAnimation,
+  //         child: Row(
+  //           // Ensures the Row is wide enough to scroll off-screen before repeating
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(width: 30), // Initial padding before first text
+  //             Text('Disclaimer: ',
+  //                 style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontSize: titleSize,
+  //                     fontWeight: FontWeight.bold)),
+  //             Text('We do not charge for hiring!',
+  //                 style: TextStyle(color: Colors.black, fontSize: bodySize)),
+  //             SizedBox(width: 50), // Spacing between repetitions
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  // --- Helper: Static Disclaimer for Mobile/Tablet (No Change) ---
-  Widget _buildStaticDisclaimer() {
-    const double titleSize = 14.0;
-    const double bodySize = 13.0;
+  // // --- Helper: Static Disclaimer for Mobile/Tablet (No Change) ---
+  // Widget _buildStaticDisclaimer() {
+  //   const double titleSize = 14.0;
+  //   const double bodySize = 13.0;
 
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        color: Colors.grey[100], // Optional background
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(
-                color: Colors.black54, fontSize: bodySize, height: 1.4),
-            children: <TextSpan>[
-              TextSpan(
-                  text: 'Disclaimer: ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: titleSize)),
-              TextSpan(text: 'We do not charge for hiring!'),
-            ],
-          ),
-        ));
-  }
+  //   return Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+  //       color: Colors.grey[100], // Optional background
+  //       child: RichText(
+  //         textAlign: TextAlign.center,
+  //         text: const TextSpan(
+  //           style: TextStyle(
+  //               color: Colors.black54, fontSize: bodySize, height: 1.4),
+  //           children: <TextSpan>[
+  //             TextSpan(
+  //                 text: 'Disclaimer: ',
+  //                 style: TextStyle(
+  //                     fontWeight: FontWeight.bold, fontSize: titleSize)),
+  //             TextSpan(text: 'We do not charge for hiring!'),
+  //           ],
+  //         ),
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -1199,12 +1199,12 @@ class _HomeDashboardState extends State<HomeDashboard>
                   const SizedBox(height: 20),
 
                   // --- CORRECTED: Responsive Disclaimer Section ---
-                  Responsive(
-                    mobile: _buildStaticDisclaimer(), // Static view for mobile
-                    tablet: _buildStaticDisclaimer(), // Static view for tablet
-                    desktop:
-                        _buildDisclaimerMarquee(), // Scrolling marquee for desktop
-                  ),
+                  // Responsive(
+                  //   mobile: _buildStaticDisclaimer(), // Static view for mobile
+                  //   tablet: _buildStaticDisclaimer(), // Static view for tablet
+                  //   desktop:
+                  //       _buildDisclaimerMarquee(), // Scrolling marquee for desktop
+                  // ),
                   // --- End Responsive Disclaimer Section ---
 
                   const SizedBox(height: 20), // Bottom spacing

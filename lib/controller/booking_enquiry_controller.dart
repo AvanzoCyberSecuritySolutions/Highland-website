@@ -14,7 +14,7 @@ class BookingEnquiryController with ChangeNotifier {
   String? get successMessage => _successMessage;
 
   // IMPORTANT: Replace this with your actual base URL
-  final String _baseURL = "http://192.168.220.70:8000/patientapp/api";
+  final String _baseURL = "http://192.168.220.67:8000/patientapp/api";
 
   Future<bool> submitEnquiry(BookingEnquiry enquiry) async {
     _isLoading = true;

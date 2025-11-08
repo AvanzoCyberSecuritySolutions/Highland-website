@@ -1094,9 +1094,13 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
 // Assuming Highlandhome is needed for navigation back or context
 
 import 'package:flutter_highland/highland_home.dart';
+import 'package:flutter_highland/model/contact_enquiry.dart';
+import 'package:provider/provider.dart';
 // Import other necessary pages if navigation is added later
 // import 'package:flutter_highland/constants/Color_Constant.dart'; // If needed
 
@@ -1353,13 +1357,13 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
             SizedBox(height: sectionPadding),
 
             // Disclaimer Marquee (Hidden on mobile)
-            mobile // Check if it's mobile
-                // If mobile, show the static disclaimer
-                ? _buildStaticDisclaimerAbout(
-                    context, bodyTextMedium) // Use appropriate base text size
-                // If not mobile (tablet or desktop), show the scrolling marquee
-                : _buildDisclaimerMarqueeAbout(context, desktop, tablet, mobile,
-                    headingSize * 0.85), // Use
+            // mobile // Check if it's mobile
+            //     // If mobile, show the static disclaimer
+            //     ? _buildStaticDisclaimerAbout(
+            //         context, bodyTextMedium) // Use appropriate base text size
+            //     // If not mobile (tablet or desktop), show the scrolling marquee
+            //     : _buildDisclaimerMarqueeAbout(context, desktop, tablet, mobile,
+            //         headingSize * 0.85), // Use
             _buildFooterAbout(
                 context, desktop, tablet, mobile, bodyTextMedium * 0.9),
           ],
@@ -1851,201 +1855,417 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildStaticDisclaimerAbout(BuildContext context, double textSize) {
-    return RichText(
-      textAlign: TextAlign.center, // Center the text block
-      text: TextSpan(
-        // Base style for the static text
-        style: TextStyle(
-            color: Colors.black54, fontSize: textSize * 0.95, height: 1.4),
-        children: <TextSpan>[
-          // Make "Disclaimer:" bold and slightly larger
-          TextSpan(
-              text: 'Disclaimer: ',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, fontSize: textSize)),
-          // The main message
-          const TextSpan(text: 'We do not charge for hiring!'),
-        ],
-      ),
-    );
-  }
+  // Widget _buildStaticDisclaimerAbout(BuildContext context, double textSize) {
+  //   return RichText(
+  //     textAlign: TextAlign.center, // Center the text block
+  //     text: TextSpan(
+  //       // Base style for the static text
+  //       style: TextStyle(
+  //           color: Colors.black54, fontSize: textSize * 0.95, height: 1.4),
+  //       children: <TextSpan>[
+  //         // Make "Disclaimer:" bold and slightly larger
+  //         TextSpan(
+  //             text: 'Disclaimer: ',
+  //             style:
+  //                 TextStyle(fontWeight: FontWeight.bold, fontSize: textSize)),
+  //         // The main message
+  //         const TextSpan(text: 'We do not charge for hiring!'),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // Helper for Contact Us Form (About Page) - Reuses validation logic
-  Widget _buildContactUsFormAbout(BuildContext context, bool isMobile,
-      double headingSize, double bodyTextMedium, double buttonTextSize) {
-    // Define controllers and key locally for this form instance
+  // Widget _buildContactUsFormAbout(BuildContext context, bool isMobile,
+  //     double headingSize, double bodyTextMedium, double buttonTextSize) {
+  //   // Define controllers and key locally for this form instance
+  //   final TextEditingController nameController = TextEditingController();
+  //   final TextEditingController emailController = TextEditingController();
+  //   final TextEditingController mobileController = TextEditingController();
+  //   final TextEditingController messageController = TextEditingController();
+  //   final formKey = GlobalKey<FormState>();
+
+  //   // Dispose controllers when the state is disposed if they were state variables
+  //   // If defined locally like here, they are garbage collected automatically.
+
+  //   return Form(
+  //     key: formKey, // Still using form key
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           'Contact us',
+  //           style: TextStyle(
+  //             color: const Color.fromARGB(255, 15, 12, 12),
+  //             fontSize: headingSize,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 10),
+
+  //         // --- Name Field ---
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 5),
+  //           child: TextField(
+  //             controller: nameController,
+  //             decoration: const InputDecoration(
+  //               labelText: 'Name:',
+  //               fillColor: Colors.white,
+  //               filled: true,
+  //               border: OutlineInputBorder(),
+  //               contentPadding:
+  //                   EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //             ),
+  //             style: const TextStyle(color: Colors.black),
+  //           ),
+  //         ),
+
+  //         // --- Email Field ---
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 5),
+  //           child: TextField(
+  //             controller: emailController,
+  //             keyboardType: TextInputType.emailAddress,
+  //             decoration: const InputDecoration(
+  //               labelText: 'Email:',
+  //               fillColor: Colors.white,
+  //               filled: true,
+  //               border: OutlineInputBorder(),
+  //               contentPadding:
+  //                   EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //             ),
+  //             style: const TextStyle(color: Colors.black),
+  //           ),
+  //         ),
+
+  //         // --- Mobile Number Field ---
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 5),
+  //           child: TextField(
+  //             controller: mobileController,
+  //             keyboardType: TextInputType.phone,
+  //             decoration: const InputDecoration(
+  //               labelText: 'Mobile Number:',
+  //               fillColor: Colors.white,
+  //               filled: true,
+  //               border: OutlineInputBorder(),
+  //               contentPadding:
+  //                   EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //             ),
+  //             style: const TextStyle(color: Colors.black),
+  //           ),
+  //         ),
+
+  //         // --- Message Field ---
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 5),
+  //           child: TextField(
+  //             controller: messageController,
+  //             maxLines: isMobile ? 3 : 4,
+  //             decoration: const InputDecoration(
+  //               labelText: 'Message:',
+  //               fillColor: Colors.white,
+  //               filled: true,
+  //               border: OutlineInputBorder(),
+  //               contentPadding:
+  //                   EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //             ),
+  //             style: const TextStyle(color: Colors.black),
+  //           ),
+  //         ),
+
+  //         const SizedBox(height: 10),
+
+  //         // --- Submit Button ---
+  //         Padding(
+  //             padding: const EdgeInsets.symmetric(vertical: 10),
+  //             child: Center(
+  //               child: SizedBox(
+  //                 width: isMobile ? double.infinity : 240, // Responsive width
+  //                 child: ElevatedButton(
+  //                   onPressed: () {
+  //                     // Validation logic
+  //                     bool hasError = false;
+  //                     String errorMessage = 'Please fill all required fields.';
+
+  //                     final emailValid =
+  //                         RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+  //                             .hasMatch(emailController.text);
+  //                     final phoneValid = RegExp(r'^[0-9]{10}$')
+  //                         .hasMatch(mobileController.text);
+
+  //                     if (nameController.text.isEmpty ||
+  //                         emailController.text.isEmpty ||
+  //                         mobileController.text.isEmpty ||
+  //                         messageController.text.isEmpty) {
+  //                       hasError = true;
+  //                     } else if (!emailValid || !phoneValid) {
+  //                       hasError = true;
+  //                       errorMessage = 'Please check email/phone format.';
+  //                     }
+
+  //                     if (hasError) {
+  //                       ScaffoldMessenger.of(context).showSnackBar(
+  //                         SnackBar(
+  //                           content: Text(errorMessage),
+  //                           backgroundColor: Colors.red,
+  //                         ),
+  //                       );
+  //                       return;
+  //                     }
+
+  //                     // On success
+  //                     print("Form Submitted (Styled Version):");
+  //                     print(
+  //                         "Name: ${nameController.text}, Email: ${emailController.text}, Mobile: ${mobileController.text}, Message: ${messageController.text}");
+
+  //                     ScaffoldMessenger.of(context).showSnackBar(
+  //                       const SnackBar(
+  //                         content: Text('Message Submitted!'),
+  //                         backgroundColor: Colors.green,
+  //                       ),
+  //                     );
+
+  //                     // Clear fields
+  //                     nameController.clear();
+  //                     emailController.clear();
+  //                     mobileController.clear();
+  //                     messageController.clear();
+  //                   },
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: const Color(0xFFE7A20E),
+  //                     foregroundColor: Colors.white,
+  //                     padding:
+  //                         EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(isMobile ? 8 : 10),
+  //                     ),
+  //                     textStyle: TextStyle(
+  //                       fontSize: buttonTextSize,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                   child: const Text('Submit'),
+  //                 ),
+  //               ),
+  //             ))
+  //       ],
+  //     ),
+  //   );
+  // }
+  Widget _buildContactUsFormAbout(
+    BuildContext context,
+    bool isMobile,
+    double headingSize,
+    double bodyTextMedium,
+    double buttonTextSize,
+  ) {
+    // Define controllers and form key locally
     final TextEditingController nameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController mobileController = TextEditingController();
     final TextEditingController messageController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    // Dispose controllers when the state is disposed if they were state variables
-    // If defined locally like here, they are garbage collected automatically.
-
-    return Form(
-      key: formKey, // Still using form key
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Contact us',
-            style: TextStyle(
-              color: const Color.fromARGB(255, 15, 12, 12),
-              fontSize: headingSize,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // --- Name Field ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              ),
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-
-          // --- Email Field ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Email:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              ),
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-
-          // --- Mobile Number Field ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: TextField(
-              controller: mobileController,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Mobile Number:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              ),
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-
-          // --- Message Field ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: TextField(
-              controller: messageController,
-              maxLines: isMobile ? 3 : 4,
-              decoration: const InputDecoration(
-                labelText: 'Message:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              ),
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          // --- Submit Button ---
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Center(
-                child: SizedBox(
-                  width: isMobile ? double.infinity : 240, // Responsive width
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Validation logic
-                      bool hasError = false;
-                      String errorMessage = 'Please fill all required fields.';
-
-                      final emailValid =
-                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(emailController.text);
-                      final phoneValid = RegExp(r'^[0-9]{10}$')
-                          .hasMatch(mobileController.text);
-
-                      if (nameController.text.isEmpty ||
-                          emailController.text.isEmpty ||
-                          mobileController.text.isEmpty ||
-                          messageController.text.isEmpty) {
-                        hasError = true;
-                      } else if (!emailValid || !phoneValid) {
-                        hasError = true;
-                        errorMessage = 'Please check email/phone format.';
-                      }
-
-                      if (hasError) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(errorMessage),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      // On success
-                      print("Form Submitted (Styled Version):");
-                      print(
-                          "Name: ${nameController.text}, Email: ${emailController.text}, Mobile: ${mobileController.text}, Message: ${messageController.text}");
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Message Submitted!'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-
-                      // Clear fields
-                      nameController.clear();
-                      emailController.clear();
-                      mobileController.clear();
-                      messageController.clear();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFE7A20E),
-                      foregroundColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(isMobile ? 8 : 10),
-                      ),
-                      textStyle: TextStyle(
-                        fontSize: buttonTextSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: const Text('Submit'),
+    return ChangeNotifierProvider(
+      create: (_) => ContactInquiryController(),
+      child: Consumer<ContactInquiryController>(
+        builder: (context, controller, _) {
+          return Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 🟣 Heading
+                Text(
+                  'Contact Us',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: headingSize,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ))
-        ],
+                const SizedBox(height: 10),
+
+                // 🟢 Name Field
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name:',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    validator: (v) => v == null || v.isEmpty
+                        ? 'Please enter your name'
+                        : null,
+                  ),
+                ),
+
+                // 🟢 Email Field
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Email:',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    validator: (v) {
+                      if (v == null || v.isEmpty) return 'Please enter email';
+                      final emailRegex =
+                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      if (!emailRegex.hasMatch(v)) {
+                        return 'Enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                // 🟢 Mobile Number Field
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: mobileController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter
+                          .digitsOnly, // allow only digits
+                      LengthLimitingTextInputFormatter(
+                          10), // limit to 10 digits
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Mobile Number:',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return 'Please enter mobile number';
+                      }
+                      final phoneRegex = RegExp(r'^[0-9]{10}$');
+                      if (!phoneRegex.hasMatch(v)) {
+                        return 'Enter valid 10-digit phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                // 🟢 Message Field
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: messageController,
+                    maxLines: isMobile ? 3 : 4,
+                    decoration: const InputDecoration(
+                      labelText: 'Message:',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    validator: (v) => v == null || v.isEmpty
+                        ? 'Please enter a message'
+                        : null,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // 🟠 Submit Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Center(
+                    child: SizedBox(
+                      width: isMobile ? double.infinity : 240,
+                      child: ElevatedButton(
+                        onPressed: controller.isLoading
+                            ? null
+                            : () async {
+                                if (!formKey.currentState!.validate()) return;
+
+                                final inquiry = ContactInquiry(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  phone: mobileController.text,
+                                  message: messageController.text,
+                                );
+
+                                final success = await controller
+                                    .submitContactInquiry(inquiry);
+
+                                if (success) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(controller.successMessage ??
+                                          'Sent successfully!'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                  nameController.clear();
+                                  emailController.clear();
+                                  mobileController.clear();
+                                  messageController.clear();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(controller.errorMessage ??
+                                          'Something went wrong'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE7A20E),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                              vertical: isMobile ? 12 : 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(isMobile ? 8 : 10),
+                          ),
+                          textStyle: TextStyle(
+                            fontSize: buttonTextSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: controller.isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('Submit'),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

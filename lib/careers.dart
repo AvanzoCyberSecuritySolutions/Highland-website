@@ -16,7 +16,7 @@ class Careers extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color(0xFF1FBCB1), // Teal header
-        centerTitle: true, // ✅ Center title
+        // centerTitle: true, // ✅ Center title
         iconTheme: const IconThemeData(
           color: Colors.white, // ✅ Back arrow color white
         ),
