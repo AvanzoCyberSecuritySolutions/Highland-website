@@ -588,68 +588,73 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
-                        child: SizedBox(
-                          width: 240,
-                          child: ElevatedButton(
-                            onPressed: controller.isLoading
-                                ? null
-                                : () async {
-                                    if (!formKey.currentState!.validate())
-                                      return;
+                        child: Center(
+                          child: SizedBox(
+                            width: 170,
+                            child: ElevatedButton(
+                              onPressed: controller.isLoading
+                                  ? null
+                                  : () async {
+                                      if (!formKey.currentState!.validate())
+                                        return;
 
-                                    final inquiry = ContactInquiry(
-                                      name: nameController.text,
-                                      email: emailController.text,
-                                      phone: mobileController.text,
-                                      message: messageController.text,
-                                    );
+                                      final inquiry = ContactInquiry(
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        phone: mobileController.text,
+                                        message: messageController.text,
+                                      );
 
-                                    final success = await controller
-                                        .submitContactInquiry(inquiry);
+                                      final success = await controller
+                                          .submitContactInquiry(inquiry);
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(success
-                                            ? (controller.successMessage ??
-                                                'Message sent successfully!')
-                                            : (controller.errorMessage ??
-                                                'Something went wrong')),
-                                        backgroundColor:
-                                            success ? Colors.green : Colors.red,
-                                      ),
-                                    );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(success
+                                              ? (controller.successMessage ??
+                                                  'Message sent successfully!')
+                                              : (controller.errorMessage ??
+                                                  'Something went wrong')),
+                                          backgroundColor: success
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      );
 
-                                    if (success) {
-                                      nameController.clear();
-                                      emailController.clear();
-                                      mobileController.clear();
-                                      messageController.clear();
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: kButtonColor,
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                      if (success) {
+                                        nameController.clear();
+                                        emailController.clear();
+                                        mobileController.clear();
+                                        messageController.clear();
+                                      }
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kButtonColor,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                               ),
+                              child: controller.isLoading
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Submit',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
-                            child: controller.isLoading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                           ),
                         ),
                       ),

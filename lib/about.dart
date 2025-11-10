@@ -1101,6 +1101,7 @@ import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
 import 'package:flutter_highland/highland_home.dart';
 import 'package:flutter_highland/model/contact_enquiry.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 // Import other necessary pages if navigation is added later
 // import 'package:flutter_highland/constants/Color_Constant.dart'; // If needed
 
@@ -1238,7 +1239,7 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
         title: Text(
           'About Highland Hospital',
           style: TextStyle(
-            fontSize: mobile ? 18 : 20, // Responsive title size
+            fontSize: mobile ? 30 : 25, // Responsive title size
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -1592,6 +1593,124 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
   }
 
   // Contact Info Section
+  // Widget _buildContactInfoSection(
+  //     BuildContext context,
+  //     bool mobile,
+  //     bool tablet,
+  //     bool desktop,
+  //     double iconSize,
+  //     double titleSize,
+  //     double descSize,
+  //     double sectionPadding) {
+  //   Widget locationCol = _buildContactColumnItem(
+  //       mobile: mobile,
+  //       icon: Icons.location_on,
+  //       title: 'Location',
+  //       description:
+  //           'Mother Theresa Road,\nKankanady, Mangaluru,\nKarnataka 575002, India.',
+  //       iconSize: iconSize,
+  //       titleSize: titleSize,
+  //       descriptionSize: descSize);
+  //   Widget emergencyCol = _buildContactColumnItem(
+  //       mobile: mobile,
+  //       icon: Icons.phone,
+  //       title: 'Emergency 24x7',
+  //       description: '0824-4235555',
+  //       iconSize: iconSize,
+  //       titleSize: titleSize,
+  //       descriptionSize: descSize);
+  //   Widget emailCol = _buildContactColumnItem(
+  //       mobile: mobile,
+  //       icon: Icons.email,
+  //       title: 'Email',
+  //       description: 'reachus@highlandhospital.in',
+  //       iconSize: iconSize,
+  //       titleSize: titleSize,
+  //       descriptionSize: descSize);
+
+  //   return Container(
+  //     width: double.infinity,
+  //     color: Color(0xFF1FBCB1), // Background color
+  //     padding: EdgeInsets.symmetric(
+  //         vertical: sectionPadding * 1.5, horizontal: sectionPadding),
+  //     child: mobile
+  //         ? Column(
+  //             // Stack vertically on mobile
+  //             crossAxisAlignment: CrossAxisAlignment.start, // Align items left
+  //             children: [
+  //               locationCol,
+  //               SizedBox(height: 20),
+  //               emergencyCol,
+  //               SizedBox(height: 20),
+  //               emailCol,
+  //             ],
+  //           )
+  //         : Row(
+  //             // Row layout for tablet/desktop
+  //             mainAxisAlignment:
+  //                 MainAxisAlignment.spaceAround, // Space out columns
+  //             crossAxisAlignment: CrossAxisAlignment.start, // Align tops
+  //             children: [
+  //               Expanded(child: locationCol),
+  //               SizedBox(width: tablet ? 15 : 20), // Spacing
+  //               Expanded(child: emergencyCol),
+  //               SizedBox(width: tablet ? 15 : 20), // Spacing
+  //               Expanded(child: emailCol),
+  //             ],
+  //           ),
+  //   );
+  // }
+  // ... inside _AboutState class ...
+
+// Helper for individual Contact Info Column Item - MODIFIED TO ACCEPT onTap
+  Widget _buildContactColumnItem({
+    required bool mobile,
+    required IconData icon,
+    required String title,
+    required String description,
+    required double iconSize,
+    required double titleSize,
+    required double descriptionSize,
+    VoidCallback? onTap, // New onTap callback
+  }) {
+    return GestureDetector(
+      // Make the entire column item tappable
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:
+            mobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: Color(0xFFEE9821), size: iconSize), // Accent color
+          SizedBox(width: mobile ? 10 : 15),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: titleSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white), // White text
+                ),
+                SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(
+                      fontSize: descriptionSize,
+                      color: Colors.white.withOpacity(0.9),
+                      height: 1.3), // White text
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+// Contact Info Section Widget - MODIFIED TO PASS onTap
   Widget _buildContactInfoSection(
       BuildContext context,
       bool mobile,
@@ -1602,30 +1721,38 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
       double descSize,
       double sectionPadding) {
     Widget locationCol = _buildContactColumnItem(
-        mobile: mobile,
-        icon: Icons.location_on,
-        title: 'Location',
-        description:
-            'Mother Theresa Road,\nKankanady, Mangaluru,\nKarnataka 575002, India.',
-        iconSize: iconSize,
-        titleSize: titleSize,
-        descriptionSize: descSize);
+      mobile: mobile,
+      icon: Icons.location_on,
+      title: 'Location',
+      description:
+          'Mother Theresa Road,\nKankanady, Mangaluru,\nKarnataka 575002, India.',
+      iconSize: iconSize,
+      titleSize: titleSize,
+      descriptionSize: descSize,
+      onTap: () => _launchURL(
+          'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D'),
+    );
     Widget emergencyCol = _buildContactColumnItem(
-        mobile: mobile,
-        icon: Icons.phone,
-        title: 'Emergency 24x7',
-        description: '0824-4235555',
-        iconSize: iconSize,
-        titleSize: titleSize,
-        descriptionSize: descSize);
+      mobile: mobile,
+      icon: Icons.phone,
+      title: 'Emergency 24x7',
+      description: '0824-4235555',
+      iconSize: iconSize,
+      titleSize: titleSize,
+      descriptionSize: descSize,
+      onTap: () => makePhoneCall('08244235555', context),
+    );
     Widget emailCol = _buildContactColumnItem(
-        mobile: mobile,
-        icon: Icons.email,
-        title: 'Email',
-        description: 'reachus@highlandhospital.in',
-        iconSize: iconSize,
-        titleSize: titleSize,
-        descriptionSize: descSize);
+      mobile: mobile,
+      icon: Icons.email,
+      title: 'Email',
+      description: 'reachus@highlandhospital.in',
+      iconSize: iconSize,
+      titleSize: titleSize,
+      descriptionSize: descSize,
+      onTap: () => _launchURL(
+          'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry'),
+    );
 
     return Container(
       width: double.infinity,
@@ -1661,46 +1788,93 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
   }
 
   // Helper for individual Contact Info Column Item
-  Widget _buildContactColumnItem(
-      {required bool mobile,
-      required IconData icon,
-      required String title,
-      required String description,
-      required double iconSize,
-      required double titleSize,
-      required double descriptionSize}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment:
-          mobile ? MainAxisAlignment.start : MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: Color(0xFFEE9821), size: iconSize), // Accent color
-        SizedBox(width: mobile ? 10 : 15),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: titleSize,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white), // White text
-              ),
-              SizedBox(height: 4),
-              Text(
-                description,
-                style: TextStyle(
-                    fontSize: descriptionSize,
-                    color: Colors.white.withOpacity(0.9),
-                    height: 1.3), // White text
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildContactColumnItem(
+  //     {required bool mobile,
+  //     required IconData icon,
+  //     required String title,
+  //     required String description,
+  //     required double iconSize,
+  //     required double titleSize,
+  //     required double descriptionSize}) {
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     mainAxisAlignment:
+  //         mobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+  //     children: [
+  //       Icon(icon, color: Color(0xFFEE9821), size: iconSize), // Accent color
+  //       SizedBox(width: mobile ? 10 : 15),
+  //       Flexible(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               title,
+  //               style: TextStyle(
+  //                   fontSize: titleSize,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.white), // White text
+  //             ),
+  //             SizedBox(height: 4),
+  //             Text(
+  //               description,
+  //               style: TextStyle(
+  //                   fontSize: descriptionSize,
+  //                   color: Colors.white.withOpacity(0.9),
+  //                   height: 1.3), // White text
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  // Widget _buildContactColumnItem({
+  //   required bool mobile,
+  //   required IconData icon,
+  //   required String title,
+  //   required String description,
+  //   required double iconSize,
+  //   required double titleSize,
+  //   required double descriptionSize,
+  //   VoidCallback? onTap, // New onTap callback
+  // }) {
+  //   return GestureDetector(
+  //     // Make the entire column item tappable
+  //     onTap: onTap,
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment:
+  //           mobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+  //       children: [
+  //         Icon(icon, color: Color(0xFFEE9821), size: iconSize), // Accent color
+  //         SizedBox(width: mobile ? 10 : 15),
+  //         Flexible(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 title,
+  //                 style: TextStyle(
+  //                     fontSize: titleSize,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.white), // White text
+  //               ),
+  //               SizedBox(height: 4),
+  //               Text(
+  //                 description,
+  //                 style: TextStyle(
+  //                     fontSize: descriptionSize,
+  //                     color: Colors.white.withOpacity(0.9),
+  //                     height: 1.3), // White text
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // --- Specialities & Contact Form Section (Adapted for About Page) ---
   Widget _buildSpecialitiesAndFormSectionAbout(
@@ -2191,77 +2365,155 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
                 const SizedBox(height: 10),
 
                 // 🟠 Submit Button
+                //       Padding(
+                //         padding: const EdgeInsets.symmetric(vertical: 10),
+                //         child: Center(
+                //           child: SizedBox(
+                //             width: isMobile ? double.infinity : 240,
+                //             child: ElevatedButton(
+                //               onPressed: controller.isLoading
+                //                   ? null
+                //                   : () async {
+                //                       if (!formKey.currentState!.validate()) return;
+
+                //                       final inquiry = ContactInquiry(
+                //                         name: nameController.text,
+                //                         email: emailController.text,
+                //                         phone: mobileController.text,
+                //                         message: messageController.text,
+                //                       );
+
+                //                       final success = await controller
+                //                           .submitContactInquiry(inquiry);
+
+                //                       if (success) {
+                //                         ScaffoldMessenger.of(context).showSnackBar(
+                //                           SnackBar(
+                //                             content: Text(controller.successMessage ??
+                //                                 'Sent successfully!'),
+                //                             backgroundColor: Colors.green,
+                //                           ),
+                //                         );
+                //                         nameController.clear();
+                //                         emailController.clear();
+                //                         mobileController.clear();
+                //                         messageController.clear();
+                //                       } else {
+                //                         ScaffoldMessenger.of(context).showSnackBar(
+                //                           SnackBar(
+                //                             content: Text(controller.errorMessage ??
+                //                                 'Something went wrong'),
+                //                             backgroundColor: Colors.red,
+                //                           ),
+                //                         );
+                //                       }
+                //                     },
+                //               style: ElevatedButton.styleFrom(
+                //                 backgroundColor: const Color(0xFFE7A20E),
+                //                 foregroundColor: Colors.white,
+                //                 padding: EdgeInsets.symmetric(
+                //                     vertical: isMobile ? 12 : 15),
+                //                 shape: RoundedRectangleBorder(
+                //                   borderRadius:
+                //                       BorderRadius.circular(isMobile ? 8 : 10),
+                //                 ),
+                //                 textStyle: TextStyle(
+                //                   fontSize: buttonTextSize,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //               child: controller.isLoading
+                //                   ? const SizedBox(
+                //                       height: 20,
+                //                       width: 20,
+                //                       child: CircularProgressIndicator(
+                //                         color: Colors.white,
+                //                         strokeWidth: 2,
+                //                       ),
+                //                     )
+                //                   : const Text('Submit'),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // );
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Center(
+                    // 1. Ensure the button is centered
                     child: SizedBox(
-                      width: isMobile ? double.infinity : 240,
+                      width: 170, // 2. Use a fixed width for all screen sizes
                       child: ElevatedButton(
-                        onPressed: controller.isLoading
-                            ? null
-                            : () async {
-                                if (!formKey.currentState!.validate()) return;
+                        onPressed: () {
+                          // Your existing validation and submission logic here...
+                          bool hasError = false;
+                          String errorMessage =
+                              'Please fill all required fields.';
 
-                                final inquiry = ContactInquiry(
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                  phone: mobileController.text,
-                                  message: messageController.text,
-                                );
+                          final emailValid =
+                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                  .hasMatch(emailController.text);
+                          final phoneValid = RegExp(r'^[0-9]{10}$')
+                              .hasMatch(mobileController.text);
 
-                                final success = await controller
-                                    .submitContactInquiry(inquiry);
+                          if (nameController.text.isEmpty ||
+                              emailController.text.isEmpty ||
+                              mobileController.text.isEmpty ||
+                              messageController.text.isEmpty) {
+                            hasError = true;
+                          } else if (!emailValid || !phoneValid) {
+                            hasError = true;
+                            errorMessage = 'Please check email/phone format.';
+                          }
 
-                                if (success) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(controller.successMessage ??
-                                          'Sent successfully!'),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                  nameController.clear();
-                                  emailController.clear();
-                                  mobileController.clear();
-                                  messageController.clear();
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(controller.errorMessage ??
-                                          'Something went wrong'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
+                          if (hasError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(errorMessage),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          // On success
+                          print("Form Submitted (Styled Version):");
+                          print(
+                              "Name: ${nameController.text}, Email: ${emailController.text}, Mobile: ${mobileController.text}, Message: ${messageController.text}");
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Message Submitted!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+
+                          // Clear fields
+                          nameController.clear();
+                          emailController.clear();
+                          mobileController.clear();
+                          messageController.clear();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE7A20E),
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              vertical: isMobile ? 12 : 15),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(isMobile ? 8 : 10),
+                                BorderRadius.circular(30), // Pill shape
                           ),
                           textStyle: TextStyle(
                             fontSize: buttonTextSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: controller.isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
           );
@@ -2352,6 +2604,36 @@ class _AboutState extends State<About> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Future<void> _launchURL(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      // Fallback for web or if external application fails
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not launch $urlString')),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (!await launchUrl(launchUri)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not dial $phoneNumber')),
+        );
+      }
+    }
   }
 
   // --- Footer ---

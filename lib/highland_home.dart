@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_highland/about.dart';
-import 'package:flutter_highland/already_registered.dart';
 import 'package:flutter_highland/careers.dart';
 import 'package:flutter_highland/controller/booking_enquiry_controller.dart';
 import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
-import 'package:flutter_highland/feedbackform.dart';
 import 'package:flutter_highland/highland_departments.dart';
 import 'package:flutter_highland/model/booking_enquiry_model.dart';
 import 'package:flutter_highland/model/contact_enquiry.dart';
@@ -15,7 +13,6 @@ import 'package:flutter_highland/model/contact_enquiry.dart';
 import 'package:flutter_highland/responsive.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/contacts.dart';
-import 'package:flutter_highland/new_patient_registration.dart';
 import 'package:flutter_highland/patient_registration.dart';
 import 'package:flutter_highland/url_launcher_connection.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +24,8 @@ class CoreLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       'assets/img/LogowithISO.png',
-      height: 120,
-      fit: BoxFit.contain,
+      //height: 180,
+      fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) =>
           Icon(Icons.business, size: 30),
     );
@@ -303,11 +300,21 @@ class _HighlandhomeState extends State<Highlandhome>
         _buildHospitalDescriptionResponsive(
             context, screenSize, false, isTablet, isMobile, bodyTextLarge),
         SizedBox(height: isMobile ? 20 : 30),
+        // _buildKnowMoreButtonResponsive(
+        //     context, screenSize, false, isTablet, isMobile, buttonText),
+        // SizedBox(height: isMobile ? 20 : 30),
+        // _buildFeatureCarouselResponsive(
+        //     context, screenSize, false, isTablet, isMobile),
+        // SizedBox(height: isMobile ? 30 : screenSize.height * .08),
+        // _buildVisionMissionSectionResponsive(
+        //     context, screenSize, false, isTablet, isMobile, bodyTextMedium),
         _buildKnowMoreButtonResponsive(
             context, screenSize, false, isTablet, isMobile, buttonText),
         SizedBox(height: isMobile ? 20 : 30),
-        _buildFeatureCarouselResponsive(
-            context, screenSize, false, isTablet, isMobile),
+
+        // **** THIS IS THE CORRECTED LINE ****
+        _buildFeatureCarouselResponsive(context), // No extra arguments needed
+
         SizedBox(height: isMobile ? 30 : screenSize.height * .08),
         _buildVisionMissionSectionResponsive(
             context, screenSize, false, isTablet, isMobile, bodyTextMedium),
@@ -1282,36 +1289,28 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
-  Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
-    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+  // Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
+  //   final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
 
-    // 🔹 On web: launch tel: link directly (browser will handle or show error)
-    if (kIsWeb) {
-      try {
-        await launchUrl(callUri);
-      } catch (e) {
-        _showError(context, 'Web call not supported on this device.');
-      }
-      return;
-    }
+  //   // 🔹 On web: launch tel: link directly (browser will handle or show error)
+  //   if (kIsWeb) {
+  //     try {
+  //       await launchUrl(callUri);
+  //     } catch (e) {
+  //       _showError(context, 'Web call not supported on this device.');
+  //     }
+  //     return;
+  //   }
 
-    // 🔹 On mobile or desktop
-    if (await canLaunchUrl(callUri)) {
-      await launchUrl(callUri);
-    } else {
-      _showError(context, 'This device cannot make phone calls.');
-    }
-  }
+  //   // 🔹 On mobile or desktop
+  //   if (await canLaunchUrl(callUri)) {
+  //     await launchUrl(callUri);
+  //   } else {
+  //     _showError(context, 'This device cannot make phone calls.');
+  //   }
+  // }
 
 // Helper to show error as SnackBar
-  void _showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
 
   Widget _originalCarousalContainer({
     required BuildContext context,
@@ -1352,13 +1351,6 @@ class _HighlandhomeState extends State<Highlandhome>
         ),
       ),
     );
-  }
-
-  String _getIconAssetPath(IconData icon) {
-    if (icon == Icons.location_on) return 'assets/img/Location.png';
-    if (icon == Icons.phone) return 'assets/img/Call.png';
-    if (icon == Icons.email) return 'assets/img/E-mail.png';
-    return 'assets/img/default_icon.png';
   }
 
   // Widget _buildSpecialitiesAndFormSectionDesktopOriginal(BuildContext context,
@@ -2354,10 +2346,51 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
+  // PreferredSizeWidget _buildMobileTabletAppBar(
+  //     BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
+  //   double iconSize = isMobile ? 20 : 24;
+  //   double emailFontSize = isMobile ? 12 : (isTablet ? 14 : 16);
+  //   return AppBar(
+  //     leading: IconButton(
+  //       icon: Icon(Icons.menu, color: Colors.black),
+  //       onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+  //     ),
+  //     title: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         if (isTablet)
+  //           Flexible(
+  //             child: Row(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Icon(Icons.mail,
+  //                     color: const Color.fromARGB(255, 90, 78, 78),
+  //                     size: iconSize),
+  //                 SizedBox(width: 10),
+  //                 Flexible(
+  //                   child: Text(
+  //                     'reachus@highlandhospital.in',
+  //                     style: TextStyle(
+  //                         color: Colors.black, fontSize: emailFontSize),
+  //                     overflow: TextOverflow.ellipsis,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         if (isMobile) CoreLogo(),
+  //         if (isTablet) HighlandSocialBar(iconSize: iconSize),
+  //       ],
+  //     ),
+  //     backgroundColor: Color(0xFFFFFFFF),
+  //     elevation: 1.0,
+  //   );
+  // }
   PreferredSizeWidget _buildMobileTabletAppBar(
       BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
-    double iconSize = isMobile ? 20 : 24;
-    double emailFontSize = isMobile ? 12 : (isTablet ? 14 : 16);
+    double iconSize = isMobile ? 18 : 22; // Adjusted for better fit on mobile
+    double emailFontSize = isMobile ? 14 : 16;
+
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.menu, color: Colors.black),
@@ -2366,27 +2399,34 @@ class _HighlandhomeState extends State<Highlandhome>
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (isTablet)
-            Flexible(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.mail,
-                      color: const Color.fromARGB(255, 90, 78, 78),
-                      size: iconSize),
-                  SizedBox(width: 10),
-                  Flexible(
-                    child: Text(
-                      'reachus@highlandhospital.in',
-                      style: TextStyle(
-                          color: Colors.black, fontSize: emailFontSize),
-                      overflow: TextOverflow.ellipsis,
+          // **** THIS IS THE CORRECTED SECTION ****
+          // This Row now builds for both mobile and tablet
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.mail,
+                  color: const Color.fromARGB(255, 90, 78, 78),
+                  size: iconSize,
+                ),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    'reachus@highlandhospital.in',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30, // 🔹 Increased font size here
+                      fontWeight:
+                          FontWeight.w500, // optional: makes it slightly bolder
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          if (isMobile) CoreLogo(),
+          ),
+          // We still show social icons on tablet but not on mobile to save space
           if (isTablet) HighlandSocialBar(iconSize: iconSize),
         ],
       ),
@@ -2395,21 +2435,54 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
+  // Widget _buildAppDrawer(BuildContext context) {
+  //   return Drawer(
+  //     child: ListView(
+  //       padding: EdgeInsets.zero,
+  //       children: [
+  //         DrawerHeader(
+  //           decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
+  //           child: Center(child: CoreLogo()),
+  //         ),
+  //         ...menuItems
+  //             .map((item) => ListTile(
+  //                   title: Text(item),
+  //                   onTap: () => onMenuItemTapped(item),
+  //                 ))
+  //             .toList(),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildAppDrawer(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
+        // 1. Wrap with a Column
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
-            child: Center(child: CoreLogo()),
+          Expanded(
+            // 3. Allow ListView to take available space
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
+                  child: Center(child: CoreLogo()),
+                ),
+                ...menuItems
+                    .map((item) => ListTile(
+                          title: Text(item, style: TextStyle(fontSize: 25)),
+                          onTap: () => onMenuItemTapped(item),
+                        ))
+                    .toList(),
+              ],
+            ),
           ),
-          ...menuItems
-              .map((item) => ListTile(
-                    title: Text(item),
-                    onTap: () => onMenuItemTapped(item),
-                  ))
-              .toList(),
+          // 2. Add the social media icons at the bottom
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child:
+                HighlandSocialBar(iconSize: 30), // Adjust icon size as needed
+          ),
         ],
       ),
     );
@@ -2599,93 +2672,172 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
-  Widget _buildFeatureCarouselResponsive(BuildContext context, Size screenSize,
-      bool isDesktop, bool isTablet, bool isMobile) {
+  // Widget _buildFeatureCarouselResponsive(BuildContext context, Size screenSize,
+  //     bool isDesktop, bool isTablet, bool isMobile) {
+  //   List<Widget> carouselItems = [
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/find a doctor.png',
+  //         label: 'FIND A DOCTOR',
+  //         backgroundColor: Color(0xFF1FBCB1)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/Test result.png',
+  //         label: 'TEST RESULT',
+  //         backgroundColor: Color(0xFFEE9821)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/online admission.png',
+  //         label: 'ONLINE ADMISSION',
+  //         backgroundColor: Color(0xFF1BA08D)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/Patient acces.png',
+  //         label: 'PATIENT ACCESS',
+  //         backgroundColor: Color(0xFF5592C8)),
+  //   ];
+
+  //   if (isMobile) {
+  //     return Center(
+  //       child: SingleChildScrollView(
+  //         scrollDirection: Axis.horizontal,
+  //         child: Row(
+  //           children: carouselItems
+  //               .map((item) => Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
+  //                     child: item,
+  //                   ))
+  //               .toList(),
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     return Center(
+  //       child: Container(
+  //         constraints: BoxConstraints(maxWidth: 1200),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: carouselItems
+  //               .map((item) => Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //                     child: item,
+  //                   ))
+  //               .toList(),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Widget _buildCarouselItem(
+  //     BuildContext context, Size screenSize, bool isMobile,
+  //     {required String image,
+  //     required String label,
+  //     required Color backgroundColor}) {
+  //   double itemHeight = isMobile ? 200 : 290;
+  //   double imageSize = isMobile ? 50 : 70;
+  //   double labelSize = isMobile ? 16 : 20;
+
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width * (83 / 375),
+  //     height: itemHeight,
+  //     color: backgroundColor,
+  //     margin: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 4),
+  //     padding: EdgeInsets.all(isMobile ? 8 : 12),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         Image.asset(image,
+  //             width: imageSize,
+  //             height: imageSize,
+  //             fit: BoxFit.contain,
+  //             errorBuilder: (c, e, s) => Icon(Icons.image_not_supported,
+  //                 size: imageSize, color: Colors.white54)),
+  //         SizedBox(height: 8),
+  //         Text(
+  //           label,
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             fontSize: labelSize,
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  Widget _buildFeatureCarouselResponsive(BuildContext context) {
+    final bool isMobile = Responsive.isMobile(context);
     List<Widget> carouselItems = [
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/find a doctor.png',
-          label: 'FIND A DOCTOR',
-          backgroundColor: Color(0xFF1FBCB1)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/Test result.png',
-          label: 'TEST RESULT',
-          backgroundColor: Color(0xFFEE9821)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/online admission.png',
-          label: 'ONLINE ADMISSION',
-          backgroundColor: Color(0xFF1BA08D)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/Patient acces.png',
-          label: 'PATIENT ACCESS',
-          backgroundColor: Color(0xFF5592C8)),
+      _buildCarouselItem(
+          'assets/img/find a doctor.png', 'FIND A DOCTOR', Color(0xFF1FBCB1)),
+      _buildCarouselItem(
+          'assets/img/Test result.png', 'TEST RESULT', Color(0xFFEE9821)),
+      _buildCarouselItem('assets/img/online admission.png', 'ONLINE ADMISSION',
+          Color(0xFF1BA08D)),
+      _buildCarouselItem(
+          'assets/img/Patient acces.png', 'PATIENT ACCESS', Color(0xFF5592C8)),
     ];
 
     if (isMobile) {
-      return Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: carouselItems
-                .map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: item,
-                    ))
-                .toList(),
-          ),
+      // **** THIS IS THE CORRECTED SECTION FOR MOBILE ****
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          // Use a Column to stack items vertically
+          children: carouselItems
+              .map((item) => Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 15.0), // Add space between items
+                    child: item,
+                  ))
+              .toList(),
         ),
       );
     } else {
-      return Center(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 1200),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: carouselItems
-                .map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: item,
-                    ))
-                .toList(),
-          ),
+      // Desktop layout remains the same
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(width: 20, height: 277, color: Color(0xFF1FBCB1)),
+            ...carouselItems.map((item) => Expanded(child: item)),
+            Container(width: 20, height: 277, color: Color(0xFF5592C8)),
+          ],
         ),
       );
     }
   }
 
-  Widget _buildCarouselItem(
-      BuildContext context, Size screenSize, bool isMobile,
-      {required String image,
-      required String label,
-      required Color backgroundColor}) {
-    double itemHeight = isMobile ? 200 : 290;
-    double imageSize = isMobile ? 50 : 70;
-    double labelSize = isMobile ? 16 : 20;
+  Widget _buildCarouselItem(String image, String label, Color backgroundColor) {
+    final bool isMobile = Responsive.isMobile(context);
+    // Adjust sizes for better appearance
+    double itemHeight = isMobile ? 180 : 277;
+    double imageSize = isMobile ? 60 : 80;
+    double labelSize = isMobile ? 18 : 18;
 
     return Container(
-      width: MediaQuery.of(context).size.width * (83 / 375),
+      // **** THIS IS THE OTHER KEY CHANGE ****
+      width: isMobile ? double.infinity : null, // Fill width on mobile
       height: itemHeight,
       color: backgroundColor,
-      margin: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 4),
-      padding: EdgeInsets.all(isMobile ? 8 : 12),
+      margin: isMobile ? EdgeInsets.zero : EdgeInsets.symmetric(horizontal: 1),
+      padding: EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(image,
               width: imageSize,
               height: imageSize,
               fit: BoxFit.contain,
-              errorBuilder: (c, e, s) => Icon(Icons.image_not_supported,
-                  size: imageSize, color: Colors.white54)),
-          SizedBox(height: 8),
+              color: Colors.white),
+          SizedBox(height: 15),
           Text(
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: labelSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: labelSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
         ],
       ),
@@ -3999,6 +4151,78 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
+  // Widget _buildSpecialitiesAndFormSectionResponsive(
+  //     BuildContext context,
+  //     Size screenSize,
+  //     bool isDesktop,
+  //     bool isTablet,
+  //     bool isMobile,
+  //     double headingSize,
+  //     double bodyTextMedium,
+  //     double buttonTextSize) {
+  //   double sectionPadding = isMobile ? 15 : 30;
+  //   double columnSpacing = isMobile ? 15 : 30;
+
+  //   Widget specialities1 = _buildSpecialitiesListResponsive(
+  //     context,
+  //     isMobile: isMobile,
+  //     title: 'Specialities',
+  //     specialties: [
+  //       'General Medicine',
+  //       'General Surgery',
+  //       'Orthopaedic & Trauma Care',
+  //       'Total Knee & Hip Replacement',
+  //       'Arthroscopy & Sports Medicine',
+  //       'Pediatric & Pediatric Surgery',
+  //       'Nephrology',
+  //       'Gastroenterology',
+  //     ],
+  //     headingSize: headingSize,
+  //     bodyTextMedium: bodyTextMedium,
+  //   );
+
+  //   Widget specialities2 = _buildSpecialitiesListResponsive(
+  //     context,
+  //     isMobile: isMobile,
+  //     title: '',
+  //     specialties: [
+  //       'Ophthalmology',
+  //       'E.N.T Micro Surgery',
+  //       'Neurology and Neuro Surgery',
+  //       'Plastic & Reconstructive Surgery',
+  //       'Maxillofacial Surgery',
+  //       'Microvascular Surgery',
+  //       'Endocrinology',
+  //       'Urology & Andrology',
+  //     ],
+  //     headingSize: headingSize,
+  //     bodyTextMedium: bodyTextMedium,
+  //   );
+
+  //   Widget contactForm = _buildContactUsFormResponsive(
+  //       context, isMobile, headingSize, bodyTextMedium, buttonTextSize);
+
+  //   return Container(
+  //     color: Color(0xFFEAEBED),
+  //     padding: EdgeInsets.symmetric(
+  //         vertical: sectionPadding, horizontal: sectionPadding),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Expanded(child: specialities1),
+  //             SizedBox(width: columnSpacing),
+  //             Expanded(child: specialities2),
+  //           ],
+  //         ),
+  //         SizedBox(height: columnSpacing),
+  //         contactForm,
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildSpecialitiesAndFormSectionResponsive(
       BuildContext context,
       Size screenSize,
@@ -4008,8 +4232,8 @@ class _HighlandhomeState extends State<Highlandhome>
       double headingSize,
       double bodyTextMedium,
       double buttonTextSize) {
-    double sectionPadding = isMobile ? 15 : 30;
-    double columnSpacing = isMobile ? 15 : 30;
+    double sectionPadding = isMobile ? 20 : 40;
+    double columnSpacing = isMobile ? 20 : 30;
 
     Widget specialities1 = _buildSpecialitiesListResponsive(
       context,
@@ -4032,7 +4256,7 @@ class _HighlandhomeState extends State<Highlandhome>
     Widget specialities2 = _buildSpecialitiesListResponsive(
       context,
       isMobile: isMobile,
-      title: '',
+      title: ' ', // Use a space to maintain alignment on desktop
       specialties: [
         'Ophthalmology',
         'E.N.T Micro Surgery',
@@ -4054,21 +4278,48 @@ class _HighlandhomeState extends State<Highlandhome>
       color: Color(0xFFEAEBED),
       padding: EdgeInsets.symmetric(
           vertical: sectionPadding, horizontal: sectionPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: specialities1),
-              SizedBox(width: columnSpacing),
-              Expanded(child: specialities2),
-            ],
-          ),
-          SizedBox(height: columnSpacing),
-          contactForm,
-        ],
-      ),
+      child: isMobile
+          // --- MOBILE LAYOUT: Everything stacked vertically ---
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                specialities1,
+                SizedBox(height: columnSpacing),
+                specialities2,
+                SizedBox(height: columnSpacing + 10),
+                contactForm,
+              ],
+            )
+          // --- DESKTOP/TABLET LAYOUT: Side-by-side columns ---
+          //         : Row(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: [
+          //               Expanded(flex: 1, child: specialities1),
+          //               SizedBox(width: columnSpacing),
+          //               Expanded(flex: 1, child: specialities2),
+          //               SizedBox(width: columnSpacing + 10),
+          //               Expanded(flex: 1, child: contactForm),
+          //             ],
+          //           ),
+          //   );
+          // }
+          : Center(
+              // **** FIX: WRAPPED THE ROW IN A CENTER WIDGET ****
+              child: Row(
+                mainAxisSize:
+                    MainAxisSize.min, // Allow row to shrink to its content
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // We no longer use Expanded, so the columns take their natural width
+                  specialities1,
+                  SizedBox(width: 80), // Spacing between columns
+                  specialities2,
+                  SizedBox(width: 80), // Spacing between columns
+                  // Constrain the width of the form on desktop
+                  SizedBox(width: 350, child: contactForm),
+                ],
+              ),
+            ),
     );
   }
 
@@ -4127,63 +4378,61 @@ class _HighlandhomeState extends State<Highlandhome>
 
     return Form(
       key: _responsiveBookingFormKey, // Use the specific key for this form
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Contact us',
-            style: TextStyle(
-                color: const Color.fromARGB(255, 15, 12, 12),
-                fontSize: headingSize,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 15),
-          // **** FIX: USING CORRECT CONTROLLERS FOR THIS FORM ****
-          _buildContactTextFieldResponsive(
-              controller: _desktopContactNameController, // Correct controller
-              label: 'Name:',
-              isMobile: isMobile,
-              inputFontSize: bodyTextMedium),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller: _desktopContactEmailController, // Correct controller
-              label: 'Email:',
-              isMobile: isMobile,
-              keyboardType: TextInputType.emailAddress,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Invalid email';
-                return null;
-              }),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller: _desktopContactMobileController, // Correct controller
-              label: 'Mobile Number:',
-              isMobile: isMobile,
-              keyboardType: TextInputType.phone,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                if (!RegExp(r'^\d{10}$').hasMatch(v))
-                  return 'Invalid mobile number';
-                return null;
-              }),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller:
-                  _desktopContactMessageController, // Correct controller
-              label: 'Message:',
-              isMobile: isMobile,
-              maxLines: isMobile ? 3 : 4,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                return null;
-              }),
-          SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          'Contact us',
+          style: TextStyle(
+              color: const Color.fromARGB(255, 15, 12, 12),
+              fontSize: headingSize,
+              fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 15),
+        // **** FIX: USING CORRECT CONTROLLERS FOR THIS FORM ****
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactNameController, // Correct controller
+            label: 'Name:',
+            isMobile: isMobile,
+            inputFontSize: bodyTextMedium),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactEmailController, // Correct controller
+            label: 'Email:',
+            isMobile: isMobile,
+            keyboardType: TextInputType.emailAddress,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Invalid email';
+              return null;
+            }),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactMobileController, // Correct controller
+            label: 'Mobile Number:',
+            isMobile: isMobile,
+            keyboardType: TextInputType.phone,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              if (!RegExp(r'^\d{10}$').hasMatch(v))
+                return 'Invalid mobile number';
+              return null;
+            }),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactMessageController, // Correct controller
+            label: 'Message:',
+            isMobile: isMobile,
+            maxLines: isMobile ? 3 : 4,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              return null;
+            }),
+        SizedBox(height: 20),
+        Center(
+          child: SizedBox(
+            width: 170,
             child: ElevatedButton(
               onPressed: contactController.isLoading
                   ? null
@@ -4219,9 +4468,10 @@ class _HighlandhomeState extends State<Highlandhome>
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFE7A20E),
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
+                padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(isMobile ? 8 : 10),
+                  borderRadius:
+                      BorderRadius.circular(30), // More rounded corners
                 ),
                 textStyle: TextStyle(
                     fontSize: buttonTextSize, fontWeight: FontWeight.bold),
@@ -4236,8 +4486,8 @@ class _HighlandhomeState extends State<Highlandhome>
                   : Text('Submit'),
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 
@@ -4381,6 +4631,36 @@ class _HighlandhomeState extends State<Highlandhome>
               ],
             ),
     );
+  }
+
+  Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
+    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+
+    try {
+      if (kIsWeb) {
+        // ✅ Open in a new tab to avoid replacing the Flutter web app
+        if (!await launchUrl(
+          callUri,
+          webOnlyWindowName: '_blank', // this keeps your app open
+        )) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('⚠️ Web call not supported on this device.')),
+          );
+        }
+      } else {
+        // ✅ On Android/iOS
+        if (!await launchUrl(callUri, mode: LaunchMode.externalApplication)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('⚠️ Could not launch $phoneNumber')),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Error: $e')),
+      );
+    }
   }
 }
 
