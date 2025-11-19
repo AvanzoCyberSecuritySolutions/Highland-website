@@ -102,6 +102,8 @@
 // lib/main.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_highland/controller/booking_enquiry_controller.dart';
+import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
 import 'package:flutter_highland/seo_web/about_us_page_wrapper.dart';
 import 'package:flutter_highland/seo_web/seo_helper.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -129,6 +131,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => FeedbackController()),
         ChangeNotifierProvider(create: (_) => Newbookingappointcontroller()),
+        ChangeNotifierProvider(create: (_) => BookingEnquiryController()),
+        ChangeNotifierProvider(create: (_) => ContactInquiryController()),
         Provider<BookingPatientController>(
           create: (_) => BookingPatientController(),
         ),
