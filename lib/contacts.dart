@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
+import 'package:flutter_highland/model/contact_enquiry.dart';
 import 'package:flutter_highland/webviewmap.dart';
-import 'package:flutter_highland/responsive.dart'; // Make sure this import is correct
+import 'package:flutter_highland/responsive.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart'; // Make sure this import is correct
 
 // Define colors for consistency (Optional, but good practice)
 const Color kAppBarColor = Color(0xFF1BA08D);
@@ -82,7 +87,7 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Contact Us'),
         backgroundColor: kAppBarColor, // Use defined color
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       // Use SafeArea to avoid system UI overlaps
       body: SafeArea(
@@ -142,350 +147,691 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
   // --- Reusable Content Widgets ---
 
   // Widget for the Contact Form section
+//   Widget _buildContactForm(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         // Contact us Title
+//         // const Text(
+//         //   'Contact us',
+//         //   style: TextStyle(
+//         //     color: Color.fromARGB(255, 15, 12, 12),
+//         //     fontSize: 24,
+//         //     fontWeight: FontWeight.bold,
+//         //   ),
+//         // ),
+//         SizedBox(height: 20),
+// // Name input field
+//         Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 8),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(12),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.grey.withOpacity(0.3),
+//                   spreadRadius: 1,
+//                   blurRadius: 5,
+//                 ),
+//               ],
+//             ),
+//             child: TextField(
+//               decoration: InputDecoration(
+//                 labelStyle: TextStyle(fontSize: 18), // <- Added this
+//                 labelText: 'Name:',
+//                 fillColor: Colors.white,
+//                 filled: true,
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 contentPadding:
+//                     EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+//               ),
+//               style: TextStyle(color: Colors.black),
+//             ),
+//           ),
+//         ),
+
+//         // Email input field
+//         Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 8),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(12),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.grey.withOpacity(0.3),
+//                   spreadRadius: 1,
+//                   blurRadius: 5,
+//                 ),
+//               ],
+//             ),
+//             child: TextField(
+//               decoration: InputDecoration(
+//                 labelStyle: TextStyle(fontSize: 18), // <- Added this
+//                 labelText: 'Email:',
+//                 fillColor: Colors.white,
+//                 filled: true,
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 contentPadding:
+//                     EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+//               ),
+//               style: TextStyle(color: Colors.black),
+//             ),
+//           ),
+//         ),
+
+//         // Mobile Number input field
+//         Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 8),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(12),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.grey.withOpacity(0.3),
+//                   spreadRadius: 1,
+//                   blurRadius: 5,
+//                 ),
+//               ],
+//             ),
+//             child: TextField(
+//               decoration: InputDecoration(
+//                 labelStyle: TextStyle(fontSize: 18), // <- Added this
+//                 labelText: 'Mobile Number:',
+//                 fillColor: Colors.white,
+//                 filled: true,
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 contentPadding:
+//                     EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+//               ),
+//               style: TextStyle(color: Colors.black),
+//             ),
+//           ),
+//         ),
+
+//         // Message input field
+//         Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 8),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(12),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.grey.withOpacity(0.3),
+//                   spreadRadius: 1,
+//                   blurRadius: 5,
+//                 ),
+//               ],
+//             ),
+//             child: TextField(
+//               maxLines: 4,
+//               decoration: InputDecoration(
+//                 labelStyle: TextStyle(fontSize: 18), // <- Added this
+//                 labelText: 'Message:',
+//                 fillColor: Colors.white,
+//                 filled: true,
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 contentPadding:
+//                     EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+//               ),
+//               style: TextStyle(color: Colors.black),
+//             ),
+//           ),
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//           child: SizedBox(
+//             width: 240, // Make the button stretch across the width
+//             child: ElevatedButton(
+//               onPressed: () {
+//                 // Add your submission logic here
+//                 print("Form Submitted");
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Color(
+//                     0xFFE7A20E), // Correct parameter for Button background color
+//                 padding: EdgeInsets.symmetric(vertical: 15), // Button height
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(15), // Rounded corners
+//                 ),
+//               ),
+//               child: Text(
+//                 'Submit',
+//                 style: TextStyle(
+//                   color: Colors.white, // Text color
+//                   fontSize: 24,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+// Widget _buildContactForm(BuildContext context) {
+//   // Controllers for inputs
+//   final nameController = TextEditingController();
+//   final emailController = TextEditingController();
+//   final mobileController = TextEditingController();
+//   final messageController = TextEditingController();
+//   final formKey = GlobalKey<FormState>();
+
+//   return ChangeNotifierProvider(
+//     create: (_) => ContactInquiryController(),
+//     child: Consumer<ContactInquiryController>(
+//       builder: (context, controller, _) {
+//         return Form(
+//           key: formKey,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const SizedBox(height: 20),
+
+//               // 🟢 Name Field
+//               _buildTextField(
+//                 controller: nameController,
+//                 label: 'Name:',
+//                 validator: (v) =>
+//                     v == null || v.isEmpty ? 'Please enter your name' : null,
+//               ),
+
+//               // 🟢 Email Field
+//               _buildTextField(
+//                 controller: emailController,
+//                 label: 'Email:',
+//                 keyboardType: TextInputType.emailAddress,
+//                 validator: (v) {
+//                   if (v == null || v.isEmpty) return 'Please enter email';
+//                   final emailRegex =
+//                       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+//                   if (!emailRegex.hasMatch(v)) {
+//                     return 'Enter a valid email';
+//                   }
+//                   return null;
+//                 },
+//               ),
+
+//               // 🟢 Mobile Number Field
+//               _buildTextField(
+//                 controller: mobileController,
+//                 label: 'Mobile Number:',
+//                 keyboardType: TextInputType.phone,
+//                 validator: (v) {
+//                   if (v == null || v.isEmpty) return 'Please enter mobile number';
+//                   final phoneRegex = RegExp(r'^[0-9]{10}$');
+//                   if (!phoneRegex.hasMatch(v)) {
+//                     return 'Enter valid 10-digit phone number';
+//                   }
+//                   return null;
+//                 },
+//               ),
+
+//               // 🟢 Message Field
+//               _buildTextField(
+//                 controller: messageController,
+//                 label: 'Message:',
+//                 maxLines: 4,
+//                 validator: (v) =>
+//                     v == null || v.isEmpty ? 'Please enter a message' : null,
+//               ),
+
+//               // 🟠 Submit Button
+//               Padding(
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//                 child: SizedBox(
+//                   width: 240,
+//                   child: ElevatedButton(
+//                     onPressed: controller.isLoading
+//                         ? null
+//                         : () async {
+//                             if (!formKey.currentState!.validate()) return;
+
+//                             final inquiry = ContactInquiry(
+//                               name: nameController.text,
+//                               email: emailController.text,
+//                               phone: mobileController.text,
+//                               message: messageController.text,
+//                             );
+
+//                             final success = await controller
+//                                 .submitContactInquiry(inquiry);
+
+//                             if (success) {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                 SnackBar(
+//                                   content: Text(controller.successMessage ??
+//                                       'Message sent successfully!'),
+//                                   backgroundColor: Colors.green,
+//                                 ),
+//                               );
+//                               nameController.clear();
+//                               emailController.clear();
+//                               mobileController.clear();
+//                               messageController.clear();
+//                             } else {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                 SnackBar(
+//                                   content: Text(controller.errorMessage ??
+//                                       'Something went wrong'),
+//                                   backgroundColor: Colors.red,
+//                                 ),
+//                               );
+//                             }
+//                           },
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFE7A20E),
+//                       padding: const EdgeInsets.symmetric(vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(15),
+//                       ),
+//                     ),
+//                     child: controller.isLoading
+//                         ? const SizedBox(
+//                             width: 20,
+//                             height: 20,
+//                             child: CircularProgressIndicator(
+//                               color: Colors.white,
+//                               strokeWidth: 2,
+//                             ),
+//                           )
+//                         : const Text(
+//                             'Submit',
+//                             style: TextStyle(
+//                               color: Colors.white,
+//                               fontSize: 24,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         );
+//       },
+//     ),
+//   );
+// }
+
+// /// 🧱 Reusable TextField Builder
+// Widget _buildTextField({
+//   required TextEditingController controller,
+//   required String label,
+//   TextInputType? keyboardType,
+//   int maxLines = 1,
+//   String? Function(String?)? validator,
+// }) {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(vertical: 8),
+//     child: Container(
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(12),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.grey.withOpacity(0.3),
+//             spreadRadius: 1,
+//             blurRadius: 5,
+//           ),
+//         ],
+//       ),
+//       child: TextFormField(
+//         controller: controller,
+//         keyboardType: keyboardType,
+//         maxLines: maxLines,
+//         validator: validator,
+//         decoration: InputDecoration(
+//           labelStyle: const TextStyle(fontSize: 18),
+//           labelText: label,
+//           fillColor: Colors.white,
+//           filled: true,
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           contentPadding:
+//               const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+//         ),
+//         style: const TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   );
+// }
+
+//         const SizedBox(height: 30), // Space before disclaimer
+
+//         // --- Responsive Disclaimer ---
+//         Responsive(
+//           mobile: _buildStaticDisclaimer(), // Static for mobile
+//           tablet: _buildStaticDisclaimer(), // Static for tablet
+//           desktop: _buildDisclaimerMarquee(), // Animated for desktop
+//         ),
+//         // --- End Responsive Disclaimer ---
+//       ],
+//     );
+//   }
+
   Widget _buildContactForm(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Contact us Title
-        const Text(
-          'Contact us',
-          style: TextStyle(
-            color: Color.fromARGB(255, 15, 12, 12),
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 20),
-// Name input field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final mobileController = TextEditingController();
+    final messageController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    return ChangeNotifierProvider(
+      create: (_) => ContactInquiryController(),
+      child: Consumer<ContactInquiryController>(
+        builder: (context, controller, _) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextField(
+                        controller: nameController,
+                        label: 'Name:',
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Please enter your name'
+                            : null,
+                      ),
+                      _buildTextField(
+                        controller: emailController,
+                        label: 'Email:',
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (v) {
+                          if (v == null || v.isEmpty)
+                            return 'Please enter email';
+                          final emailRegex =
+                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                          if (!emailRegex.hasMatch(v))
+                            return 'Enter a valid email';
+                          return null;
+                        },
+                      ),
+                      _buildTextField(
+                        controller: mobileController,
+                        label: 'Mobile Number:',
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                        validator: (v) {
+                          if (v == null || v.isEmpty)
+                            return 'Please enter mobile number';
+                          final phoneRegex = RegExp(r'^[0-9]{10}$');
+                          if (!phoneRegex.hasMatch(v))
+                            return 'Enter valid 10-digit number';
+                          return null;
+                        },
+                      ),
+
+                      _buildTextField(
+                        controller: messageController,
+                        label: 'Message:',
+                        maxLines: 4,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Please enter a message'
+                            : null,
+                      ),
+
+                      // Submit button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Center(
+                          child: SizedBox(
+                            width: 170,
+                            child: ElevatedButton(
+                              onPressed: controller.isLoading
+                                  ? null
+                                  : () async {
+                                      if (!formKey.currentState!.validate())
+                                        return;
+
+                                      final inquiry = ContactInquiry(
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        phone: mobileController.text,
+                                        message: messageController.text,
+                                      );
+
+                                      final success = await controller
+                                          .submitContactInquiry(inquiry);
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(success
+                                              ? (controller.successMessage ??
+                                                  'Message sent successfully!')
+                                              : (controller.errorMessage ??
+                                                  'Something went wrong')),
+                                          backgroundColor: success
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      );
+
+                                      if (success) {
+                                        nameController.clear();
+                                        emailController.clear();
+                                        mobileController.clear();
+                                        messageController.clear();
+                                      }
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kButtonColor,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              child: controller.isLoading
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Submit',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                // const SizedBox(height: 30),
+                // Responsive(
+                //   mobile: _buildStaticDisclaimer(),
+                //   tablet: _buildStaticDisclaimer(),
+                //   desktop: _buildDisclaimerMarquee(),
+                // ),
               ],
             ),
-            child: TextField(
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
-                labelText: 'Name:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-
-        // Email input field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
-                labelText: 'Email:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-
-        // Mobile Number input field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
-                labelText: 'Mobile Number:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-
-        // Message input field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: TextField(
-              maxLines: 4,
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 18), // <- Added this
-                labelText: 'Message:',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: SizedBox(
-            width: 240, // Make the button stretch across the width
-            child: ElevatedButton(
-              onPressed: () {
-                // Add your submission logic here
-                print("Form Submitted");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(
-                    0xFFE7A20E), // Correct parameter for Button background color
-                padding: EdgeInsets.symmetric(vertical: 15), // Button height
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), // Rounded corners
-                ),
-              ),
-              child: Text(
-                'Submit',
-                style: TextStyle(
-                  color: Colors.white, // Text color
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 30), // Space before disclaimer
-
-        // --- Responsive Disclaimer ---
-        Responsive(
-          mobile: _buildStaticDisclaimer(), // Static for mobile
-          tablet: _buildStaticDisclaimer(), // Static for tablet
-          desktop: _buildDisclaimerMarquee(), // Animated for desktop
-        ),
-        // --- End Responsive Disclaimer ---
-      ],
+          );
+        },
+      ),
     );
   }
 
-  // Helper to build styled TextFields consistently
+  /// 💫 Animated Marquee Disclaimer (Desktop) — now INSIDE class
+  // Widget _buildDisclaimerMarquee() {
+  //   return Container(
+  //     color: const Color(0xFFF5F5F5),
+  //     height: 40,
+  //     alignment: Alignment.centerLeft,
+  //     child: ClipRect(
+  //       child: SlideTransition(
+  //         position: _scrollAnimation,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(width: 40),
+  //             Text(
+  //               'We do not charge for hiring!',
+  //               style: TextStyle(fontSize: 16, color: Colors.black54),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // /// 🟣 Static Disclaimer (Mobile + Tablet)
+  // Widget _buildStaticDisclaimer() {
+  //   return const Padding(
+  //     padding: EdgeInsets.all(15),
+  //     child: Text(
+  //       'We do not charge for hiring!',
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(fontSize: 16, color: Colors.black54),
+  //     ),
+  //   );
+  // }
+
+  // 🧱 Styled TextField
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
+    TextInputType? keyboardType,
     int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+    List<TextInputFormatter>? inputFormatters, // ✅ Added here
   }) {
-    return Container(
-      // Wrap in container for shadow
-      decoration: BoxDecoration(
-        color: kFieldBackgroundColor, // Ensure background is set for shadow
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2), // Softer shadow
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: label,
-          fillColor:
-              kFieldBackgroundColor, // Redundant due to container, but safe
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide:
-                BorderSide(color: Colors.grey.shade300), // Subtle border
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide:
-                BorderSide(color: Colors.grey.shade300), // Consistent border
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-                color: kAppBarColor, width: 1.5), // Highlight focus
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        style: const TextStyle(color: Colors.black87), // Default text color
+        child: TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          validator: validator,
+          inputFormatters: inputFormatters, // ✅ Added here
+          decoration: InputDecoration(
+            labelText: label,
+            labelStyle: const TextStyle(fontSize: 18),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          ),
+          style: const TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
 
-  // Widget for the Map Image section
-  Widget _buildMapImage(BuildContext context) {
-    // Use LayoutBuilder to get constraints if needed for aspect ratio
-    return LayoutBuilder(builder: (context, constraints) {
-      // Determine a reasonable height based on width for mobile/tablet if needed
-      double imageHeight = Responsive.isMobile(context)
-          ? constraints.maxWidth * 0.8
-          : 360; // Example aspect ratio adjustment
+  // 🗺️ Map Image
+  // Widget _buildMapImage(BuildContext context) {
+  //   return LayoutBuilder(
+  //     builder: (context, constraints) {
+  //       final double imageHeight =
+  //           Responsive.isMobile(context) ? constraints.maxWidth * 0.8 : 360;
 
-      return GestureDetector(
-        onTap: () {
-          // Consider opening map link directly on web or using platform checks
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Webviewmap()),
-          );
-        },
-        child: Container(
-          height: imageHeight, // Use calculated or fixed height
-          // width: double.infinity, // Takes width from Expanded or Column
-          clipBehavior: Clip.antiAlias, // Clip the image to rounded corners
-          decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(12), // Rounded corners for image
+  //       return GestureDetector(
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => const Webviewmap()),
+  //           );
+  //         },
+  //         child: Container(
+  //           height: imageHeight,
+  //           clipBehavior: Clip.antiAlias,
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(12),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.grey.withOpacity(0.3),
+  //                 blurRadius: 6,
+  //                 spreadRadius: 2,
+  //               ),
+  //             ],
+  //           ),
+  //           child: Image.asset(
+  //             'assets/img/hospital-map.png',
+  //             fit: BoxFit.cover,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Widget _buildMapImage(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double imageHeight =
+            Responsive.isMobile(context) ? constraints.maxWidth * 0.8 : 360;
+
+        return GestureDetector(
+          onTap: () async {
+            const url =
+                'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D';
+            if (await canLaunch(url)) {
+              await launch(url);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Could not open Google Maps')),
+              );
+            }
+          },
+          child: Container(
+            height: imageHeight,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [
-                // Optional shadow for image
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
                   blurRadius: 6,
-                  offset: const Offset(0, 2),
+                  spreadRadius: 2,
                 ),
-              ]),
-          child: Image.asset(
-            'assets/img/hospital-map.png', // Ensure asset path is correct
-            fit: BoxFit.cover,
+              ],
+            ),
+            child: Image.asset(
+              'assets/img/hospital-map.png',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-      );
-    });
-  }
-
-  // --- Helper: Scrolling Marquee for Desktop ---
-  Widget _buildDisclaimerMarquee() {
-    const double titleSize = 14.0; // Smaller size suitable for disclaimer
-    const double bodySize = 14.0;
-
-    return SizedBox(
-      height: 30, // Reduced height
-      child: ClipRect(
-        child: SlideTransition(
-          position: _scrollAnimation,
-          child: Row(
-            // Ensures the Row is wide enough to scroll off-screen before repeating
-            children: [
-              // Repeat the text couple of times to ensure continuous scroll
-              for (int i = 0; i < 1; i++)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40.0), // Spacing
-                  child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: bodySize), // Subdued color
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Disclaimer: ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: titleSize)),
-                        TextSpan(text: 'We do not charge for hiring! '),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  // --- Helper: Static Disclaimer for Mobile/Tablet ---
-  Widget _buildStaticDisclaimer() {
-    const double titleSize = 13.0;
-    const double bodySize = 13.0;
-
-    return Container(
-        width: double.infinity, // Take full width
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-        decoration: BoxDecoration(
-            color: kDisclaimerBackgroundColor, // Light background
-            borderRadius: BorderRadius.circular(8)),
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(
-                color: Colors.black54, fontSize: bodySize, height: 1.3),
-            children: <TextSpan>[
-              TextSpan(
-                  text: 'Disclaimer: ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: titleSize)),
-              TextSpan(text: 'We do not charge for hiring!'),
-            ],
-          ),
-        ));
-  }
-
-  // --- Reusable Footer Widget ---
+// --- Reusable Footer Widget ---
   Widget _buildFooter(BuildContext context) {
     // Determine layout based on screen size for footer content
     bool isMobile = Responsive.isMobile(context);
@@ -549,4 +895,5 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
             ),
     );
   }
-} // End of _ContactsState
+// End of _ContactsState
+}

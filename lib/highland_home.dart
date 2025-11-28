@@ -1,32 +1,33 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-// Placeholders - Replace with your actual page imports
-
+import 'package:flutter/services.dart';
 import 'package:flutter_highland/about.dart';
-import 'package:flutter_highland/already_registered.dart';
-import 'package:flutter_highland/feedbackform.dart';
+import 'package:flutter_highland/careers.dart';
+import 'package:flutter_highland/controller/booking_enquiry_controller.dart';
+import 'package:flutter_highland/controller/contact_inquiry_controller.dart';
 import 'package:flutter_highland/highland_departments.dart';
+import 'package:flutter_highland/model/booking_enquiry_model.dart';
+import 'package:flutter_highland/model/contact_enquiry.dart';
 
+// <-- FIX #1: ADDED MISSING IMPORT
 import 'package:flutter_highland/responsive.dart';
 import 'package:flutter_highland/constants/color_constant.dart';
 import 'package:flutter_highland/contacts.dart';
-
-
-import 'package:flutter_highland/new_patient_registration.dart';
 import 'package:flutter_highland/patient_registration.dart';
-// Responsive helpers
+import 'package:flutter_highland/url_launcher_connection.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-// --- CoreLogo Class --- (Ensure this is defined)
+// --- CoreLogo Class ---
 class CoreLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Adjust path and size as needed
     return Image.asset(
-      'assets/img/LogowithISO.png', // Make sure this asset exists
-      height: 120,
-      // width: 100,
-      fit: BoxFit.contain,
+      'assets/img/LogowithISO.png',
+      //height: 180,
+      fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) =>
-          Icon(Icons.business, size: 30), // Placeholder on error
+          Icon(Icons.business, size: 30),
     );
   }
 }
@@ -51,37 +52,18 @@ class _HighlandhomeState extends State<Highlandhome>
     'Careers',
     'News',
     'Feedback',
-    'International - Patient',
+    // 'International - Patient',
     'CONTACT',
   ];
 
-  Widget buildDrawerMenu() {
-    return ListView.builder(
-      itemCount: menuItems.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            menuItems[index],
-            style: TextStyle(
-              fontSize: 22, // <-- increase font size here
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          onTap: () => onMenuItemTapped(menuItems[index]),
-        );
-      },
-    );
-  }
+  // --- FORM KEYS FOR VALIDATION ---
+  final _responsiveBookingFormKey = GlobalKey<FormState>();
+  final _desktopBookingFormKey =
+      GlobalKey<FormState>(); // <-- FIX #2: DEFINED FORM KEY
 
   // Text Editing Controllers for Responsive Booking Form
-  TextEditingController nameController = TextEditingController();
-  TextEditingController stateController =
-      TextEditingController(); // Using as Last Name
-  TextEditingController emailController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
 
-  // Text Editing Controllers for Desktop Contact Form (as per original code)
+  // Text Editing Controllers for Desktop Contact Form
   final TextEditingController _desktopContactNameController =
       TextEditingController();
   final TextEditingController _desktopContactEmailController =
@@ -90,33 +72,31 @@ class _HighlandhomeState extends State<Highlandhome>
       TextEditingController();
   final TextEditingController _desktopContactMessageController =
       TextEditingController();
-  final _desktopContactFormKey =
-      GlobalKey<FormState>(); // For desktop form validation
+  final _desktopContactFormKey = GlobalKey<FormState>();
 
-  // Text Editing Controllers for Desktop Booking Form (as per original code)
-  final TextEditingController _desktopBookNameController =
+  // Text Editing Controllers for Desktop Booking Form
+  final TextEditingController _desktopBookFirstNameController =
       TextEditingController();
-  final TextEditingController _desktopBookStateController =
-      TextEditingController(); // Used as Last Name
+  final TextEditingController _desktopBookLastNameController =
+      TextEditingController();
   final TextEditingController _desktopBookEmailController =
       TextEditingController();
   final TextEditingController _desktopBookAddressController =
       TextEditingController();
   final TextEditingController _desktopBookPhoneController =
       TextEditingController();
-  // Removed desktop book form key as original code didn't use validation here
 
   @override
   void initState() {
     super.initState();
     _marqueeController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 15), // Adjusted duration
+      duration: Duration(seconds: 17),
     )..repeat();
 
     _scrollAnimation = Tween<Offset>(
       begin: Offset(1.0, 0.0),
-      end: Offset(-3.0, 0.0), // Match original end offset? Adjusted from -3.5
+      end: Offset(-1.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _marqueeController,
       curve: Curves.linear,
@@ -126,43 +106,38 @@ class _HighlandhomeState extends State<Highlandhome>
   @override
   void dispose() {
     _marqueeController.dispose();
-    // Dispose all controllers
-    nameController.dispose();
-    stateController.dispose();
-    emailController.dispose();
-    addressController.dispose();
-    phoneController.dispose();
+
     _desktopContactNameController.dispose();
     _desktopContactEmailController.dispose();
     _desktopContactMobileController.dispose();
     _desktopContactMessageController.dispose();
-    _desktopBookNameController.dispose();
-    _desktopBookStateController.dispose();
+    _desktopBookFirstNameController.dispose();
+    _desktopBookLastNameController.dispose();
     _desktopBookEmailController.dispose();
     _desktopBookAddressController.dispose();
     _desktopBookPhoneController.dispose();
-
     super.dispose();
   }
 
-  // Method to handle menu item tap
   void onMenuItemTapped(String menuItem) {
     if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-      Navigator.pop(context); // Close drawer if open
+      Navigator.pop(context);
     }
-    // Navigation Logic
     switch (menuItem) {
       case 'About':
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => About()));
         break;
       case 'Feedback':
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => FeedbackForm()));
+        _launchURL('https://feedback.highlandhospitals.in/');
         break;
       case 'Departments':
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeDashboard()));
+        break;
+      case 'Careers':
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Careers()));
         break;
       case 'CONTACT':
         Navigator.push(
@@ -180,17 +155,11 @@ class _HighlandhomeState extends State<Highlandhome>
                       phone: '',
                     )));
         break;
-      case 'Home':
-        print("Tapped on: Home");
-        break; // Maybe scroll to top
       default:
         print("Tapped on: $menuItem");
     }
   }
 
-  // ===========================================================================
-  // BUILD METHOD - Main Entry Point
-  // ===========================================================================
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -198,151 +167,116 @@ class _HighlandhomeState extends State<Highlandhome>
     final bool isTablet = Responsive.isTablet(context);
     final bool isMobile = Responsive.isMobile(context);
 
-    // --- Dynamic sizes (Primarily for mobile/tablet) ---
-    double heading1 = isMobile ? 30 : (isTablet ? 34 : 32); // bold main titles
-    double heading2 = isMobile ? 24 : (isTablet ? 26 : 24); // section headings
-    double heading3 = isMobile ? 22 : (isTablet ? 24 : 22); // subheadings
+    double heading1 = isMobile ? 30 : (isTablet ? 34 : 32);
+    double heading2 = isMobile ? 24 : (isTablet ? 26 : 24);
+    double heading3 = isMobile ? 22 : (isTablet ? 24 : 22);
+    double bodyTextLarge = isMobile ? 22 : (isTablet ? 24 : 22);
+    double bodyTextMedium = isMobile ? 20 : (isTablet ? 22 : 19);
+    double bodyTextSmall = isMobile ? 30 : (isTablet ? 20 : 16);
+    double buttonText = isMobile ? 20 : (isTablet ? 22 : 18);
 
-    double bodyTextLarge =
-        isMobile ? 22 : (isTablet ? 24 : 22); // for important paragraphs
-    double bodyTextMedium =
-        isMobile ? 20 : (isTablet ? 22 : 19); // general body text
-    double bodyTextSmall =
-        isMobile ? 18 : (isTablet ? 20 : 16); // footers, captions
-
-    double buttonText =
-        isMobile ? 20 : (isTablet ? 22 : 18); // better tap target feel
-
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: isDesktop
-          ? _buildDesktopAppBar(context, screenSize.width)
-          : _buildMobileTabletAppBar(context, isDesktop, isTablet, isMobile),
-      drawer: isDesktop ? null : _buildAppDrawer(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                width: screenSize.width, height: 20, color: Color(0xFF1FBCB1)),
-            Container(
-                width: screenSize.width, height: 3, color: Color(0xFFEE9B27)),
-            if (isDesktop)
-              _buildDesktopLayout(
-                  context, screenSize) // Build the original Desktop Layout
-            else
-              _buildMobileTabletLayout(
-                  context,
-                  screenSize,
-                  isTablet,
-                  isMobile,
-                  heading1,
-                  heading2,
-                  heading3,
-                  bodyTextLarge,
-                  bodyTextMedium,
-                  bodyTextSmall,
-                  buttonText), // Build the Responsive Mobile/Tablet Layout
-          ],
+    return ChangeNotifierProvider(
+      create: (context) => BookingEnquiryController(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: isDesktop
+            ? _buildDesktopAppBar(context, screenSize.width)
+            : _buildMobileTabletAppBar(context, isDesktop, isTablet, isMobile),
+        drawer: isDesktop ? null : _buildAppDrawer(context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  width: screenSize.width,
+                  height: 20,
+                  color: Color(0xFF1FBCB1)),
+              Container(
+                  width: screenSize.width, height: 3, color: Color(0xFFEE9B27)),
+              if (isDesktop)
+                _buildDesktopLayout(context, screenSize)
+              else
+                _buildMobileTabletLayout(
+                    context,
+                    screenSize,
+                    isTablet,
+                    isMobile,
+                    heading1,
+                    heading2,
+                    heading3,
+                    bodyTextLarge,
+                    bodyTextMedium,
+                    bodyTextSmall,
+                    buttonText),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // ===========================================================================
-  // DESKTOP LAYOUT BUILDER (Using the original non-responsive structure)
-  // ===========================================================================
+  Widget buildDrawerMenu() {
+    return ListView.builder(
+      itemCount: menuItems.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            menuItems[index],
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onTap: () => onMenuItemTapped(menuItems[index]),
+        );
+      },
+    );
+  }
+
   Widget _buildDesktopLayout(BuildContext context, Size screenSize) {
     double screenHeight = screenSize.height;
     double screenWidth = screenSize.width;
-
-    // Use fixed sizes as defined in the original code or appropriate large screen values
     double desktopMenuFontSize = 18;
     double desktopBodyLarge = 27;
     double desktopWelcomeHeading1 = 30;
     double desktopWelcomeHeading2 = 20;
     double desktopOutpatientTitle = 40;
     double desktopSpecialityFontSize = 19;
-    double desktopContactFormTitleSize = 20;
     double desktopFooterFontSize = 18;
     double desktopMarqueeFontSize = 20;
 
     return Column(
-      // Wrap the original content in a Column
       children: [
-        // --- Desktop Menu Bar (Original Style) ---
-        _buildDesktopMenuBar(
-            context, desktopMenuFontSize), // Using the original helper
+        _buildDesktopMenuBar(context, desktopMenuFontSize),
         SizedBox(height: 20),
-
-        // --- Desktop Hero Section (Original Style) ---
-        _buildHeroSectionDesktop(
-            context, screenHeight, screenWidth), // Using the original helper
+        _buildHeroSectionDesktop(context, screenHeight, screenWidth),
         SizedBox(height: 20),
-
-        // --- Desktop Welcome Section (Original Style) ---
-        _buildWelcomeSectionDesktop(
-            context,
-            screenWidth,
-            desktopWelcomeHeading1,
-            desktopWelcomeHeading2), // Using the original helper
-        SizedBox(height: 20), // Added space
-
-        // --- Desktop Hospital Description (Original Style) ---
-        _buildHospitalDescriptionDesktop(context, screenWidth,
-            desktopBodyLarge), // Using the original helper
+        _buildWelcomeSectionDesktop(context, screenWidth,
+            desktopWelcomeHeading1, desktopWelcomeHeading2),
+        SizedBox(height: 20),
+        _buildHospitalDescriptionDesktop(
+            context, screenWidth, desktopBodyLarge),
         SizedBox(height: 30),
-
-        // --- Desktop Know More Button (Original Style) ---
-        _buildKnowMoreButtonDesktop(
-            context, screenWidth), // Using the original helper
+        _buildKnowMoreButtonDesktop(context, screenWidth),
         SizedBox(height: 10),
-
-        // --- Desktop Feature Carousel (Original Style) ---
-        _buildFeatureCarouselDesktop(
-            context, screenHeight, screenWidth), // Using the original helper
+        _buildFeatureCarouselDesktop(context, screenHeight, screenWidth),
         SizedBox(height: screenHeight * .12),
-
-        // --- Desktop Vision/Mission Images (Original Style) ---
-        _buildVisionMissionSectionDesktop(
-            context, screenHeight, screenWidth), // Using the original helper
-        // Spacing handled by the next section
-
-        // --- Desktop Booking/Info Section (Original Style Stack) ---
+        _buildVisionMissionSectionDesktop(context, screenHeight, screenWidth),
         _buildBookingAndInfoSectionDesktopOriginal(
-            context, screenHeight, screenWidth), // Using the original helper
-
-        // --- Desktop Out-Patient Section (Original Style Row) ---
-        _buildOutPatientSectionDesktopOriginal(context, screenHeight,
-            screenWidth, desktopOutpatientTitle), // Using the original helper
-        // SizedBox(height: 50), // Add space if needed
-
-        // --- Desktop Services & Contact Info Section (Original Style Stack/Layout) ---
+            context, screenHeight, screenWidth),
+        _buildOutPatientSectionDesktopOriginal(
+            context, screenHeight, screenWidth, desktopOutpatientTitle),
         _buildServicesAndContactSectionDesktopOriginal(
-            context, screenHeight, screenWidth), // Using the original helper
-
-        // --- Desktop Specialities & Contact Form Section (Original Style Row) ---
+            context, screenHeight, screenWidth),
         _buildSpecialitiesAndFormSectionDesktopOriginal(
-            context,
-            screenHeight,
-            screenWidth,
-            desktopSpecialityFontSize), // Using the original helper
+            context, screenHeight, screenWidth, desktopSpecialityFontSize),
         SizedBox(height: 20),
-
-        // --- Desktop Disclaimer Marquee (Original Style) ---
-        _buildDisclaimerMarqueeDesktopOriginal(
-            context, desktopMarqueeFontSize), // Using the original helper
+        _buildDisclaimerMarqueeDesktopOriginal(context, desktopMarqueeFontSize),
         SizedBox(height: 2),
-
-        // --- Desktop Footer (Original Style) ---
-        _buildFooterDesktopOriginal(
-            context, desktopFooterFontSize), // Using the original helper
+        _buildFooterDesktopOriginal(context, desktopFooterFontSize),
       ],
     );
   }
 
-  // ===========================================================================
-  // MOBILE/TABLET LAYOUT BUILDER (Responsive version - Unchanged)
-  // ===========================================================================
   Widget _buildMobileTabletLayout(
       BuildContext context,
       Size screenSize,
@@ -366,11 +300,21 @@ class _HighlandhomeState extends State<Highlandhome>
         _buildHospitalDescriptionResponsive(
             context, screenSize, false, isTablet, isMobile, bodyTextLarge),
         SizedBox(height: isMobile ? 20 : 30),
+        // _buildKnowMoreButtonResponsive(
+        //     context, screenSize, false, isTablet, isMobile, buttonText),
+        // SizedBox(height: isMobile ? 20 : 30),
+        // _buildFeatureCarouselResponsive(
+        //     context, screenSize, false, isTablet, isMobile),
+        // SizedBox(height: isMobile ? 30 : screenSize.height * .08),
+        // _buildVisionMissionSectionResponsive(
+        //     context, screenSize, false, isTablet, isMobile, bodyTextMedium),
         _buildKnowMoreButtonResponsive(
             context, screenSize, false, isTablet, isMobile, buttonText),
         SizedBox(height: isMobile ? 20 : 30),
-        _buildFeatureCarouselResponsive(
-            context, screenSize, false, isTablet, isMobile),
+
+        // **** THIS IS THE CORRECTED LINE ****
+        _buildFeatureCarouselResponsive(context), // No extra arguments needed
+
         SizedBox(height: isMobile ? 30 : screenSize.height * .08),
         _buildVisionMissionSectionResponsive(
             context, screenSize, false, isTablet, isMobile, bodyTextMedium),
@@ -388,16 +332,11 @@ class _HighlandhomeState extends State<Highlandhome>
         SizedBox(height: isMobile ? 20 : 30),
         _buildDisclaimerMarqueeResponsive(
             context, false, isTablet, isMobile, heading3),
-        // SizedBox(height: isMobile ? 5 : 5),
         _buildFooterResponsive(
             context, false, isTablet, isMobile, bodyTextSmall),
       ],
     );
   }
-
-  // ===========================================================================
-  // ORIGINAL DESKTOP WIDGET BUILDERS (Replicating the original code's layout)
-  // ===========================================================================
 
   PreferredSizeWidget _buildDesktopAppBar(
       BuildContext context, double screenWidth) {
@@ -429,15 +368,7 @@ class _HighlandhomeState extends State<Highlandhome>
             ),
             Padding(
               padding: EdgeInsets.only(right: screenWidth * .012),
-              child: Row(
-                children: [
-                  _buildSocialIcon(
-                      'assets/img/twitter.png', 24), // Re-using common helper
-                  _buildSocialIcon('assets/img/facebook.png', 24),
-                  _buildSocialIcon('assets/img/instagram.png', 24),
-                  _buildSocialIcon('assets/img/youtube.png', 24),
-                ],
-              ),
+              child: HighlandSocialBar(iconSize: 22),
             ),
           ],
         ),
@@ -446,6 +377,13 @@ class _HighlandhomeState extends State<Highlandhome>
       automaticallyImplyLeading: false,
       elevation: 1.0,
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Widget _buildDesktopMenuBar(BuildContext context, double menuTextSize) {
@@ -645,9 +583,6 @@ class _HighlandhomeState extends State<Highlandhome>
               child: _originalCarousalContainer(
                   image: 'assets/img/find a doctor.png',
                   label: 'FIND A DOCTOR',
-                  content: '''Lorem ipsum dolor sit amet, 
-consectetur adipiscing elit,
- sed incididunt ut labore''',
                   backgroundColor: Color(0xFF1FBCB1),
                   height: screenHeight,
                   width: screenWidth,
@@ -656,9 +591,6 @@ consectetur adipiscing elit,
               child: _originalCarousalContainer(
                   image: 'assets/img/Test result.png',
                   label: 'TEST RESULT',
-                  content: '''Lorem ipsum dolor sit amet, 
-consectetur adipiscing elit,
- sed incididunt ut labore''',
                   backgroundColor: Color(0xFFEE9821),
                   height: screenHeight,
                   width: screenWidth,
@@ -667,9 +599,6 @@ consectetur adipiscing elit,
               child: _originalCarousalContainer(
                   image: 'assets/img/online admission.png',
                   label: 'ONLINE ADMISSION',
-                  content: '''Lorem ipsum dolor sit amet, 
-consectetur adipiscing elit,
- sed incididunt ut labore''',
                   backgroundColor: Color(0xFF1BA08D),
                   height: screenHeight,
                   width: screenWidth,
@@ -678,9 +607,6 @@ consectetur adipiscing elit,
               child: _originalCarousalContainer(
                   image: 'assets/img/Patient acces.png',
                   label: 'PATIENT ACCESS',
-                  content: '''Lorem ipsum dolor sit amet, 
-consectetur adipiscing elit,
- sed incididunt ut labore''',
                   backgroundColor: Color(0xFF5592C8),
                   height: screenHeight,
                   width: screenWidth,
@@ -729,6 +655,8 @@ consectetur adipiscing elit,
   Widget _buildBookingAndInfoSectionDesktopOriginal(
       BuildContext context, double screenHeight, double screenWidth) {
     double stackHeight = screenHeight * 1;
+    final bookingController = context.watch<BookingEnquiryController>();
+
     return SizedBox(
       height: stackHeight,
       width: screenWidth,
@@ -766,7 +694,7 @@ consectetur adipiscing elit,
                               'VISION',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 29, 23, 23),
-                                fontSize: 17,
+                                fontSize: 19,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -777,7 +705,7 @@ consectetur adipiscing elit,
                                   '''To be a beacon of healthcare excellence, where “YOUR HEALTH, OUR CARE” is not just a tagline but a promise. We envision Highland Hospital as a leader in innovation and compassionate care, ensuring that every patient—regardless of their background—receives world-class, accessible healthcare. Through dedication to patient well-being, cutting-edge technology, and community welfare, we aim to shape a future where healthcare is a right, not a privilege.''',
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 29, 23, 23),
-                                    fontSize: 14,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -802,7 +730,7 @@ consectetur adipiscing elit,
                               'MISSION',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 19,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -813,7 +741,7 @@ consectetur adipiscing elit,
                                   '''To provide advanced, patient-centered healthcare through our guiding principle of “YOUR HEALTH, OUR CARE.” We are dedicated to delivering the highest standards of care with empathy, integrity, and innovation. By investing in both our people and technology, we strive to improve the health and well-being of every individual we serve. We aim to create a supportive environment where every patient feels valued, ensuring accessible, high-quality healthcare that elevates lives and strengthens our community.''',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 14,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -851,7 +779,7 @@ consectetur adipiscing elit,
                     ),
                     child: Center(
                       child: Text(
-                        'Book an Appointment',
+                        'Booking Enquiry',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -872,213 +800,224 @@ consectetur adipiscing elit,
                           color: Colors.white),
                       child: Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  width: screenWidth * .42,
-                                  child: Text(
-                                    '''Enter your contacts below to schedule an appointment or discuss it with us in details.''',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                          child: Form(
+                            key: _desktopBookingFormKey,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    width: screenWidth * .42,
+                                    child: Text(
+                                      '''Request a callback from our team''',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 5,
                                     ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 5,
                                   ),
-                                ),
-                                _bookAnAppointmentFieldsOriginal(
+                                  _bookAnAppointmentFieldsOriginal(
                                     firstFieldLabel: 'First Name',
                                     firstFieldController:
-                                        _desktopBookNameController,
+                                        _desktopBookFirstNameController,
                                     secondFieldLabel: 'Last Name',
                                     secondFieldController:
-                                        _desktopBookStateController),
-                                _bookAnAppointmentFieldsOriginal(
+                                        _desktopBookLastNameController,
+                                  ),
+                                  _bookAnAppointmentFieldsOriginal(
                                     firstFieldLabel: 'Email',
                                     firstFieldController:
                                         _desktopBookEmailController,
                                     secondFieldLabel: 'Address',
                                     secondFieldController:
-                                        _desktopBookAddressController),
-                                Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          height: 40,
-                                          color: Color(0xFFF2F3F5),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8.0),
-                                                child: Text(
-                                                  'Phone Number',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: TextFormField(
-                                                  controller:
-                                                      _desktopBookPhoneController,
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    contentPadding:
-                                                        EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 15,
+                                        _desktopBookAddressController,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(right: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height: 40,
+                                            color: const Color(0xFFF2F3F5),
+                                            child: Row(
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 8.0),
+                                                  child: Text(
+                                                    'Phone Number',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: TextFormField(
+                                                    controller:
+                                                        _desktopBookPhoneController,
+                                                    keyboardType: TextInputType
+                                                        .number, // 🔢 Numeric keypad
+                                                    maxLength:
+                                                        10, // ✅ Max 10 digits
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly, // ✅ Only digits
+                                                    ],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      border: InputBorder.none,
+                                                      counterText:
+                                                          "", // ✅ Hides character counter
+                                                      contentPadding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 10,
+                                                              horizontal: 15),
+                                                      // hintText:
+                                                      //     'Enter Phone Number',
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.black54),
+                                                    ),
+                                                    validator: (value) {
+                                                      if (value == null ||
+                                                          value.isEmpty) {
+                                                        return 'Required';
+                                                      }
+                                                      if (!RegExp(r'^\d{10}$')
+                                                          .hasMatch(value)) {
+                                                        return 'Enter a valid 10-digit number';
+                                                      }
+                                                      return null;
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NewBookings()));
-                                          },
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap: bookingController.isLoading
+                                              ? null
+                                              : () async {
+                                                  if (_desktopBookingFormKey
+                                                      .currentState!
+                                                      .validate()) {
+                                                    final enquiry =
+                                                        BookingEnquiry(
+                                                      firstName:
+                                                          _desktopBookFirstNameController
+                                                              .text,
+                                                      lastName:
+                                                          _desktopBookLastNameController
+                                                              .text,
+                                                      phone:
+                                                          _desktopBookPhoneController
+                                                              .text,
+                                                      email:
+                                                          _desktopBookEmailController
+                                                              .text,
+                                                      address:
+                                                          _desktopBookAddressController
+                                                              .text,
+                                                    );
+
+                                                    final controller = context.read<
+                                                        BookingEnquiryController>();
+                                                    await controller
+                                                        .submitEnquiry(enquiry)
+                                                        .then((success) {
+                                                      if (success) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  controller
+                                                                      .successMessage!),
+                                                              backgroundColor:
+                                                                  Colors.green),
+                                                        );
+                                                        _desktopBookFirstNameController
+                                                            .clear();
+                                                        _desktopBookLastNameController
+                                                            .clear();
+                                                        _desktopBookPhoneController
+                                                            .clear();
+                                                        _desktopBookEmailController
+                                                            .clear();
+                                                        _desktopBookAddressController
+                                                            .clear();
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  controller
+                                                                      .errorMessage!),
+                                                              backgroundColor:
+                                                                  Colors.red),
+                                                        );
+                                                      }
+                                                    });
+                                                  }
+                                                },
                                           child: Container(
-                                            margin: EdgeInsets.only(right: 10),
+                                            width: 220,
                                             height: 50,
                                             decoration: BoxDecoration(
-                                              color: Color(0xFF1BA08F),
+                                              color: Color(0xFFEE9821),
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                               border: Border.all(
                                                   color: Colors.yellow),
                                             ),
                                             child: Center(
-                                              child: Text(
-                                                'Already Registered Patients',
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 8, 8),
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
+                                              child: bookingController.isLoading
+                                                  ? CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                    )
+                                                  : Text(
+                                                      'Request Callback',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255, 8, 8, 8),
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    bookappoint_register(
-                                                  firstName:
-                                                      _desktopBookNameController
-                                                          .text,
-                                                  lastName:
-                                                      _desktopBookStateController
-                                                          .text,
-                                                  email:
-                                                      _desktopBookEmailController
-                                                          .text,
-                                                  address:
-                                                      _desktopBookAddressController
-                                                          .text,
-                                                  phone:
-                                                      _desktopBookPhoneController
-                                                          .text,
-                                                ),
-                                              ),
-                                            ).then((_) {
-                                              _desktopBookNameController
-                                                  .clear();
-                                              _desktopBookStateController
-                                                  .clear();
-                                              _desktopBookEmailController
-                                                  .clear();
-                                              _desktopBookAddressController
-                                                  .clear();
-                                              _desktopBookPhoneController
-                                                  .clear();
-                                            });
-                                          },
-                                          child: LayoutBuilder(
-                                            builder:
-                                                (context, buttonConstraints) {
-                                              double buttonWidth =
-                                                  buttonConstraints.maxWidth <
-                                                          350
-                                                      ? buttonConstraints
-                                                              .maxWidth *
-                                                          0.8
-                                                      : 150;
-                                              buttonWidth = buttonWidth > 100
-                                                  ? buttonWidth
-                                                  : 100;
-                                              return Container(
-                                                width: buttonWidth,
-                                                height: 50,
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8, horizontal: 9),
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFFEE9821),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  border: Border.all(
-                                                      color: Colors.yellow),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Book Now',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color.fromARGB(
-                                                          255, 8, 8, 8),
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ])))
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                          )))
                 ]),
               ),
             ),
@@ -1201,69 +1140,108 @@ consectetur adipiscing elit,
 
   Widget _buildServicesAndContactSectionDesktopOriginal(
       BuildContext context, double screenHeight, double screenWidth) {
-    // Replication based on original structure - might need height adjustments
-    // Removed the explicit height: screenHeight on the outer container
+    Future<void> _launchURL(String url) async {
+      final Uri uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    Widget _originalContactColumn({
+      required IconData icon,
+      required String title,
+      required String description,
+      required VoidCallback onTap,
+    }) {
+      return InkWell(
+        onTap: onTap,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: const Color(0xFF0EA69F), size: 30),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                description,
+                style: const TextStyle(color: Colors.black54, fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: screenWidth,
-      color: Color(0xFF1FBCB1),
-      padding: EdgeInsets.symmetric(vertical: 40),
+      color: const Color(0xFF1FBCB1),
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildDesktopHealthTipBox(
-                    title: "Health Tips",
-                    image: 'assets/img/healthi.png',
-                    content:
-                        '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
-                    backgroundColor: Color.fromARGB(255, 231, 162, 14),
-                    width: 450,
-                    height: 275),
-                //SizedBox(width: 10),
+                  title: "Health Tips",
+                  image: 'assets/img/healthi.png',
+                  content:
+                      '''Add more fruits and vegetables to your daily meals — your heart will thank you!''',
+                  backgroundColor: const Color.fromARGB(255, 231, 162, 14),
+                  width: 450,
+                  height: 275,
+                ),
                 _buildDesktopHealthTipBox(
-                    title: "Latest News",
-                    image: 'assets/img/Latest.png',
-                    content:
-                        '''exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse proident''',
-                    backgroundColor: Color(0xFF3FAE9E),
-                    width: 450,
-                    height: 275),
-                // SizedBox(width: 10),
+                  title: "Latest News",
+                  image: 'assets/img/Latest.png',
+                  content:
+                      '''Our hospital continues to provide 24/7 emergency care with the latest medical technology and dedicated specialists.''',
+                  backgroundColor: const Color(0xFF3FAE9E),
+                  width: 450,
+                  height: 275,
+                ),
                 _buildDesktopPatientCountBox(width: 380, height: 195),
               ],
             ),
           ),
-          SizedBox(height: 70),
+          const SizedBox(height: 70),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Row(
               children: [
-                Container(
-                  height: 2,
+                Container(height: 2),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "Services",
+                    style: TextStyle(
+                      fontSize: 33,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text("Services",
-                      style: TextStyle(
-                          fontSize: 33,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold)),
-                ),
-                // Expanded(
-                //   child: Container(height: 2, color: Color(0xFFF1B056)),
-                // ),
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1276,25 +1254,33 @@ consectetur adipiscing elit,
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 80, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Using the original ContactColumn which is now Desktop specific
                 _originalContactColumn(
-                    icon: Icons.location_on,
-                    title: 'Location',
-                    description:
-                        'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.'),
+                  icon: Icons.location_on,
+                  title: 'Location',
+                  description:
+                      'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.',
+                  onTap: () => _launchURL(
+                      'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D'),
+                ),
                 _originalContactColumn(
-                    icon: Icons.phone,
-                    title: 'Emergency 24x7',
-                    description: '0824-4235555'),
+                  icon: Icons.phone,
+                  title: 'Emergency 24x7',
+                  description: '0824-4235555',
+                  onTap: () => makePhoneCall('08244235555', context),
+                ),
                 _originalContactColumn(
-                    icon: Icons.email,
-                    title: 'Email',
-                    description: 'reachus@highlandhospital.in'),
+                  icon: Icons.email,
+                  title: 'Email',
+                  description: 'reachus@highlandhospital.in',
+                  onTap: () => _launchURL(
+                    'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry',
+                  ),
+                ),
               ],
             ),
           ),
@@ -1303,32 +1289,50 @@ consectetur adipiscing elit,
     );
   }
 
-  // --- Original Carousel Container Helper (Desktop) ---
+  // Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
+  //   final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+
+  //   // 🔹 On web: launch tel: link directly (browser will handle or show error)
+  //   if (kIsWeb) {
+  //     try {
+  //       await launchUrl(callUri);
+  //     } catch (e) {
+  //       _showError(context, 'Web call not supported on this device.');
+  //     }
+  //     return;
+  //   }
+
+  //   // 🔹 On mobile or desktop
+  //   if (await canLaunchUrl(callUri)) {
+  //     await launchUrl(callUri);
+  //   } else {
+  //     _showError(context, 'This device cannot make phone calls.');
+  //   }
+  // }
+
+// Helper to show error as SnackBar
+
   Widget _originalCarousalContainer({
-    required BuildContext context, // Added context if needed by children
+    required BuildContext context,
     required String image,
     required String label,
-    required String content,
     required Color backgroundColor,
-    required double width, // screenWidth passed here
-    required double height, // screenHeight passed here
+    required double width,
+    required double height,
   }) {
-    // Replicating structure and fixed height from original desktop layout
     return Padding(
-      padding: const EdgeInsets.all(1.0), // Minimal padding
+      padding: const EdgeInsets.all(1.0),
       child: Container(
-        height: 277, // Fixed height from original layout
-        // Width is determined by Expanded in the Row
-        margin: EdgeInsets.symmetric(
-            vertical: 8.0, horizontal: 1.0), // Minimal margin
+        height: 277,
+        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 1.0),
         color: backgroundColor,
-        padding: EdgeInsets.all(15), // Decent padding for content
+        padding: EdgeInsets.all(15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(image,
-                width: 80, // Fixed size from visual interpretation
+                width: 80,
                 height: 80,
                 fit: BoxFit.contain,
                 errorBuilder: (c, e, s) =>
@@ -1338,111 +1342,349 @@ consectetur adipiscing elit,
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16, // Slightly larger than responsive mobile
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            // SizedBox(height: 10),
-            Expanded(
-              // Allow text to take available space
-              child: SingleChildScrollView(
-                // Allow scrolling if text too long
-                child: Text(
-                  content,
-                  style: TextStyle(
-                    fontSize: 17, // Slightly larger than responsive mobile
-                    fontWeight: FontWeight.normal,
-                    color:
-                        const Color.fromARGB(255, 14, 14, 14).withOpacity(0.9),
-                    height: 1.4, // Improve readability
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.add_circle_outline_rounded,
-              color: Colors.white, // Use white color directly
-              size: 26, // Fixed size icon
-            ),
           ],
         ),
       ),
     );
   }
 
-  // --- Original Contact Column Helper (Desktop) ---
-  Widget _originalContactColumn({
-    required IconData icon,
-    required String title,
-    required String description,
-  }) {
-    // Replicating structure from original desktop layout
-    // Using Flexible to allow columns to share space within their parent Row
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 20.0, horizontal: 10), // Add padding
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start, // Align content left
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Center icon vertically with text
-          children: [
-            Image.asset(
-              _getIconAssetPath(icon), // Use helper to get image path
-              width: 60, // Fixed size from original
-              height: 60,
-              errorBuilder: (c, e, s) =>
-                  Icon(icon, size: 40, color: Colors.black54), // Fallback
-            ),
-            const SizedBox(width: 15),
-            // Use Expanded for the text Column to take remaining space
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.min, // Prevent taking infinite height
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors
-                          .black, // Black text on green bg (as per original visual)
-                      fontSize: 20, // Original size
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.black, // Black text on green bg
-                      fontSize: 14, // Original size
-                      height: 1.3, // Improve line spacing
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // --- Helper to get asset path (keep this inside the State class or make top-level) ---
-  String _getIconAssetPath(IconData icon) {
-    if (icon == Icons.location_on) return 'assets/img/Location.png';
-    if (icon == Icons.phone) return 'assets/img/Call.png';
-    if (icon == Icons.email) return 'assets/img/E-mail.png';
-    return 'assets/img/default_icon.png'; // Fallback - create a default icon asset
-  }
+  // Widget _buildSpecialitiesAndFormSectionDesktopOriginal(BuildContext context,
+  //     double screenHeight, double screenWidth, double specialityFontSize) {
+  //   double contactFormTitleSize = 20;
+  //   double contactFormButtonSize = 24;
+  //   return Container(
+  //     width: screenWidth,
+  //     color: Color(0xFFEAEBED),
+  //     padding:
+  //         EdgeInsets.symmetric(vertical: screenHeight * 0.04, horizontal: 50),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Flexible(
+  //           flex: 1,
+  //           child: Padding(
+  //             padding: EdgeInsets.only(right: 10.0),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   'Specialties',
+  //                   style: TextStyle(
+  //                     color: Color.fromARGB(255, 24, 14, 14),
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 10),
+  //                 Text('General Medicine',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('General Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Orthopaedic & Trauma Care',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Total Knee & Hip Replacement',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Arthroscopy & Sports Medicine',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Pediatric & Pediatric Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Nephrology',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Gastroenterology',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         Flexible(
+  //           flex: 1,
+  //           child: Padding(
+  //             padding: EdgeInsets.only(left: 10.0, top: 32.0),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 SizedBox(height: 10),
+  //                 Text('Ophthalmology',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('E.N.T Micro Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Neurology and Neuro Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Plastic & Reconstructive Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Maxillofacial Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Microvascular Surgery',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Endocrinology',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //                 SizedBox(height: 10),
+  //                 Text('Urology & Andrology',
+  //                     style: TextStyle(fontSize: specialityFontSize)),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  // //         Flexible(
+  // //           flex: 1,
+  // //           child: Padding(
+  // //             padding: EdgeInsets.only(left: 20.0),
+  // //             child: Form(
+  // //               key: _desktopContactFormKey,
+  // //               child: Column(
+  // //                 mainAxisAlignment: MainAxisAlignment.center,
+  // //                 children: [
+  // //                   Text(
+  // //                     'Contact us',
+  // //                     style: TextStyle(
+  // //                       color: const Color.fromARGB(255, 15, 12, 12),
+  // //                       fontSize: contactFormTitleSize,
+  // //                       fontWeight: FontWeight.bold,
+  // //                     ),
+  // //                   ),
+  // //                   SizedBox(height: 10),
+  // //                   Padding(
+  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  // //                     child: TextField(
+  // //                       controller: _desktopContactNameController,
+  // //                       decoration: InputDecoration(
+  // //                           labelText: 'Name:',
+  // //                           fillColor: Colors.white,
+  // //                           filled: true,
+  // //                           border: OutlineInputBorder(),
+  // //                           contentPadding: EdgeInsets.symmetric(
+  // //                               horizontal: 10, vertical: 5)),
+  // //                       style: TextStyle(color: Colors.black),
+  // //                     ),
+  // //                   ),
+  // //                   Padding(
+  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  // //                     child: TextField(
+  // //                       controller: _desktopContactEmailController,
+  // //                       decoration: InputDecoration(
+  // //                           labelText: 'Email:',
+  // //                           fillColor: Colors.white,
+  // //                           filled: true,
+  // //                           border: OutlineInputBorder(),
+  // //                           contentPadding: EdgeInsets.symmetric(
+  // //                               horizontal: 10, vertical: 5)),
+  // //                       style: TextStyle(color: Colors.black),
+  // //                     ),
+  // //                   ),
+  // //                   Padding(
+  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  // //                     child: TextField(
+  // //                       controller: _desktopContactMobileController,
+  // //                       decoration: InputDecoration(
+  // //                           labelText: 'Mobile Number:',
+  // //                           fillColor: Colors.white,
+  // //                           filled: true,
+  // //                           border: OutlineInputBorder(),
+  // //                           contentPadding: EdgeInsets.symmetric(
+  // //                               horizontal: 10, vertical: 5)),
+  // //                       style: TextStyle(color: Colors.black),
+  // //                     ),
+  // //                   ),
+  // //                   Padding(
+  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  // //                     child: TextField(
+  // //                       controller: _desktopContactMessageController,
+  // //                       maxLines: 4,
+  // //                       decoration: InputDecoration(
+  // //                           labelText: 'Message:',
+  // //                           fillColor: Colors.white,
+  // //                           filled: true,
+  // //                           border: OutlineInputBorder(),
+  // //                           contentPadding: EdgeInsets.symmetric(
+  // //                               horizontal: 10, vertical: 10)),
+  // //                       style: TextStyle(color: Colors.black),
+  // //                     ),
+  // //                   ),
+  // //                   Padding(
+  // //                     padding: const EdgeInsets.symmetric(vertical: 10),
+  // //                     child: SizedBox(
+  // //                       width: 240,
+  // //                       child: ElevatedButton(
+  // //                         onPressed: () {
+  // //                           print("Desktop Form Submitted");
+  // //                           _desktopContactNameController.clear();
+  // //                           _desktopContactEmailController.clear();
+  // //                           _desktopContactMobileController.clear();
+  // //                           _desktopContactMessageController.clear();
+  // //                         },
+  // //                         style: ElevatedButton.styleFrom(
+  // //                           backgroundColor: Color(0xFFE7A20E),
+  // //                           padding: EdgeInsets.symmetric(vertical: 15),
+  // //                           shape: RoundedRectangleBorder(
+  // //                             borderRadius: BorderRadius.circular(15),
+  // //                           ),
+  // //                         ),
+  // //                         child: Text(
+  // //                           'Submit',
+  // //                           style: TextStyle(
+  // //                             color: Colors.white,
+  // //                             fontSize: contactFormButtonSize,
+  // //                             fontWeight: FontWeight.bold,
+  // //                           ),
+  // //                         ),
+  // //                       ),
+  // //                     ),
+  // //                   ),
+  // //                 ],
+  // //               ),
+  // //             ),
+  // //           ),
+  // //         )
+  // //       ],
+  // //     ),
+  // //   );
+  // // }
+  //  Flexible(
+  //           flex: 1,
+  //           child: Padding(
+  //             padding: EdgeInsets.only(left: 20.0),
+  //             child: Form(
+  //               key: _desktopContactFormKey,
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(
+  //                     'Contact us',
+  //                     style: TextStyle(
+  //                       color: const Color.fromARGB(255, 15, 12, 12),
+  //                       fontSize: contactFormTitleSize,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 10),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  //                     child: TextFormField(
+  //                       controller: _desktopContactNameController,
+  //                       decoration: InputDecoration(labelText: 'Name:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+  //                       style: TextStyle(color: Colors.black),
+  //                       validator: (v) => v == null || v.isEmpty ? 'Name is required' : null,
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  //                     child: TextFormField(
+  //                       controller: _desktopContactEmailController,
+  //                       decoration: InputDecoration(labelText: 'Email:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+  //                       style: TextStyle(color: Colors.black),
+  //                       validator: (v) {
+  //                          if (v == null || v.isEmpty) return 'Email is required';
+  //                          if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Enter a valid email';
+  //                          return null;
+  //                       },
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  //                     child: TextFormField(
+  //                       controller: _desktopContactMobileController,
+  //                       decoration: InputDecoration(labelText: 'Mobile Number:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+  //                       style: TextStyle(color: Colors.black),
+  //                       validator: (v) {
+  //                          if (v == null || v.isEmpty) return 'Mobile is required';
+  //                          if (!RegExp(r'^\d{10}$').hasMatch(v)) return 'Enter a valid 10-digit number';
+  //                          return null;
+  //                       },
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(vertical: 5),
+  //                     child: TextFormField(
+  //                       controller: _desktopContactMessageController,
+  //                       maxLines: 4,
+  //                       decoration: InputDecoration(labelText: 'Message:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
+  //                       style: TextStyle(color: Colors.black),
+  //                       validator: (v) => v == null || v.isEmpty ? 'Message is required' : null,
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(vertical: 10),
+  //                     child: SizedBox(
+  //                       width: 240,
+  //                       child: ElevatedButton(
+  //                         onPressed: contactController.isLoading ? null : () async {
+  //                            if (_desktopContactFormKey.currentState!.validate()) {
+  //                               final inquiry = ContactInquiry(
+  //                                 name: _desktopContactNameController.text,
+  //                                 email: _desktopContactEmailController.text,
+  //                                 phone:_desktopContactMobileController.text,
+  //                                 message: _desktopContactMessageController.text,
+  //                               );
+  //                               final controller = context.read<ContactInquiryController>();
+  //                               await controller.submitContactInquiry(inquiry).then((success) {
+  //                                 if (success) {
+  //                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(controller.successMessage!), backgroundColor: Colors.green));
+  //                                   _desktopContactNameController.clear();
+  //                                  _desktopContactEmailController.clear();
+  //                                   _desktopContactMobileController.clear();
+  //                                  _desktopContactMessageController.clear();
+  //                                 } else {
+  //                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(controller.errorMessage!), backgroundColor: Colors.red));
+  //                                 }
+  //                               });
+  //                            }
+  //                         },
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: Color(0xFFE7A20E),
+  //                           padding: EdgeInsets.symmetric(vertical: 15),
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(15),
+  //                           ),
+  //                         ),
+  //                         child: contactController.isLoading
+  //                          ? CircularProgressIndicator(color: Colors.white)
+  //                          : Text(
+  //                           'Submit',
+  //                           style: TextStyle(
+  //                             color: Colors.white,
+  //                             fontSize: contactFormButtonSize,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildSpecialitiesAndFormSectionDesktopOriginal(BuildContext context,
       double screenHeight, double screenWidth, double specialityFontSize) {
     double contactFormTitleSize = 20;
     double contactFormButtonSize = 24;
+    // **** THE ONLY FIX NEEDED IS THIS LINE ****
+    final contactController = context.watch<ContactInquiryController>();
+
     return Container(
       width: screenWidth,
       color: Color(0xFFEAEBED),
@@ -1467,10 +1709,10 @@ consectetur adipiscing elit,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10), // Space between title and list
+                  SizedBox(height: 10),
                   Text('General Medicine',
                       style: TextStyle(fontSize: specialityFontSize)),
-                  SizedBox(height: 10), // Space between list items
+                  SizedBox(height: 10),
                   Text('General Surgery',
                       style: TextStyle(fontSize: specialityFontSize)),
                   SizedBox(height: 10),
@@ -1502,10 +1744,10 @@ consectetur adipiscing elit,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10), // Space before the list
+                  SizedBox(height: 10),
                   Text('Ophthalmology',
                       style: TextStyle(fontSize: specialityFontSize)),
-                  SizedBox(height: 10), // Space between items
+                  SizedBox(height: 10),
                   Text('E.N.T Micro Surgery',
                       style: TextStyle(fontSize: specialityFontSize)),
                   SizedBox(height: 10),
@@ -1550,7 +1792,7 @@ consectetur adipiscing elit,
                     SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _desktopContactNameController,
                         decoration: InputDecoration(
                             labelText: 'Name:',
@@ -1560,11 +1802,13 @@ consectetur adipiscing elit,
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5)),
                         style: TextStyle(color: Colors.black),
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Name is required' : null,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _desktopContactEmailController,
                         decoration: InputDecoration(
                             labelText: 'Email:',
@@ -1574,25 +1818,49 @@ consectetur adipiscing elit,
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5)),
                         style: TextStyle(color: Colors.black),
+                        validator: (v) {
+                          if (v == null || v.isEmpty)
+                            return 'Email is required';
+                          if (!RegExp(r'^.+@.+\..+$').hasMatch(v))
+                            return 'Enter a valid email';
+                          return null;
+                        },
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _desktopContactMobileController,
-                        decoration: InputDecoration(
-                            labelText: 'Mobile Number:',
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5)),
-                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.number, // 🔢 Numeric keypad
+                        maxLength: 10, // ✅ Limit to 10 digits
+                        inputFormatters: [
+                          FilteringTextInputFormatter
+                              .digitsOnly, // ✅ Allow only digits
+                        ],
+                        decoration: const InputDecoration(
+                          labelText: 'Mobile Number:',
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          counterText: "", // ✅ Hide maxLength counter text
+                        ),
+                        style: const TextStyle(color: Colors.black),
+                        validator: (v) {
+                          if (v == null || v.isEmpty) {
+                            return 'Mobile number is required';
+                          }
+                          if (!RegExp(r'^\d{10}$').hasMatch(v)) {
+                            return 'Enter a valid 10-digit mobile number';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _desktopContactMessageController,
                         maxLines: 4,
                         decoration: InputDecoration(
@@ -1603,6 +1871,9 @@ consectetur adipiscing elit,
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10)),
                         style: TextStyle(color: Colors.black),
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Message is required'
+                            : null,
                       ),
                     ),
                     Padding(
@@ -1610,13 +1881,46 @@ consectetur adipiscing elit,
                       child: SizedBox(
                         width: 240,
                         child: ElevatedButton(
-                          onPressed: () {
-                            print("Desktop Form Submitted");
-                            _desktopContactNameController.clear();
-                            _desktopContactEmailController.clear();
-                            _desktopContactMobileController.clear();
-                            _desktopContactMessageController.clear();
-                          },
+                          onPressed: contactController.isLoading
+                              ? null
+                              : () async {
+                                  if (_desktopContactFormKey.currentState!
+                                      .validate()) {
+                                    final inquiry = ContactInquiry(
+                                      name: _desktopContactNameController.text,
+                                      email:
+                                          _desktopContactEmailController.text,
+                                      phone:
+                                          _desktopContactMobileController.text,
+                                      message:
+                                          _desktopContactMessageController.text,
+                                    );
+                                    final controller = context
+                                        .read<ContactInquiryController>();
+                                    await controller
+                                        .submitContactInquiry(inquiry)
+                                        .then((success) {
+                                      if (success) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    controller.successMessage!),
+                                                backgroundColor: Colors.green));
+                                        _desktopContactNameController.clear();
+                                        _desktopContactEmailController.clear();
+                                        _desktopContactMobileController.clear();
+                                        _desktopContactMessageController
+                                            .clear();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    controller.errorMessage!),
+                                                backgroundColor: Colors.red));
+                                      }
+                                    });
+                                  }
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFE7A20E),
                             padding: EdgeInsets.symmetric(vertical: 15),
@@ -1624,14 +1928,16 @@ consectetur adipiscing elit,
                               borderRadius: BorderRadius.circular(15),
                             ),
                           ),
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: contactFormButtonSize,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: contactController.isLoading
+                              ? CircularProgressIndicator(color: Colors.white)
+                              : Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: contactFormButtonSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -1730,8 +2036,7 @@ consectetur adipiscing elit,
         children: [
           Expanded(
             child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.start, // Align left as per visual
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, right: 8.0),
@@ -1753,14 +2058,16 @@ consectetur adipiscing elit,
                         horizontal: 5,
                       ),
                     ),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Required' : null,
                   ),
                 ),
               ],
             ),
-          ), // Adjust padding/alignment
+          ),
           Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start, // Align left
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, right: 8.0),
@@ -1782,6 +2089,8 @@ consectetur adipiscing elit,
                         horizontal: 5,
                       ),
                     ),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Required' : null,
                   ),
                 ),
               ],
@@ -1937,7 +2246,7 @@ consectetur adipiscing elit,
               ),
               SizedBox(width: 10),
               Text(
-                "PATIENT COUNT",
+                "PATIENT COUNT+",
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -1988,7 +2297,6 @@ consectetur adipiscing elit,
                 bottom: 10,
                 child: Center(
                   child: Container(
-                    // color: Colors.white,
                     padding: EdgeInsets.all(8),
                     child: Text(
                       text,
@@ -2014,13 +2322,10 @@ consectetur adipiscing elit,
     required String title,
     required String description,
   }) {
-    // Using the ContactColumn class directly as it was in the original code
-    // If ContactColumn needs specific Desktop styling, modify it or create a Desktop version
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: ContactColumn(
-          // Assuming ContactColumn is defined as in original
           icon: icon,
           title: title,
           description: description,
@@ -2041,14 +2346,51 @@ consectetur adipiscing elit,
     );
   }
 
-  // ===========================================================================
-  // RESPONSIVE HELPER WIDGETS (Called by Mobile/Tablet builders - Keep Unchanged)
-  // ===========================================================================
-
+  // PreferredSizeWidget _buildMobileTabletAppBar(
+  //     BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
+  //   double iconSize = isMobile ? 20 : 24;
+  //   double emailFontSize = isMobile ? 12 : (isTablet ? 14 : 16);
+  //   return AppBar(
+  //     leading: IconButton(
+  //       icon: Icon(Icons.menu, color: Colors.black),
+  //       onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+  //     ),
+  //     title: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         if (isTablet)
+  //           Flexible(
+  //             child: Row(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Icon(Icons.mail,
+  //                     color: const Color.fromARGB(255, 90, 78, 78),
+  //                     size: iconSize),
+  //                 SizedBox(width: 10),
+  //                 Flexible(
+  //                   child: Text(
+  //                     'reachus@highlandhospital.in',
+  //                     style: TextStyle(
+  //                         color: Colors.black, fontSize: emailFontSize),
+  //                     overflow: TextOverflow.ellipsis,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         if (isMobile) CoreLogo(),
+  //         if (isTablet) HighlandSocialBar(iconSize: iconSize),
+  //       ],
+  //     ),
+  //     backgroundColor: Color(0xFFFFFFFF),
+  //     elevation: 1.0,
+  //   );
+  // }
   PreferredSizeWidget _buildMobileTabletAppBar(
       BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
-    double iconSize = isMobile ? 20 : 24;
-    double emailFontSize = isMobile ? 12 : (isTablet ? 14 : 16);
+    double iconSize = isMobile ? 18 : 22; // Adjusted for better fit on mobile
+    double emailFontSize = isMobile ? 14 : 16;
+
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.menu, color: Colors.black),
@@ -2057,37 +2399,35 @@ consectetur adipiscing elit,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (isTablet)
-            Flexible(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.mail,
-                      color: const Color.fromARGB(255, 90, 78, 78),
-                      size: iconSize),
-                  SizedBox(width: 10),
-                  Flexible(
-                    child: Text(
-                      'reachus@highlandhospital.in',
-                      style: TextStyle(
-                          color: Colors.black, fontSize: emailFontSize),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          if (isMobile) CoreLogo(),
-          if (isTablet)
-            Row(
+          // **** THIS IS THE CORRECTED SECTION ****
+          // This Row now builds for both mobile and tablet
+          Flexible(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildSocialIcon('assets/img/twitter.png', iconSize),
-                _buildSocialIcon('assets/img/facebook.png', iconSize),
-                _buildSocialIcon('assets/img/instagram.png', iconSize),
-                _buildSocialIcon('assets/img/youtube.png', iconSize),
+                Icon(
+                  Icons.mail,
+                  color: const Color.fromARGB(255, 90, 78, 78),
+                  size: iconSize,
+                ),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    'reachus@highlandhospital.in',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30, // 🔹 Increased font size here
+                      fontWeight:
+                          FontWeight.w500, // optional: makes it slightly bolder
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
+          ),
+          // We still show social icons on tablet but not on mobile to save space
+          if (isTablet) HighlandSocialBar(iconSize: iconSize),
         ],
       ),
       backgroundColor: Color(0xFFFFFFFF),
@@ -2095,21 +2435,54 @@ consectetur adipiscing elit,
     );
   }
 
+  // Widget _buildAppDrawer(BuildContext context) {
+  //   return Drawer(
+  //     child: ListView(
+  //       padding: EdgeInsets.zero,
+  //       children: [
+  //         DrawerHeader(
+  //           decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
+  //           child: Center(child: CoreLogo()),
+  //         ),
+  //         ...menuItems
+  //             .map((item) => ListTile(
+  //                   title: Text(item),
+  //                   onTap: () => onMenuItemTapped(item),
+  //                 ))
+  //             .toList(),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildAppDrawer(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
+        // 1. Wrap with a Column
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
-            child: Center(child: CoreLogo()),
+          Expanded(
+            // 3. Allow ListView to take available space
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(color: Color(0xFF1FBCB1)),
+                  child: Center(child: CoreLogo()),
+                ),
+                ...menuItems
+                    .map((item) => ListTile(
+                          title: Text(item, style: TextStyle(fontSize: 25)),
+                          onTap: () => onMenuItemTapped(item),
+                        ))
+                    .toList(),
+              ],
+            ),
           ),
-          ...menuItems
-              .map((item) => ListTile(
-                    title: Text(item),
-                    onTap: () => onMenuItemTapped(item),
-                  ))
-              .toList(),
+          // 2. Add the social media icons at the bottom
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child:
+                HighlandSocialBar(iconSize: 30), // Adjust icon size as needed
+          ),
         ],
       ),
     );
@@ -2299,123 +2672,172 @@ consectetur adipiscing elit,
     );
   }
 
-  Widget _buildFeatureCarouselResponsive(BuildContext context, Size screenSize,
-      bool isDesktop, bool isTablet, bool isMobile) {
+  // Widget _buildFeatureCarouselResponsive(BuildContext context, Size screenSize,
+  //     bool isDesktop, bool isTablet, bool isMobile) {
+  //   List<Widget> carouselItems = [
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/find a doctor.png',
+  //         label: 'FIND A DOCTOR',
+  //         backgroundColor: Color(0xFF1FBCB1)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/Test result.png',
+  //         label: 'TEST RESULT',
+  //         backgroundColor: Color(0xFFEE9821)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/online admission.png',
+  //         label: 'ONLINE ADMISSION',
+  //         backgroundColor: Color(0xFF1BA08D)),
+  //     _buildCarouselItem(context, screenSize, isMobile,
+  //         image: 'assets/img/Patient acces.png',
+  //         label: 'PATIENT ACCESS',
+  //         backgroundColor: Color(0xFF5592C8)),
+  //   ];
+
+  //   if (isMobile) {
+  //     return Center(
+  //       child: SingleChildScrollView(
+  //         scrollDirection: Axis.horizontal,
+  //         child: Row(
+  //           children: carouselItems
+  //               .map((item) => Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
+  //                     child: item,
+  //                   ))
+  //               .toList(),
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     return Center(
+  //       child: Container(
+  //         constraints: BoxConstraints(maxWidth: 1200),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: carouselItems
+  //               .map((item) => Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //                     child: item,
+  //                   ))
+  //               .toList(),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Widget _buildCarouselItem(
+  //     BuildContext context, Size screenSize, bool isMobile,
+  //     {required String image,
+  //     required String label,
+  //     required Color backgroundColor}) {
+  //   double itemHeight = isMobile ? 200 : 290;
+  //   double imageSize = isMobile ? 50 : 70;
+  //   double labelSize = isMobile ? 16 : 20;
+
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width * (83 / 375),
+  //     height: itemHeight,
+  //     color: backgroundColor,
+  //     margin: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 4),
+  //     padding: EdgeInsets.all(isMobile ? 8 : 12),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         Image.asset(image,
+  //             width: imageSize,
+  //             height: imageSize,
+  //             fit: BoxFit.contain,
+  //             errorBuilder: (c, e, s) => Icon(Icons.image_not_supported,
+  //                 size: imageSize, color: Colors.white54)),
+  //         SizedBox(height: 8),
+  //         Text(
+  //           label,
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             fontSize: labelSize,
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  Widget _buildFeatureCarouselResponsive(BuildContext context) {
+    final bool isMobile = Responsive.isMobile(context);
     List<Widget> carouselItems = [
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/find a doctor.png',
-          label: 'FIND A DOCTOR',
-          content: '''Search our database...''',
-          backgroundColor: Color(0xFF1FBCB1)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/Test result.png',
-          label: 'TEST RESULT',
-          content: '''Access your lab...''',
-          backgroundColor: Color(0xFFEE9821)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/online admission.png',
-          label: 'ONLINE ADMISSION',
-          content: '''Pre-register for...''',
-          backgroundColor: Color(0xFF1BA08D)),
-      _buildCarouselItem(context, screenSize, isMobile,
-          image: 'assets/img/Patient acces.png',
-          label: 'PATIENT ACCESS',
-          content: '''Manage your appointments...''',
-          backgroundColor: Color(0xFF5592C8)),
+      _buildCarouselItem(
+          'assets/img/find a doctor.png', 'FIND A DOCTOR', Color(0xFF1FBCB1)),
+      _buildCarouselItem(
+          'assets/img/Test result.png', 'TEST RESULT', Color(0xFFEE9821)),
+      _buildCarouselItem('assets/img/online admission.png', 'ONLINE ADMISSION',
+          Color(0xFF1BA08D)),
+      _buildCarouselItem(
+          'assets/img/Patient acces.png', 'PATIENT ACCESS', Color(0xFF5592C8)),
     ];
 
     if (isMobile) {
-      // Use Wrap or ListView for scrolling + responsiveness
-      return Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: carouselItems
-                .map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: item,
-                    ))
-                .toList(),
-          ),
+      // **** THIS IS THE CORRECTED SECTION FOR MOBILE ****
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          // Use a Column to stack items vertically
+          children: carouselItems
+              .map((item) => Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 15.0), // Add space between items
+                    child: item,
+                  ))
+              .toList(),
         ),
       );
     } else {
-      // Center everything on tablet/desktop and limit max width
-      return Center(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 1200), // center content
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: carouselItems
-                .map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: item,
-                    ))
-                .toList(),
-          ),
+      // Desktop layout remains the same
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(width: 20, height: 277, color: Color(0xFF1FBCB1)),
+            ...carouselItems.map((item) => Expanded(child: item)),
+            Container(width: 20, height: 277, color: Color(0xFF5592C8)),
+          ],
         ),
       );
     }
   }
 
-  Widget _buildCarouselItem(
-      BuildContext context, Size screenSize, bool isMobile,
-      {required String image,
-      required String label,
-      required String content,
-      required Color backgroundColor}) {
-    double itemHeight =
-        isMobile ? 200 : 290; // slightly taller cards/containers
-    double imageSize = isMobile ? 50 : 70; // better visual emphasis
-    double labelSize = isMobile ? 16 : 20; // clearer labels
-    double contentSize = isMobile ? 14 : 18; // easier-to-read content text
-    double iconSize = isMobile ? 24 : 28; // slightly bolder icons
+  Widget _buildCarouselItem(String image, String label, Color backgroundColor) {
+    final bool isMobile = Responsive.isMobile(context);
+    // Adjust sizes for better appearance
+    double itemHeight = isMobile ? 180 : 277;
+    double imageSize = isMobile ? 60 : 80;
+    double labelSize = isMobile ? 18 : 18;
 
     return Container(
-      width: MediaQuery.of(context).size.width * (83 / 375),
+      // **** THIS IS THE OTHER KEY CHANGE ****
+      width: isMobile ? double.infinity : null, // Fill width on mobile
       height: itemHeight,
       color: backgroundColor,
-      margin: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 4),
-      padding: EdgeInsets.all(isMobile ? 8 : 12),
+      margin: isMobile ? EdgeInsets.zero : EdgeInsets.symmetric(horizontal: 1),
+      padding: EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(image,
               width: imageSize,
               height: imageSize,
               fit: BoxFit.contain,
-              errorBuilder: (c, e, s) => Icon(Icons.image_not_supported,
-                  size: imageSize, color: Colors.white54)),
-          SizedBox(height: 8),
+              color: Colors.white),
+          SizedBox(height: 15),
           Text(
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: labelSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 5),
-          Flexible(
-            child: Text(
-              content,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: contentSize,
-                fontWeight: FontWeight.normal,
-                color: Colors.white.withOpacity(0.9),
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(height: 8),
-          Icon(
-            Icons.add_circle_outline_rounded,
-            color: ColorConstant.mainWhite,
-            size: iconSize,
+                fontSize: labelSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
         ],
       ),
@@ -2472,9 +2894,9 @@ consectetur adipiscing elit,
               mainAxisSize: MainAxisSize.min,
               children: [
                 visionImage,
-                SizedBox(height: 20), // Add spacing between images
+                SizedBox(height: 20),
                 missionImage,
-                SizedBox(height: 20), // Add spacing after mission image
+                SizedBox(height: 20),
               ],
             )
           : Row(
@@ -2635,293 +3057,385 @@ consectetur adipiscing elit,
   }
 
   Widget _buildBookingAppointmentFormResponsive(
-      BuildContext context,
-      Size screenSize,
-      bool isDesktop,
-      bool isTablet,
-      bool isMobile,
-      double headingSize,
-      double bodySize,
-      double buttonSize) {
+    BuildContext context,
+    Size screenSize,
+    bool isDesktop,
+    bool isTablet,
+    bool isMobile,
+    double headingSize,
+    double bodySize,
+    double buttonSize,
+  ) {
+    final formKey = GlobalKey<FormState>();
+
     double formWidth = isMobile
-        ? screenSize.width * 0.95 // slightly wider for edge-to-edge form
+        ? screenSize.width * 0.95
         : (isTablet ? screenSize.width * 0.65 : screenSize.width * 0.5);
 
-    double fieldHeight = isMobile
-        ? 55 // more height for touch comfort
-        : (isTablet ? 60 : 50);
-
+    double fieldHeight = isMobile ? 55 : (isTablet ? 60 : 50);
     double inputFontSize = isMobile ? 16 : (isTablet ? 18 : 15);
-
     double borderRadius = isMobile ? 16 : (isTablet ? 20 : 18);
-
     double formBorderRadius = isMobile ? 18 : (isTablet ? 24 : 20);
-    return Container(
-      width: formWidth,
-      decoration: BoxDecoration(
+
+    final bookingController = context.watch<BookingEnquiryController>();
+
+    return SingleChildScrollView(
+      child: Container(
+        width: formWidth,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(formBorderRadius),
-          border: Border.all(color: Color(0xFFEE9821), width: 2),
+          border: Border.all(color: const Color(0xFFEE9821), width: 2),
           color: Colors.white,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-                color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))
-          ]),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
-            decoration: BoxDecoration(
-              color: Color(0xFF1BA08F),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(borderRadius),
-                topRight: Radius.circular(borderRadius),
+                color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 🟢 Header
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1BA08F),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(borderRadius),
+                  topRight: Radius.circular(borderRadius),
+                ),
               ),
-            ),
-            child: Text(
-              'Book an Appointment',
-              style: TextStyle(
+              child: Text(
+                'Booking Enquiry',
+                style: TextStyle(
                   fontSize: headingSize,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
-              textAlign: TextAlign.center,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(isMobile ? 15 : 20),
-            child: Column(
-              children: [
-                Text(
-                    '''Enter your contacts below to schedule an appointment or discuss it with us in details.'''),
-                SizedBox(height: isMobile ? 15 : 20),
-                if (isMobile) ...[
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'First Name',
-                      controller: nameController,
-                      isMobile: isMobile,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize),
-                  SizedBox(height: 10),
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'Last Name',
-                      controller: stateController,
-                      isMobile: isMobile,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize),
-                  SizedBox(height: 10),
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'Email',
-                      controller: emailController,
-                      isMobile: isMobile,
-                      keyboardType: TextInputType.emailAddress,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize),
-                  SizedBox(height: 10),
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'Address',
-                      controller: addressController,
-                      isMobile: isMobile,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize),
-                  SizedBox(height: 10),
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'Phone Number',
-                      controller: phoneController,
-                      isMobile: isMobile,
-                      keyboardType: TextInputType.phone,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize),
-                ] else ...[
-                  Row(children: [
-                    Expanded(
-                        child: _buildAppointmentTextFieldResponsive(
-                            label: 'First Name',
-                            controller: nameController,
-                            isMobile: isMobile,
-                            height: fieldHeight,
-                            inputFontSize: inputFontSize)),
-                    SizedBox(width: 10),
-                    Expanded(
-                        child: _buildAppointmentTextFieldResponsive(
-                            label: 'Last Name',
-                            controller: stateController,
-                            isMobile: isMobile,
-                            height: fieldHeight,
-                            inputFontSize: inputFontSize))
-                  ]),
-                  SizedBox(height: 10),
-                  Row(children: [
-                    Expanded(
-                        child: _buildAppointmentTextFieldResponsive(
-                            label: 'Email',
-                            controller: emailController,
-                            isMobile: isMobile,
-                            keyboardType: TextInputType.emailAddress,
-                            height: fieldHeight,
-                            inputFontSize: inputFontSize)),
-                    SizedBox(width: 10),
-                    Expanded(
-                        child: _buildAppointmentTextFieldResponsive(
-                            label: 'Address',
-                            controller: addressController,
-                            isMobile: isMobile,
-                            height: fieldHeight,
-                            inputFontSize: inputFontSize))
-                  ]),
-                  SizedBox(height: 10),
-                  _buildAppointmentTextFieldResponsive(
-                      label: 'Phone Number',
-                      controller: phoneController,
-                      isMobile: isMobile,
-                      keyboardType: TextInputType.phone,
-                      height: fieldHeight,
-                      inputFontSize: inputFontSize)
-                ],
-                SizedBox(height: isMobile ? 20 : 25),
-                _buildAppointmentButtonsResponsive(
-                    context, isMobile, buttonSize),
-              ],
+
+            // 🟣 Form
+            Padding(
+              padding: EdgeInsets.all(isMobile ? 15 : 20),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Request a callback from our team',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: isMobile ? 15 : 20),
+
+                    // 🔹 Fields
+                    if (isMobile) ...[
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'First Name',
+                          controller: _desktopBookFirstNameController,
+                          isMobile: isMobile,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                      const SizedBox(height: 10),
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'Last Name',
+                          controller: _desktopBookLastNameController,
+                          isMobile: isMobile,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                      const SizedBox(height: 10),
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'Email',
+                          controller: _desktopBookEmailController,
+                          isMobile: isMobile,
+                          keyboardType: TextInputType.emailAddress,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                      const SizedBox(height: 10),
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'Address',
+                          controller: _desktopBookAddressController,
+                          isMobile: isMobile,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                      const SizedBox(height: 10),
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'Phone Number',
+                          controller: _desktopBookPhoneController,
+                          isMobile: isMobile,
+                          keyboardType: TextInputType.phone,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                    ] else ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildAppointmentTextFieldResponsive(
+                              label: 'First Name',
+                              controller: _desktopBookFirstNameController,
+                              isMobile: isMobile,
+                              height: fieldHeight,
+                              inputFontSize: inputFontSize,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _buildAppointmentTextFieldResponsive(
+                              label: 'Last Name',
+                              controller: _desktopBookLastNameController,
+                              isMobile: isMobile,
+                              height: fieldHeight,
+                              inputFontSize: inputFontSize,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildAppointmentTextFieldResponsive(
+                              label: 'Email',
+                              controller: _desktopBookEmailController,
+                              isMobile: isMobile,
+                              keyboardType: TextInputType.emailAddress,
+                              height: fieldHeight,
+                              inputFontSize: inputFontSize,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _buildAppointmentTextFieldResponsive(
+                              label: 'Address',
+                              controller: _desktopBookAddressController,
+                              isMobile: isMobile,
+                              height: fieldHeight,
+                              inputFontSize: inputFontSize,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      _buildAppointmentTextFieldResponsive(
+                          label: 'Phone Number',
+                          controller: _desktopBookPhoneController,
+                          isMobile: isMobile,
+                          keyboardType: TextInputType.phone,
+                          height: fieldHeight,
+                          inputFontSize: inputFontSize),
+                    ],
+
+                    SizedBox(height: isMobile ? 20 : 25),
+
+                    // 🟡 Button
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: bookingController.isLoading
+                            ? null
+                            : () async {
+                                if (formKey.currentState!.validate()) {
+                                  final enquiry = BookingEnquiry(
+                                    firstName:
+                                        _desktopBookFirstNameController.text,
+                                    lastName:
+                                        _desktopBookLastNameController.text,
+                                    phone: _desktopBookPhoneController.text,
+                                    email: _desktopBookEmailController.text,
+                                    address: _desktopBookAddressController.text,
+                                  );
+
+                                  final controller =
+                                      context.read<BookingEnquiryController>();
+
+                                  await controller.submitEnquiry(enquiry).then(
+                                    (success) {
+                                      if (success) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              controller.successMessage ?? ''),
+                                          backgroundColor: Colors.green,
+                                        ));
+                                        _desktopBookFirstNameController.clear();
+                                        _desktopBookLastNameController.clear();
+                                        _desktopBookPhoneController.clear();
+                                        _desktopBookEmailController.clear();
+                                        _desktopBookAddressController.clear();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              controller.errorMessage ?? ''),
+                                          backgroundColor: Colors.red,
+                                        ));
+                                      }
+                                    },
+                                  );
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEE9821),
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(
+                            vertical: isMobile ? 12 : 14,
+                            horizontal: isMobile ? 30 : 50,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(isMobile ? 6 : 8),
+                          ),
+                          elevation: 3,
+                        ),
+                        child: bookingController.isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : Text(
+                                'Request Callback',
+                                style: TextStyle(
+                                  fontSize: buttonSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildAppointmentTextFieldResponsive(
-      {required String label,
-      required TextEditingController controller,
-      required bool isMobile,
-      TextInputType keyboardType = TextInputType.text,
-      required double height,
-      required double inputFontSize}) {
+  // Widget _buildAppointmentTextFieldResponsive(
+  //     {required String label,
+  //     required TextEditingController controller,
+  //     required bool isMobile,
+  //     TextInputType keyboardType = TextInputType.text,
+  //     required double height,
+  //     required double inputFontSize}) {
+  //   return SizedBox(
+  //     height: height,
+  //     child: TextFormField(
+  //       controller: controller,
+  //       keyboardType: keyboardType,
+  //       style: TextStyle(fontSize: inputFontSize),
+  //       decoration: InputDecoration(
+  //         labelText: label,
+  //         labelStyle:
+  //             TextStyle(fontSize: inputFontSize, color: Colors.grey[600]),
+  //         filled: true,
+  //         fillColor: Color(0xFFF2F3F5),
+  //         border: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+  //           borderSide: BorderSide.none,
+  //         ),
+  //         contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+  //         isDense: true,
+  //       ),
+  //       validator: (value) {
+  //         if (value == null || value.isEmpty) {
+  //           return 'Please enter $label';
+  //         }
+  //         if (label == 'Email' &&
+  //             !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+  //           return 'Please enter a valid email';
+  //         }
+  //         if (label == 'Phone Number' && !RegExp(r'^\d{10}$').hasMatch(value)) {
+  //           return 'Enter a valid 10-digit number';
+  //         }
+  //         return null;
+  //       },
+  //     ),
+  //   );
+  // }
+  Widget _buildAppointmentTextFieldResponsive({
+    required String label,
+    required TextEditingController controller,
+    required bool isMobile,
+    double? height,
+    double? inputFontSize,
+    TextInputType? keyboardType,
+  }) {
     return SizedBox(
-      height: height,
+      height: height ?? 55,
       child: TextFormField(
         controller: controller,
-        keyboardType: keyboardType,
-        style: TextStyle(fontSize: inputFontSize),
+        keyboardType: keyboardType ?? TextInputType.text,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle:
-              TextStyle(fontSize: inputFontSize, color: Colors.grey[600]),
+          border: const OutlineInputBorder(),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           filled: true,
-          fillColor: Color(0xFFF2F3F5),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-          isDense: true,
+          fillColor: Colors.white,
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter $label';
-          }
-          if (label == 'Email' &&
-              !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-            return 'Please enter a valid email';
-          }
-          if (label == 'Phone Number' &&
-              !RegExp(r'^[0-9]{10}$').hasMatch(value)) {
-            return 'Please enter a valid 10-digit phone number';
-          }
-          return null;
-        },
+        style: TextStyle(
+          fontSize: inputFontSize ?? 16,
+          color: Colors.black,
+        ),
+        validator: (value) => value == null || value.trim().isEmpty
+            ? 'Please enter $label'
+            : null,
       ),
     );
   }
 
   Widget _buildAppointmentButtonsResponsive(
       BuildContext context, bool isMobile, double buttonSize) {
-    Widget alreadyRegisteredButtonWidget = OutlinedButton(
+    Widget requestCallbackButtonWidget = ElevatedButton(
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => NewBookings()));
-      },
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Color(0xFF1BA08F),
-        padding: EdgeInsets.symmetric(vertical: isMobile ? 10 : 12),
-        side: BorderSide(color: Color(0xFF1BA08F), width: 1.5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
-        ),
-      ),
-      child: Text(
-        'Already Registered',
-        style: TextStyle(fontSize: buttonSize, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-    Widget bookNowButtonWidget = ElevatedButton(
-      onPressed: () {
-        if (nameController.text.isNotEmpty &&
-            stateController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            addressController.text.isNotEmpty &&
-            phoneController.text.isNotEmpty &&
-            RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                .hasMatch(emailController.text) &&
-            RegExp(r'^[0-9]{10}$').hasMatch(phoneController.text)) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => bookappoint_register(
-                firstName: nameController.text,
-                lastName: stateController.text,
-                email: emailController.text,
-                address: addressController.text,
-                phone: phoneController.text,
-              ),
-            ),
-          ).then((_) {
-            nameController.clear();
-            stateController.clear();
-            emailController.clear();
-            addressController.clear();
-            phoneController.clear();
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Please fill all fields correctly.'),
-                backgroundColor: Colors.red),
-          );
-        }
+        // This is now handled inside _buildBookingAppointmentFormResponsive
+        // Kept for structure but logic is moved up
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFEE9821),
+        backgroundColor: const Color(0xFFEE9821),
         foregroundColor: Colors.black,
-        padding: EdgeInsets.symmetric(vertical: isMobile ? 10 : 12),
+        padding: EdgeInsets.symmetric(
+          vertical: isMobile ? 10 : 12,
+          horizontal: isMobile ? 20 : 40,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
         ),
         elevation: 3,
       ),
       child: Text(
-        'Book Now',
-        style: TextStyle(fontSize: buttonSize, fontWeight: FontWeight.bold),
+        'Request Callback',
+        style: TextStyle(
+          fontSize: buttonSize,
+          fontWeight: FontWeight.bold,
+        ),
         textAlign: TextAlign.center,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
+
     if (isMobile) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          alreadyRegisteredButtonWidget,
-          SizedBox(height: 10),
-          bookNowButtonWidget,
-        ],
+      return Center(
+        child: SizedBox(
+          width: 220,
+          child: requestCallbackButtonWidget,
+        ),
       );
     } else {
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: alreadyRegisteredButtonWidget),
-          SizedBox(width: 10),
-          Expanded(child: bookNowButtonWidget),
+          SizedBox(
+            width: 250,
+            child: requestCallbackButtonWidget,
+          ),
         ],
       );
     }
@@ -2948,10 +3462,8 @@ consectetur adipiscing elit,
             ? 300
             : 400;
 
-    // Custom device type detection logic (manually adjusting for large tablets)
     bool isLargeTablet = screenSize.width >= 1024 && screenSize.width < 1440;
 
-    // Adjust the layout based on device size
     Widget textContent = Container(
       width: isMobile
           ? screenSize.width * 0.9
@@ -3000,7 +3512,6 @@ consectetur adipiscing elit,
             ),
           ),
           if (isMobile || isTablet || isLargeTablet) ...[
-            // Mobile, Tablet, and Large Tablet Layout
             Wrap(
               spacing: 15,
               runSpacing: 20,
@@ -3040,11 +3551,9 @@ consectetur adipiscing elit,
               ],
             ),
           ] else if (isDesktop) ...[
-            // Desktop Layout
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Left Column (Health + Careers)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -3066,7 +3575,6 @@ consectetur adipiscing elit,
                     ),
                   ],
                 ),
-                // Right Column (Surgery + Planning)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -3103,7 +3611,7 @@ consectetur adipiscing elit,
         errorBuilder: (c, e, s) => Container(
           width: imageWidth,
           height: imageHeight,
-          color: Colors.grey[300], // Color when image fails to load
+          color: Colors.grey[300],
         ),
       ),
     );
@@ -3116,7 +3624,7 @@ consectetur adipiscing elit,
             textContent,
             SizedBox(height: 20),
             SizedBox(
-              height: 250, // Explicit height for mobile
+              height: 250,
               child: imageContent,
             ),
           ],
@@ -3215,14 +3723,14 @@ consectetur adipiscing elit,
           title: "HEALTH TIPS",
           image: 'assets/img/healthi.png',
           content:
-              '''Stay informed with our latest health advice and tips for a better lifestyle.''',
+              '''Add more fruits and vegetables to your daily meals — your heart will thank you!''',
           bodyTextSize: bodyTextMedium * 0.9),
       _buildHealthTipBoxResponsive(context, isMobile, tipsHeight, tipsWidth,
           backgroundColor: Color(0xFF3FAE9E),
           title: "LATEST NEWS",
           image: 'assets/img/Latest.png',
           content:
-              '''Read about recent developments and news from Highland Hospital.''',
+              '''Our hospital continues to provide 24/7 emergency care with the latest medical technology and dedicated specialists.''',
           bodyTextSize: bodyTextMedium * 0.9),
       _buildPatientCountBoxResponsive(context, isMobile, tipsHeight, tipsWidth,
           bodyTextSize: headingSize * 0.9),
@@ -3235,32 +3743,76 @@ consectetur adipiscing elit,
       _buildServiceImageResponsive(context, isMobile, serviceImageHeight,
           'assets/img/pi3.jpg', '', bodyTextMedium),
     ];
+    // List<Widget> contactInfo = [
+    //   _buildContactColumnResponsive(
+    //       isMobile: isMobile,
+    //       icon: Icons.location_on,
+    //       title: 'Location',
+    //       description: 'Mother Theresa Road...',
+    //       iconSize: contactIconSize,
+    //       titleSize: contactTitleSize,
+    //       descriptionSize: contactDescSize),
+    //   _buildContactColumnResponsive(
+    //       isMobile: isMobile,
+    //       icon: Icons.phone,
+    //       title: 'Emergency 24x7',
+    //       description: '0824-4235555',
+    //       iconSize: contactIconSize,
+    //       titleSize: contactTitleSize,
+    //       descriptionSize: contactDescSize),
+    //   _buildContactColumnResponsive(
+    //       isMobile: isMobile,
+    //       icon: Icons.email,
+    //       title: 'Email',
+    //       description: 'reachus@highlandhospital.in',
+    //       iconSize: contactIconSize,
+    //       titleSize: contactTitleSize,
+    //       descriptionSize: contactDescSize),
+    // ];
     List<Widget> contactInfo = [
       _buildContactColumnResponsive(
-          isMobile: isMobile,
-          icon: Icons.location_on,
-          title: 'Location',
-          description: 'Mother Theresa Road...',
-          iconSize: contactIconSize,
-          titleSize: contactTitleSize,
-          descriptionSize: contactDescSize),
+        isMobile: isMobile,
+        icon: Icons.location_on,
+        title: 'Location',
+        description:
+            'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.',
+        iconSize: contactIconSize,
+        titleSize: contactTitleSize,
+        descriptionSize: contactDescSize,
+        iconColor: const Color(0xFFEE9821), // Purple accent color
+        textColor: Colors.black87,
+        onTap: () => _launchURL(
+          'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu',
+        ),
+      ),
       _buildContactColumnResponsive(
-          isMobile: isMobile,
-          icon: Icons.phone,
-          title: 'Emergency 24x7',
-          description: '0824-4235555',
-          iconSize: contactIconSize,
-          titleSize: contactTitleSize,
-          descriptionSize: contactDescSize),
+        isMobile: isMobile,
+        icon: Icons.phone,
+        title: 'Emergency 24x7',
+        description: '0824-4235555',
+        iconSize: contactIconSize,
+        titleSize: contactTitleSize,
+        descriptionSize: contactDescSize,
+        iconColor: const Color(0xFFEE9821),
+        textColor: Colors.black87,
+        onTap: () => makePhoneCall('08244235555', context),
+      ),
       _buildContactColumnResponsive(
-          isMobile: isMobile,
-          icon: Icons.email,
-          title: 'Email',
-          description: 'reachus@highlandhospital.in',
-          iconSize: contactIconSize,
-          titleSize: contactTitleSize,
-          descriptionSize: contactDescSize),
+        isMobile: isMobile,
+        icon: Icons.email,
+        title: 'Email',
+        description: 'reachus@highlandhospital.in',
+        iconSize: contactIconSize,
+        titleSize: contactTitleSize,
+        descriptionSize: contactDescSize,
+        iconColor: const Color(0xFFEE9821),
+        textColor: Colors.black87,
+        onTap: () => _launchURL(
+          'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry',
+        ),
+      ),
     ];
+
     return Container(
       width: screenSize.width,
       color: Color(0xFF1FBCB1),
@@ -3450,7 +4002,7 @@ consectetur adipiscing elit,
           ),
           SizedBox(height: 8),
           Text(
-            '1,30,000',
+            '1,30,000+',
             style: TextStyle(
                 fontSize: numberSize,
                 fontWeight: FontWeight.bold,
@@ -3518,43 +4070,159 @@ consectetur adipiscing elit,
     );
   }
 
-  Widget _buildContactColumnResponsive(
-      {required bool isMobile,
-      required IconData icon,
-      required String title,
-      required String description,
-      required double iconSize,
-      required double titleSize,
-      required double descriptionSize}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment:
-          isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: Color(0xFFEE9821), size: iconSize),
-        SizedBox(width: 10),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: TextStyle(
-                      fontSize: titleSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-              SizedBox(height: 4),
-              Text(description,
-                  style: TextStyle(
-                      fontSize: descriptionSize,
-                      color: Colors.white.withOpacity(0.9),
-                      height: 1.3)),
-            ],
+  // Widget _buildContactColumnResponsive(
+  //     {required bool isMobile,
+  //     required IconData icon,
+  //     required String title,
+  //     required String description,
+  //     required double iconSize,
+  //     required double titleSize,
+  //     required double descriptionSize}) {
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     mainAxisAlignment:
+  //         isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+  //     children: [
+  //       Icon(icon, color: Color(0xFFEE9821), size: iconSize),
+  //       SizedBox(width: 10),
+  //       Flexible(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(title,
+  //                 style: TextStyle(
+  //                     fontSize: titleSize,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.white)),
+  //             SizedBox(height: 4),
+  //             Text(description,
+  //                 style: TextStyle(
+  //                     fontSize: descriptionSize,
+  //                     color: Colors.white.withOpacity(0.9),
+  //                     height: 1.3)),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+  Widget _buildContactColumnResponsive({
+    required bool isMobile,
+    required IconData icon,
+    required String title,
+    required String description,
+    required double iconSize,
+    required double titleSize,
+    required double descriptionSize,
+    required VoidCallback onTap,
+    required Color iconColor,
+    required Color textColor,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, color: iconColor, size: iconSize),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: titleSize,
+              color: textColor,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 5),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: descriptionSize,
+              color: textColor.withOpacity(0.8),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  // Widget _buildSpecialitiesAndFormSectionResponsive(
+  //     BuildContext context,
+  //     Size screenSize,
+  //     bool isDesktop,
+  //     bool isTablet,
+  //     bool isMobile,
+  //     double headingSize,
+  //     double bodyTextMedium,
+  //     double buttonTextSize) {
+  //   double sectionPadding = isMobile ? 15 : 30;
+  //   double columnSpacing = isMobile ? 15 : 30;
+
+  //   Widget specialities1 = _buildSpecialitiesListResponsive(
+  //     context,
+  //     isMobile: isMobile,
+  //     title: 'Specialities',
+  //     specialties: [
+  //       'General Medicine',
+  //       'General Surgery',
+  //       'Orthopaedic & Trauma Care',
+  //       'Total Knee & Hip Replacement',
+  //       'Arthroscopy & Sports Medicine',
+  //       'Pediatric & Pediatric Surgery',
+  //       'Nephrology',
+  //       'Gastroenterology',
+  //     ],
+  //     headingSize: headingSize,
+  //     bodyTextMedium: bodyTextMedium,
+  //   );
+
+  //   Widget specialities2 = _buildSpecialitiesListResponsive(
+  //     context,
+  //     isMobile: isMobile,
+  //     title: '',
+  //     specialties: [
+  //       'Ophthalmology',
+  //       'E.N.T Micro Surgery',
+  //       'Neurology and Neuro Surgery',
+  //       'Plastic & Reconstructive Surgery',
+  //       'Maxillofacial Surgery',
+  //       'Microvascular Surgery',
+  //       'Endocrinology',
+  //       'Urology & Andrology',
+  //     ],
+  //     headingSize: headingSize,
+  //     bodyTextMedium: bodyTextMedium,
+  //   );
+
+  //   Widget contactForm = _buildContactUsFormResponsive(
+  //       context, isMobile, headingSize, bodyTextMedium, buttonTextSize);
+
+  //   return Container(
+  //     color: Color(0xFFEAEBED),
+  //     padding: EdgeInsets.symmetric(
+  //         vertical: sectionPadding, horizontal: sectionPadding),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Expanded(child: specialities1),
+  //             SizedBox(width: columnSpacing),
+  //             Expanded(child: specialities2),
+  //           ],
+  //         ),
+  //         SizedBox(height: columnSpacing),
+  //         contactForm,
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildSpecialitiesAndFormSectionResponsive(
       BuildContext context,
       Size screenSize,
@@ -3564,8 +4232,8 @@ consectetur adipiscing elit,
       double headingSize,
       double bodyTextMedium,
       double buttonTextSize) {
-    double sectionPadding = isMobile ? 15 : 30;
-    double columnSpacing = isMobile ? 15 : 30;
+    double sectionPadding = isMobile ? 20 : 40;
+    double columnSpacing = isMobile ? 20 : 30;
 
     Widget specialities1 = _buildSpecialitiesListResponsive(
       context,
@@ -3588,7 +4256,7 @@ consectetur adipiscing elit,
     Widget specialities2 = _buildSpecialitiesListResponsive(
       context,
       isMobile: isMobile,
-      title: '',
+      title: ' ', // Use a space to maintain alignment on desktop
       specialties: [
         'Ophthalmology',
         'E.N.T Micro Surgery',
@@ -3610,23 +4278,48 @@ consectetur adipiscing elit,
       color: Color(0xFFEAEBED),
       padding: EdgeInsets.symmetric(
           vertical: sectionPadding, horizontal: sectionPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Specialities side-by-side row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: specialities1),
-              SizedBox(width: columnSpacing),
-              Expanded(child: specialities2),
-            ],
-          ),
-          SizedBox(height: columnSpacing),
-          // Contact form below for all devices
-          contactForm,
-        ],
-      ),
+      child: isMobile
+          // --- MOBILE LAYOUT: Everything stacked vertically ---
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                specialities1,
+                SizedBox(height: columnSpacing),
+                specialities2,
+                SizedBox(height: columnSpacing + 10),
+                contactForm,
+              ],
+            )
+          // --- DESKTOP/TABLET LAYOUT: Side-by-side columns ---
+          //         : Row(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: [
+          //               Expanded(flex: 1, child: specialities1),
+          //               SizedBox(width: columnSpacing),
+          //               Expanded(flex: 1, child: specialities2),
+          //               SizedBox(width: columnSpacing + 10),
+          //               Expanded(flex: 1, child: contactForm),
+          //             ],
+          //           ),
+          //   );
+          // }
+          : Center(
+              // **** FIX: WRAPPED THE ROW IN A CENTER WIDGET ****
+              child: Row(
+                mainAxisSize:
+                    MainAxisSize.min, // Allow row to shrink to its content
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // We no longer use Expanded, so the columns take their natural width
+                  specialities1,
+                  SizedBox(width: 80), // Spacing between columns
+                  specialities2,
+                  SizedBox(width: 80), // Spacing between columns
+                  // Constrain the width of the form on desktop
+                  SizedBox(width: 350, child: contactForm),
+                ],
+              ),
+            ),
     );
   }
 
@@ -3681,95 +4374,120 @@ consectetur adipiscing elit,
 
   Widget _buildContactUsFormResponsive(BuildContext context, bool isMobile,
       double headingSize, double bodyTextMedium, double buttonTextSize) {
-    final _formKey = GlobalKey<FormState>();
+    final contactController = context.watch<ContactInquiryController>();
+
     return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Contact us',
-            style: TextStyle(
-                color: const Color.fromARGB(255, 15, 12, 12),
-                fontSize: headingSize,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 15),
-          _buildContactTextFieldResponsive(
-              controller: nameController,
-              label: 'Name:',
-              isMobile: isMobile,
-              inputFontSize: bodyTextMedium),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller: emailController,
-              label: 'Email:',
-              isMobile: isMobile,
-              keyboardType: TextInputType.emailAddress,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Invalid';
-                return null;
-              }),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller: phoneController,
-              label: 'Mobile Number:',
-              isMobile: isMobile,
-              keyboardType: TextInputType.phone,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) return 'Invalid';
-                return null;
-              }),
-          SizedBox(height: 10),
-          _buildContactTextFieldResponsive(
-              controller: addressController,
-              label: 'Message:',
-              isMobile: isMobile,
-              maxLines: isMobile ? 3 : 4,
-              inputFontSize: bodyTextMedium,
-              validator: (v) {
-                if (v == null || v.isEmpty) return 'Required';
-                return null;
-              }),
-          SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
+      key: _responsiveBookingFormKey, // Use the specific key for this form
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          'Contact us',
+          style: TextStyle(
+              color: const Color.fromARGB(255, 15, 12, 12),
+              fontSize: headingSize,
+              fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 15),
+        // **** FIX: USING CORRECT CONTROLLERS FOR THIS FORM ****
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactNameController, // Correct controller
+            label: 'Name:',
+            isMobile: isMobile,
+            inputFontSize: bodyTextMedium),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactEmailController, // Correct controller
+            label: 'Email:',
+            isMobile: isMobile,
+            keyboardType: TextInputType.emailAddress,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Invalid email';
+              return null;
+            }),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactMobileController, // Correct controller
+            label: 'Mobile Number:',
+            isMobile: isMobile,
+            keyboardType: TextInputType.phone,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              if (!RegExp(r'^\d{10}$').hasMatch(v))
+                return 'Invalid mobile number';
+              return null;
+            }),
+        SizedBox(height: 10),
+        _buildContactTextFieldResponsive(
+            controller: _desktopContactMessageController, // Correct controller
+            label: 'Message:',
+            isMobile: isMobile,
+            maxLines: isMobile ? 3 : 4,
+            inputFontSize: bodyTextMedium,
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'Required';
+              return null;
+            }),
+        SizedBox(height: 20),
+        Center(
+          child: SizedBox(
+            width: 170,
             child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  print("Responsive Form Submit");
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Message Sent!'),
-                      backgroundColor: Colors.green));
-                  nameController.clear();
-                  emailController.clear();
-                  phoneController.clear();
-                  addressController.clear();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Please fix errors.'),
-                      backgroundColor: Colors.red));
-                }
-              },
+              onPressed: contactController.isLoading
+                  ? null
+                  : () async {
+                      if (_responsiveBookingFormKey.currentState!.validate()) {
+                        final inquiry = ContactInquiry(
+                          name: _desktopContactNameController.text,
+                          email: _desktopContactEmailController.text,
+                          phone: _desktopContactMobileController.text,
+                          message: _desktopContactMessageController.text,
+                        );
+                        final controller =
+                            context.read<ContactInquiryController>();
+                        await controller
+                            .submitContactInquiry(inquiry)
+                            .then((success) {
+                          if (success) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(controller.successMessage!),
+                                backgroundColor: Colors.green));
+                            _desktopContactNameController.clear();
+                            _desktopContactEmailController.clear();
+                            _desktopContactMobileController.clear();
+                            _desktopContactMessageController.clear();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(controller.errorMessage!),
+                                backgroundColor: Colors.red));
+                          }
+                        });
+                      }
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFE7A20E),
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 15),
+                padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(isMobile ? 8 : 10),
+                  borderRadius:
+                      BorderRadius.circular(30), // More rounded corners
                 ),
                 textStyle: TextStyle(
                     fontSize: buttonTextSize, fontWeight: FontWeight.bold),
               ),
-              child: Text('Submit'),
+              child: contactController.isLoading
+                  ? SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ))
+                  : Text('Submit'),
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 
@@ -3827,8 +4545,6 @@ consectetur adipiscing elit,
   Widget _buildDisclaimerMarqueeResponsive(BuildContext context, bool isDesktop,
       bool isTablet, bool isMobile, double textSize) {
     return Container(
-      //height: 40,
-      // color: Color(0xFFEAEBED),
       child: ClipRect(
         child: SlideTransition(
           position: _scrollAnimation,
@@ -3917,92 +4633,37 @@ consectetur adipiscing elit,
     );
   }
 
-  // ===========================================================================
-  // COMMON HELPER WIDGETS (Used by multiple layouts)
-  // ===========================================================================
-  Widget _buildSocialIcon(String assetPath, double size) {
-    return Padding(
-      padding: EdgeInsets.only(left: size > 20 ? 10 : 5),
-      child: Image.asset(
-        assetPath,
-        width: size,
-        height: size,
-        errorBuilder: (context, error, stackTrace) =>
-            Icon(Icons.error_outline, size: size, color: Colors.grey),
-      ),
-    );
+  Future<void> makePhoneCall(String phoneNumber, BuildContext context) async {
+    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+
+    try {
+      if (kIsWeb) {
+        // ✅ Open in a new tab to avoid replacing the Flutter web app
+        if (!await launchUrl(
+          callUri,
+          webOnlyWindowName: '_blank', // this keeps your app open
+        )) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('⚠️ Web call not supported on this device.')),
+          );
+        }
+      } else {
+        // ✅ On Android/iOS
+        if (!await launchUrl(callUri, mode: LaunchMode.externalApplication)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('⚠️ Could not launch $phoneNumber')),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Error: $e')),
+      );
+    }
   }
-} // End of _HighlandhomeState
+}
 
-// ===========================================================================
-// PLACEHOLDER WIDGETS (Replace with actual implementations)
-// ===========================================================================
-// class About extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('About Us')),
-//       body: Center(child: Text('About Page Content')));
-// }
-
-// class FeedbackForm extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('Feedback')),
-//       body: Center(child: Text('Feedback Form Content')));
-// }
-
-// class HomeDashboard extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('Departments')),
-//       body: Center(child: Text('Departments Page Content')));
-// }
-
-// class Contacts extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('Contact Us')),
-//       body: Center(child: Text('Contact Page Content')));
-// }
-
-// class New_register2 extends StatelessWidget {
-//   final String firstName, lastName, email, address, phone;
-//   New_register2(
-//       {required this.firstName,
-//       required this.lastName,
-//       required this.email,
-//       required this.address,
-//       required this.phone});
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('International Patient Reg.')),
-//       body: Center(child: Text('International Patient Registration Form')));
-// }
-
-// class bookappoint_register extends StatelessWidget {
-//   final String firstName, lastName, email, address, phone;
-//   bookappoint_register(
-//       {required this.firstName,
-//       required this.lastName,
-//       required this.email,
-//       required this.address,
-//       required this.phone});
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('Appointment Confirmation')),
-//       body: Center(
-//           child: Text(
-//               'Appointment Booking Confirmation for ${firstName} ${lastName}')));
-// }
-
-// class NewBookings extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//       appBar: AppBar(title: Text('Existing Patient Booking')),
-//       body: Center(child: Text('Booking Form for Registered Patients')));
-// }
-
-// Original ContactColumn definition (used by Desktop layout)
 class ContactColumn extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -4014,46 +4675,40 @@ class ContactColumn extends StatelessWidget {
     required this.description,
   });
 
-  // Helper to get asset path (ensure paths are correct)
   String _getIconAssetPath(IconData icon) {
     if (icon == Icons.location_on) return 'assets/img/Location.png';
     if (icon == Icons.phone) return 'assets/img/Call.png';
     if (icon == Icons.email) return 'assets/img/E-mail.png';
-    return 'assets/img/default_icon.png'; // Fallback
+    return 'assets/img/default_icon.png';
   }
 
   @override
   Widget build(BuildContext context) {
-    // Style replicated from original Desktop helper interpretation
     return Flexible(
-      // Allow columns to share space
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.start, // Align content to the left
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              // Use Image.asset as per original visual
               _getIconAssetPath(icon),
-              width: 60, height: 60,
+              width: 60,
+              height: 60,
               errorBuilder: (c, e, s) =>
                   Icon(icon, size: 40, color: Colors.black54),
             ),
             const SizedBox(width: 15),
-            // Expand the text column to prevent overflow if needed
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize
-                    .min, // Prevent column from taking infinite height
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     title,
                     style: TextStyle(
-                      color: Colors.black, // Black text on green bg
-                      fontSize: 20, // Original size
+                      color: Colors.black,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -4061,8 +4716,8 @@ class ContactColumn extends StatelessWidget {
                   Text(
                     description,
                     style: TextStyle(
-                      color: Colors.black, // Black text on green bg
-                      fontSize: 14, // Original size
+                      color: Colors.black,
+                      fontSize: 14,
                     ),
                   ),
                 ],
