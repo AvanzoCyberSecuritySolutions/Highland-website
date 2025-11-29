@@ -3218,12 +3218,20 @@ class _HighlandhomeState extends State<Highlandhome>
                           inputFontSize: inputFontSize),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Phone Number',
-                          controller: _desktopBookPhoneController,
-                          isMobile: isMobile,
-                          keyboardType: TextInputType.phone,
-                          height: fieldHeight,
-                          inputFontSize: inputFontSize),
+                        label: 'Phone Number',
+                        controller: _desktopBookPhoneController,
+                        isMobile: isMobile,
+                        // CHANGE 1: Use number keyboard
+                        keyboardType: TextInputType.number,
+                        height: fieldHeight,
+                        inputFontSize: inputFontSize,
+                        // CHANGE 2: Set max length to 10
+                        maxLength: 10,
+                        // CHANGE 3: Allow digits only
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
                     ] else ...[
                       Row(
                         children: [
@@ -3421,14 +3429,22 @@ class _HighlandhomeState extends State<Highlandhome>
     double? height,
     double? inputFontSize,
     TextInputType? keyboardType,
+    // Add these optional parameters
+    int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return SizedBox(
       height: height ?? 55,
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType ?? TextInputType.text,
+        // Apply the new constraints
+        maxLength: maxLength,
+        inputFormatters: inputFormatters,
         decoration: InputDecoration(
           labelText: label,
+          // Hide the character counter (e.g., 5/10)
+          counterText: "",
           border: const OutlineInputBorder(),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -3439,9 +3455,18 @@ class _HighlandhomeState extends State<Highlandhome>
           fontSize: inputFontSize ?? 16,
           color: Colors.black,
         ),
-        validator: (value) => value == null || value.trim().isEmpty
-            ? 'Please enter $label'
-            : null,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Please enter $label';
+          }
+          // specific validation for Phone Number
+          if (label == 'Phone Number') {
+            if (value.length != 10) {
+              return 'Enter exactly 10 digits';
+            }
+          }
+          return null;
+        },
       ),
     );
   }
