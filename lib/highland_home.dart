@@ -53,7 +53,7 @@ class _HighlandhomeState extends State<Highlandhome>
     'News',
     'Feedback',
     // 'International - Patient',
-    'CONTACT',
+    'Contact',
   ];
 
   // --- FORM KEYS FOR VALIDATION ---
@@ -346,25 +346,39 @@ class _HighlandhomeState extends State<Highlandhome>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.mail,
-                  color: const Color.fromARGB(255, 90, 78, 78),
-                  size: 24,
-                ),
-                SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'reachus@highlandhospital.in',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
+            // **** CLICKABLE EMAIL SECTION ****
+            InkWell(
+              onTap: () async {
+                final Uri emailLaunchUri = Uri(
+                  scheme: 'mailto',
+                  path: 'reachus@highlandhospital.in',
+                );
+                if (await canLaunchUrl(emailLaunchUri)) {
+                  await launchUrl(emailLaunchUri);
+                }
+              },
+              // Add mouse cursor to indicate it's clickable
+              mouseCursor: SystemMouseCursors.click,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.mail,
+                    color: const Color.fromARGB(255, 90, 78, 78),
+                    size: 24,
+                  ),
+                  SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'reachus@highlandhospital.in',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(right: screenWidth * .012),
@@ -1140,6 +1154,7 @@ class _HighlandhomeState extends State<Highlandhome>
 
   Widget _buildServicesAndContactSectionDesktopOriginal(
       BuildContext context, double screenHeight, double screenWidth) {
+    // Helper function for URLs
     Future<void> _launchURL(String url) async {
       final Uri uri = Uri.parse(url);
       if (await canLaunchUrl(uri)) {
@@ -1197,25 +1212,37 @@ class _HighlandhomeState extends State<Highlandhome>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildDesktopHealthTipBox(
-                  title: "Health Tips",
-                  image: 'assets/img/healthi.png',
-                  content:
-                      '''Add more fruits and vegetables to your daily meals — your heart will thank you!''',
-                  backgroundColor: const Color.fromARGB(255, 231, 162, 14),
-                  width: 450,
-                  height: 275,
+                // FIX: Wrapped in Expanded to prevent Overflow
+                Expanded(
+                  child: _buildDesktopHealthTipBox(
+                    title: "Health Tips",
+                    image: 'assets/img/healthi.png',
+                    content:
+                        '''Add more fruits and vegetables to your daily meals — your heart will thank you!''',
+                    backgroundColor: const Color.fromARGB(255, 231, 162, 14),
+                    width: double.infinity, // Let Expanded handle width
+                    height: 275,
+                  ),
                 ),
-                _buildDesktopHealthTipBox(
-                  title: "Latest News",
-                  image: 'assets/img/Latest.png',
-                  content:
-                      '''Our hospital continues to provide 24/7 emergency care with the latest medical technology and dedicated specialists.''',
-                  backgroundColor: const Color(0xFF3FAE9E),
-                  width: 450,
-                  height: 275,
+                const SizedBox(width: 20), // Add spacing
+                Expanded(
+                  child: _buildDesktopHealthTipBox(
+                    title: "Latest News",
+                    image: 'assets/img/Latest.png',
+                    content:
+                        '''Our hospital continues to provide 24/7 emergency care with the latest medical technology and dedicated specialists.''',
+                    backgroundColor: const Color(0xFF3FAE9E),
+                    width: double.infinity, // Let Expanded handle width
+                    height: 275,
+                  ),
                 ),
-                _buildDesktopPatientCountBox(width: 380, height: 195),
+                const SizedBox(width: 20), // Add spacing
+                Expanded(
+                  child: _buildDesktopPatientCountBox(
+                      width: double.infinity, // Let Expanded handle width
+                      height: 275 // Matched height with others
+                      ),
+                ),
               ],
             ),
           ),
@@ -1259,26 +1286,32 @@ class _HighlandhomeState extends State<Highlandhome>
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _originalContactColumn(
-                  icon: Icons.location_on,
-                  title: 'Location',
-                  description:
-                      'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.',
-                  onTap: () => _launchURL(
-                      'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D'),
+                Expanded(
+                  child: _originalContactColumn(
+                    icon: Icons.location_on,
+                    title: 'Location',
+                    description:
+                        'Mother Theresa Road,\nKankanady, Highland Hospitals,\nMangaluru, Karnataka 575002,\nIndia.',
+                    onTap: () => _launchURL(
+                        'https://www.google.com/maps/place/Highland+Hospital/@12.8664995,74.8546887,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba35a34c13203f9:0xfb2782cbf31a7784!8m2!3d12.8664995!4d74.8546887!16s%2Fg%2F1thcl645?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D'),
+                  ),
                 ),
-                _originalContactColumn(
-                  icon: Icons.phone,
-                  title: 'Emergency 24x7',
-                  description: '0824-4235555',
-                  onTap: () => makePhoneCall('08244235555', context),
+                Expanded(
+                  child: _originalContactColumn(
+                    icon: Icons.phone,
+                    title: 'Emergency 24x7',
+                    description: '0824-4235555',
+                    onTap: () => makePhoneCall('08244235555', context),
+                  ),
                 ),
-                _originalContactColumn(
-                  icon: Icons.email,
-                  title: 'Email',
-                  description: 'reachus@highlandhospital.in',
-                  onTap: () => _launchURL(
-                    'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry',
+                Expanded(
+                  child: _originalContactColumn(
+                    icon: Icons.email,
+                    title: 'Email',
+                    description: 'reachus@highlandhospital.in',
+                    onTap: () => _launchURL(
+                      'mailto:reachus@highlandhospital.in?subject=Hospital%20Inquiry',
+                    ),
                   ),
                 ),
               ],
@@ -2219,8 +2252,8 @@ class _HighlandhomeState extends State<Highlandhome>
   Widget _buildDesktopPatientCountBox(
       {required double width, required double height}) {
     return Container(
-      height: 275,
-      width: 450,
+      height: height, // Use the passed height (275)
+      width: width, // This will be infinity via Expanded, which is fine
       color: Color(0xFF1BA08F),
       padding: EdgeInsets.all(15),
       alignment: Alignment.center,
@@ -2245,12 +2278,15 @@ class _HighlandhomeState extends State<Highlandhome>
                 ),
               ),
               SizedBox(width: 10),
-              Text(
-                "PATIENT COUNT+",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                // Added Flexible here to prevent text overflow inside the box
+                child: Text(
+                  "PATIENT COUNT+",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -2388,7 +2424,8 @@ class _HighlandhomeState extends State<Highlandhome>
   // }
   PreferredSizeWidget _buildMobileTabletAppBar(
       BuildContext context, bool isDesktop, bool isTablet, bool isMobile) {
-    double iconSize = isMobile ? 18 : 22; // Adjusted for better fit on mobile
+    double iconSize = isMobile ? 18 : 22;
+    // Adjusted font size back to readable dimensions, or keep your 30 if preferred
     double emailFontSize = isMobile ? 14 : 16;
 
     return AppBar(
@@ -2399,34 +2436,53 @@ class _HighlandhomeState extends State<Highlandhome>
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // **** THIS IS THE CORRECTED SECTION ****
-          // This Row now builds for both mobile and tablet
+          // **** CLICKABLE EMAIL SECTION ****
           Flexible(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.mail,
-                  color: const Color.fromARGB(255, 90, 78, 78),
-                  size: iconSize,
-                ),
-                SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    'reachus@highlandhospital.in',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30, // 🔹 Increased font size here
-                      fontWeight:
-                          FontWeight.w500, // optional: makes it slightly bolder
+            child: InkWell(
+              // onTap triggers the mailto action
+              onTap: () async {
+                final Uri emailLaunchUri = Uri(
+                  scheme: 'mailto',
+                  path: 'reachus@highlandhospital.in',
+                  query: 'subject=Enquiry', // Optional: adds a subject line
+                );
+                if (await canLaunchUrl(emailLaunchUri)) {
+                  await launchUrl(emailLaunchUri);
+                } else {
+                  // Fallback if specific email app launch fails
+                  await launchUrl(
+                      Uri.parse('mailto:reachus@highlandhospital.in'));
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 8.0), // increased hit area
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.mail,
+                      color: const Color.fromARGB(255, 90, 78, 78),
+                      size: iconSize,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'reachus@highlandhospital.in',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20, // Adjusted for mobile visibility
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-          // We still show social icons on tablet but not on mobile to save space
+          // Social Icons (Tablet only)
           if (isTablet) HighlandSocialBar(iconSize: iconSize),
         ],
       ),
@@ -3451,171 +3507,143 @@ class _HighlandhomeState extends State<Highlandhome>
     double heading3,
     double bodyTextMedium,
   ) {
-    double imageWidth = isMobile
-        ? screenSize.width * 0.7
-        : isTablet
-            ? screenSize.width * 0.55
-            : screenSize.width * 0.45;
-    double imageHeight = isMobile
-        ? 250
-        : isTablet
-            ? 300
-            : 400;
+    // Determine image height based on device
+    double imageHeight = isMobile ? 250 : (isTablet ? 300 : 400);
 
-    bool isLargeTablet = screenSize.width >= 1024 && screenSize.width < 1440;
-
-    Widget textContent = Container(
-      width: isMobile
-          ? screenSize.width * 0.9
-          : isTablet || isLargeTablet
-              ? screenSize.width * 0.7
-              : screenSize.width * 0.45,
-      padding: EdgeInsets.only(right: isMobile ? 0 : 20),
-      child: Column(
-        crossAxisAlignment:
-            isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Out-Patient Services',
+    // 1. Define the Text Content
+    // We remove the fixed 'width' here or let Expanded override it later.
+    Widget textContent = Column(
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Out-Patient Services',
+          style: TextStyle(
+            fontSize: heading1,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF494949),
+          ),
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+        ),
+        SizedBox(height: 5),
+        Container(
+          width: isMobile ? 100 : 120,
+          height: 3,
+          color: Colors.black,
+          margin: isMobile
+              ? EdgeInsets.only(bottom: 15)
+              : EdgeInsets.only(bottom: 15, left: 0),
+        ),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 8),
+          margin: EdgeInsets.only(bottom: isMobile ? 20 : 30),
+          decoration: BoxDecoration(
+            color: Color(0xFF1BA08F),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'We provide the following features',
             style: TextStyle(
-              fontSize: heading1,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF494949),
-            ),
-            textAlign: isMobile ? TextAlign.center : TextAlign.left,
+                fontSize: heading3,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
           ),
-          SizedBox(height: 5),
-          Container(
-            width: isMobile ? 100 : 120,
-            height: 3,
-            color: Colors.black,
-            margin: isMobile
-                ? EdgeInsets.only(bottom: 15)
-                : EdgeInsets.only(bottom: 15, left: 0),
-          ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 8),
-            margin: EdgeInsets.only(bottom: isMobile ? 20 : 30),
-            decoration: BoxDecoration(
-              color: Color(0xFF1BA08F),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              'We provide the following features',
-              style: TextStyle(
-                  fontSize: heading3,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white),
-            ),
-          ),
-          if (isMobile || isTablet || isLargeTablet) ...[
-            Wrap(
-              spacing: 15,
-              runSpacing: 20,
-              children: [
-                _buildOutPatientServiceItemResponsive(
-                  context,
-                  isMobile || isTablet || isLargeTablet,
+        ),
+        // Layout the items (Health, Surgery, etc.)
+        if (isMobile || isTablet)
+          Wrap(
+            spacing: 15,
+            runSpacing: 20,
+            children: [
+              _buildOutPatientServiceItemResponsive(
+                  context, true, // treat tablet like mobile for inner items
                   image: 'assets/img/health.png',
                   title: 'Health',
                   content: '''"The First Wealth is Health"''',
-                  bodyTextMedium: bodyTextMedium,
-                ),
-                _buildOutPatientServiceItemResponsive(
-                  context,
-                  isMobile || isTablet || isLargeTablet,
+                  bodyTextMedium: bodyTextMedium),
+              _buildOutPatientServiceItemResponsive(context, true,
                   image: 'assets/img/Surgeryicon.png',
                   title: 'Surgery',
                   content: '''"Truth Like Surgery May Hurt But It Cures"''',
-                  bodyTextMedium: bodyTextMedium,
-                ),
-                _buildOutPatientServiceItemResponsive(
-                  context,
-                  isMobile || isTablet || isLargeTablet,
+                  bodyTextMedium: bodyTextMedium),
+              _buildOutPatientServiceItemResponsive(context, true,
                   image: 'assets/img/careers.png',
                   title: 'Careers',
                   content: '''"Be So good They Can't ignore you"''',
-                  bodyTextMedium: bodyTextMedium,
-                ),
-                _buildOutPatientServiceItemResponsive(
-                  context,
-                  isMobile || isTablet || isLargeTablet,
+                  bodyTextMedium: bodyTextMedium),
+              _buildOutPatientServiceItemResponsive(context, true,
                   image: 'assets/img/calender.png',
                   title: 'Planning',
                   content: '''"If You Can Dream It, You Can Do It."''',
-                  bodyTextMedium: bodyTextMedium,
-                ),
-              ],
-            ),
-          ] else if (isDesktop) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+                  bodyTextMedium: bodyTextMedium),
+            ],
+          )
+        else
+          // Desktop Layout for items
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildOutPatientServiceItemResponsive(
-                      context,
-                      isDesktop,
-                      image: 'assets/img/health.png',
-                      title: 'Health',
-                      content: '''"The First Wealth is Health"''',
-                      bodyTextMedium: bodyTextMedium,
-                    ),
-                    _buildOutPatientServiceItemResponsive(
-                      context,
-                      isDesktop,
-                      image: 'assets/img/careers.png',
-                      title: 'Careers',
-                      content: '''"Be So good They Can't ignore you"''',
-                      bodyTextMedium: bodyTextMedium,
-                    ),
+                    _buildOutPatientServiceItemResponsive(context, false,
+                        image: 'assets/img/health.png',
+                        title: 'Health',
+                        content: '''"The First Wealth is Health"''',
+                        bodyTextMedium: bodyTextMedium),
+                    SizedBox(height: 20),
+                    _buildOutPatientServiceItemResponsive(context, false,
+                        image: 'assets/img/careers.png',
+                        title: 'Careers',
+                        content: '''"Be So good They Can't ignore you"''',
+                        bodyTextMedium: bodyTextMedium),
                   ],
                 ),
-                Column(
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildOutPatientServiceItemResponsive(
-                      context,
-                      isDesktop,
-                      image: 'assets/img/Surgeryicon.png',
-                      title: 'Surgery',
-                      content: '''"Truth Like Surgery May Hurt But It Cures"''',
-                      bodyTextMedium: bodyTextMedium,
-                    ),
-                    _buildOutPatientServiceItemResponsive(
-                      context,
-                      isDesktop,
-                      image: 'assets/img/calender.png',
-                      title: 'Planning',
-                      content: '''"If You Can Dream It, You Can Do It."''',
-                      bodyTextMedium: bodyTextMedium,
-                    ),
+                    _buildOutPatientServiceItemResponsive(context, false,
+                        image: 'assets/img/Surgeryicon.png',
+                        title: 'Surgery',
+                        content:
+                            '''"Truth Like Surgery May Hurt But It Cures"''',
+                        bodyTextMedium: bodyTextMedium),
+                    SizedBox(height: 20),
+                    _buildOutPatientServiceItemResponsive(context, false,
+                        image: 'assets/img/calender.png',
+                        title: 'Planning',
+                        content: '''"If You Can Dream It, You Can Do It."''',
+                        bodyTextMedium: bodyTextMedium),
                   ],
                 ),
-              ],
-            ),
-          ],
-        ],
-      ),
+              ),
+            ],
+          ),
+      ],
     );
-    Widget imageContent = Container(
-      width: imageWidth,
+
+    // 2. Define the Image Content
+    Widget imageContent = SizedBox(
       height: imageHeight,
       child: Image.asset(
         'assets/img/out_patient.jpg',
         fit: BoxFit.contain,
         errorBuilder: (c, e, s) => Container(
-          width: imageWidth,
           height: imageHeight,
           color: Colors.grey[300],
+          child: Icon(Icons.image),
         ),
       ),
     );
 
+    // 3. Final Layout Return
     if (isMobile) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -3623,23 +3651,30 @@ class _HighlandhomeState extends State<Highlandhome>
           children: [
             textContent,
             SizedBox(height: 20),
-            SizedBox(
-              height: 250,
-              child: imageContent,
-            ),
+            imageContent,
           ],
         ),
       );
     } else {
+      // DESKTOP / TABLET FIX:
+      // Use Expanded to force children to fit within the screen width.
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            textContent,
+            // Expanded forces text content to take up available space (flex 5)
+            Expanded(
+              flex: 5,
+              child: textContent,
+            ),
             SizedBox(width: 20),
-            imageContent,
+            // Expanded forces image to take up remaining space (flex 4)
+            Expanded(
+              flex: 4,
+              child: imageContent,
+            ),
           ],
         ),
       );
@@ -4256,7 +4291,7 @@ class _HighlandhomeState extends State<Highlandhome>
     Widget specialities2 = _buildSpecialitiesListResponsive(
       context,
       isMobile: isMobile,
-      title: ' ', // Use a space to maintain alignment on desktop
+      title: ' ',
       specialties: [
         'Ophthalmology',
         'E.N.T Micro Surgery',
@@ -4290,35 +4325,19 @@ class _HighlandhomeState extends State<Highlandhome>
                 contactForm,
               ],
             )
-          // --- DESKTOP/TABLET LAYOUT: Side-by-side columns ---
-          //         : Row(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Expanded(flex: 1, child: specialities1),
-          //               SizedBox(width: columnSpacing),
-          //               Expanded(flex: 1, child: specialities2),
-          //               SizedBox(width: columnSpacing + 10),
-          //               Expanded(flex: 1, child: contactForm),
-          //             ],
-          //           ),
-          //   );
-          // }
-          : Center(
-              // **** FIX: WRAPPED THE ROW IN A CENTER WIDGET ****
-              child: Row(
-                mainAxisSize:
-                    MainAxisSize.min, // Allow row to shrink to its content
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // We no longer use Expanded, so the columns take their natural width
-                  specialities1,
-                  SizedBox(width: 80), // Spacing between columns
-                  specialities2,
-                  SizedBox(width: 80), // Spacing between columns
-                  // Constrain the width of the form on desktop
-                  SizedBox(width: 350, child: contactForm),
-                ],
-              ),
+          // --- DESKTOP LAYOUT (FIXED) ---
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // FIX: Used Expanded here.
+                // The internal text lists use Flexible, so they MUST be inside
+                // a parent with a defined width (like Expanded within a Row).
+                Expanded(flex: 1, child: specialities1),
+                SizedBox(width: columnSpacing),
+                Expanded(flex: 1, child: specialities2),
+                SizedBox(width: columnSpacing),
+                Expanded(flex: 1, child: contactForm),
+              ],
             ),
     );
   }
