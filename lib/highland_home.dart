@@ -139,7 +139,7 @@ class _HighlandhomeState extends State<Highlandhome>
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Careers()));
         break;
-      case 'CONTACT':
+      case 'Contact':
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Contacts()));
         break;
