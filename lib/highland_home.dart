@@ -804,234 +804,237 @@ class _HighlandhomeState extends State<Highlandhome>
                     ),
                   ),
                   Container(
-                      height: constraints.maxHeight * .45,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Color(0xFFEE9821), width: 2),
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                          color: Colors.white),
-                      child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Form(
-                            key: _desktopBookingFormKey,
-                            child: Column(
+                    height: constraints.maxHeight * .45,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFEE9821), width: 2),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Form(
+                        key: _desktopBookingFormKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: screenWidth * .42,
+                              child: Text(
+                                '''Request a callback from our team''',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 5,
+                              ),
+                            ),
+
+                            // First name + Last name
+                            _bookAnAppointmentFieldsOriginal(
+                              firstFieldLabel: 'First Name :',
+                              firstFieldController:
+                                  _desktopBookFirstNameController,
+                              secondFieldLabel: 'Last Name :',
+                              secondFieldController:
+                                  _desktopBookLastNameController,
+                            ),
+
+                            // Email + Address
+                            _bookAnAppointmentFieldsOriginal(
+                              firstFieldLabel: 'Email :',
+                              firstFieldController: _desktopBookEmailController,
+                              secondFieldLabel: 'Address :',
+                              secondFieldController:
+                                  _desktopBookAddressController,
+                            ),
+
+                            // Phone number
+                            Container(
+                              margin: EdgeInsets.only(right: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  SizedBox(
-                                    width: screenWidth * .42,
-                                    child: Text(
-                                      '''Request a callback from our team''',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                  Expanded(
+                                    child: Container(
+                                      height: 40,
+                                      color: const Color(0xFFF2F3F5),
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              'Phone Number :',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: TextFormField(
+                                              controller:
+                                                  _desktopBookPhoneController,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              maxLength: 10,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                              ],
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                counterText: "",
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 15),
+                                                hintStyle: TextStyle(
+                                                    color: Colors.black54),
+                                              ),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Required';
+                                                }
+                                                if (!RegExp(r'^\d{10}$')
+                                                    .hasMatch(value)) {
+                                                  return 'Enter a valid 10-digit number';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 5,
                                     ),
                                   ),
-                                  _bookAnAppointmentFieldsOriginal(
-                                    firstFieldLabel: 'First Name :',
-                                    firstFieldController:
-                                        _desktopBookFirstNameController,
-                                    secondFieldLabel: 'Last Name :',
-                                    secondFieldController:
-                                        _desktopBookLastNameController,
-                                  ),
-                                  _bookAnAppointmentFieldsOriginal(
-                                    firstFieldLabel: 'Email :',
-                                    firstFieldController:
-                                        _desktopBookEmailController,
-                                    secondFieldLabel: 'Address :',
-                                    secondFieldController:
-                                        _desktopBookAddressController,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(right: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            height: 40,
-                                            color: const Color(0xFFF2F3F5),
-                                            child: Row(
-                                              children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 8.0),
-                                                  child: Text(
-                                                    'Phone Number :',
+                                ],
+                              ),
+                            ),
+
+                            // Submit button WITH LOADING SUPPORT
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Consumer<BookingEnquiryController>(
+                                    builder: (context, bookingController, _) {
+                                      return InkWell(
+                                        onTap: bookingController.isLoading
+                                            ? null
+                                            : () async {
+                                                if (_desktopBookingFormKey
+                                                    .currentState!
+                                                    .validate()) {
+                                                  final enquiry =
+                                                      BookingEnquiry(
+                                                    firstName:
+                                                        _desktopBookFirstNameController
+                                                            .text,
+                                                    lastName:
+                                                        _desktopBookLastNameController
+                                                            .text,
+                                                    phone:
+                                                        _desktopBookPhoneController
+                                                            .text,
+                                                    email:
+                                                        _desktopBookEmailController
+                                                            .text,
+                                                    address:
+                                                        _desktopBookAddressController
+                                                            .text,
+                                                  );
+
+                                                  final controller = context.read<
+                                                      BookingEnquiryController>();
+
+                                                  await controller
+                                                      .submitEnquiry(enquiry)
+                                                      .then((success) {
+                                                    if (success) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(controller
+                                                              .successMessage!),
+                                                          backgroundColor:
+                                                              Colors.green,
+                                                        ),
+                                                      );
+
+                                                      _desktopBookFirstNameController
+                                                          .clear();
+                                                      _desktopBookLastNameController
+                                                          .clear();
+                                                      _desktopBookPhoneController
+                                                          .clear();
+                                                      _desktopBookEmailController
+                                                          .clear();
+                                                      _desktopBookAddressController
+                                                          .clear();
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(controller
+                                                              .errorMessage!),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                      );
+                                                    }
+                                                  });
+                                                }
+                                              },
+                                        child: Container(
+                                          width: 220,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFEE9821),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            border: Border.all(
+                                                color: Colors.yellow),
+                                          ),
+                                          child: Center(
+                                            child: bookingController.isLoading
+                                                ? CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                  )
+                                                : Text(
+                                                    'Request Callback',
                                                     style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 15,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: TextFormField(
-                                                    controller:
-                                                        _desktopBookPhoneController,
-                                                    keyboardType: TextInputType
-                                                        .number, // 🔢 Numeric keypad
-                                                    maxLength:
-                                                        10, // ✅ Max 10 digits
-                                                    inputFormatters: [
-                                                      FilteringTextInputFormatter
-                                                          .digitsOnly, // ✅ Only digits
-                                                    ],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      border: InputBorder.none,
-                                                      counterText:
-                                                          "", // ✅ Hides character counter
-                                                      contentPadding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 10,
-                                                              horizontal: 15),
-                                                      // hintText:
-                                                      //     'Enter Phone Number',
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.black54),
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null ||
-                                                          value.isEmpty) {
-                                                        return 'Required';
-                                                      }
-                                                      if (!RegExp(r'^\d{10}$')
-                                                          .hasMatch(value)) {
-                                                        return 'Enter a valid 10-digit number';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: bookingController.isLoading
-                                              ? null
-                                              : () async {
-                                                  if (_desktopBookingFormKey
-                                                      .currentState!
-                                                      .validate()) {
-                                                    final enquiry =
-                                                        BookingEnquiry(
-                                                      firstName:
-                                                          _desktopBookFirstNameController
-                                                              .text,
-                                                      lastName:
-                                                          _desktopBookLastNameController
-                                                              .text,
-                                                      phone:
-                                                          _desktopBookPhoneController
-                                                              .text,
-                                                      email:
-                                                          _desktopBookEmailController
-                                                              .text,
-                                                      address:
-                                                          _desktopBookAddressController
-                                                              .text,
-                                                    );
-
-                                                    final controller = context.read<
-                                                        BookingEnquiryController>();
-                                                    await controller
-                                                        .submitEnquiry(enquiry)
-                                                        .then((success) {
-                                                      if (success) {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  controller
-                                                                      .successMessage!),
-                                                              backgroundColor:
-                                                                  Colors.green),
-                                                        );
-                                                        _desktopBookFirstNameController
-                                                            .clear();
-                                                        _desktopBookLastNameController
-                                                            .clear();
-                                                        _desktopBookPhoneController
-                                                            .clear();
-                                                        _desktopBookEmailController
-                                                            .clear();
-                                                        _desktopBookAddressController
-                                                            .clear();
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  controller
-                                                                      .errorMessage!),
-                                                              backgroundColor:
-                                                                  Colors.red),
-                                                        );
-                                                      }
-                                                    });
-                                                  }
-                                                },
-                                          child: Container(
-                                            width: 220,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFEE9821),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              border: Border.all(
-                                                  color: Colors.yellow),
-                                            ),
-                                            child: Center(
-                                              child: bookingController.isLoading
-                                                  ? CircularProgressIndicator(
-                                                      color: Colors.white,
-                                                    )
-                                                  : Text(
-                                                      'Request Callback',
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Color.fromARGB(
-                                                            255, 8, 8, 8),
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ]),
-                          )))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ]),
               ),
             ),
@@ -1385,331 +1388,6 @@ class _HighlandhomeState extends State<Highlandhome>
       ),
     );
   }
-
-  // Widget _buildSpecialitiesAndFormSectionDesktopOriginal(BuildContext context,
-  //     double screenHeight, double screenWidth, double specialityFontSize) {
-  //   double contactFormTitleSize = 20;
-  //   double contactFormButtonSize = 24;
-  //   return Container(
-  //     width: screenWidth,
-  //     color: Color(0xFFEAEBED),
-  //     padding:
-  //         EdgeInsets.symmetric(vertical: screenHeight * 0.04, horizontal: 50),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Flexible(
-  //           flex: 1,
-  //           child: Padding(
-  //             padding: EdgeInsets.only(right: 10.0),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   'Specialties',
-  //                   style: TextStyle(
-  //                     color: Color.fromARGB(255, 24, 14, 14),
-  //                     fontSize: 22,
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                 ),
-  //                 SizedBox(height: 10),
-  //                 Text('General Medicine',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('General Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Orthopaedic & Trauma Care',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Total Knee & Hip Replacement',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Arthroscopy & Sports Medicine',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Pediatric & Pediatric Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Nephrology',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Gastroenterology',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         Flexible(
-  //           flex: 1,
-  //           child: Padding(
-  //             padding: EdgeInsets.only(left: 10.0, top: 32.0),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 SizedBox(height: 10),
-  //                 Text('Ophthalmology',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('E.N.T Micro Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Neurology and Neuro Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Plastic & Reconstructive Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Maxillofacial Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Microvascular Surgery',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Endocrinology',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //                 SizedBox(height: 10),
-  //                 Text('Urology & Andrology',
-  //                     style: TextStyle(fontSize: specialityFontSize)),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  // //         Flexible(
-  // //           flex: 1,
-  // //           child: Padding(
-  // //             padding: EdgeInsets.only(left: 20.0),
-  // //             child: Form(
-  // //               key: _desktopContactFormKey,
-  // //               child: Column(
-  // //                 mainAxisAlignment: MainAxisAlignment.center,
-  // //                 children: [
-  // //                   Text(
-  // //                     'Contact us',
-  // //                     style: TextStyle(
-  // //                       color: const Color.fromARGB(255, 15, 12, 12),
-  // //                       fontSize: contactFormTitleSize,
-  // //                       fontWeight: FontWeight.bold,
-  // //                     ),
-  // //                   ),
-  // //                   SizedBox(height: 10),
-  // //                   Padding(
-  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  // //                     child: TextField(
-  // //                       controller: _desktopContactNameController,
-  // //                       decoration: InputDecoration(
-  // //                           labelText: 'Name:',
-  // //                           fillColor: Colors.white,
-  // //                           filled: true,
-  // //                           border: OutlineInputBorder(),
-  // //                           contentPadding: EdgeInsets.symmetric(
-  // //                               horizontal: 10, vertical: 5)),
-  // //                       style: TextStyle(color: Colors.black),
-  // //                     ),
-  // //                   ),
-  // //                   Padding(
-  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  // //                     child: TextField(
-  // //                       controller: _desktopContactEmailController,
-  // //                       decoration: InputDecoration(
-  // //                           labelText: 'Email:',
-  // //                           fillColor: Colors.white,
-  // //                           filled: true,
-  // //                           border: OutlineInputBorder(),
-  // //                           contentPadding: EdgeInsets.symmetric(
-  // //                               horizontal: 10, vertical: 5)),
-  // //                       style: TextStyle(color: Colors.black),
-  // //                     ),
-  // //                   ),
-  // //                   Padding(
-  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  // //                     child: TextField(
-  // //                       controller: _desktopContactMobileController,
-  // //                       decoration: InputDecoration(
-  // //                           labelText: 'Mobile Number:',
-  // //                           fillColor: Colors.white,
-  // //                           filled: true,
-  // //                           border: OutlineInputBorder(),
-  // //                           contentPadding: EdgeInsets.symmetric(
-  // //                               horizontal: 10, vertical: 5)),
-  // //                       style: TextStyle(color: Colors.black),
-  // //                     ),
-  // //                   ),
-  // //                   Padding(
-  // //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  // //                     child: TextField(
-  // //                       controller: _desktopContactMessageController,
-  // //                       maxLines: 4,
-  // //                       decoration: InputDecoration(
-  // //                           labelText: 'Message:',
-  // //                           fillColor: Colors.white,
-  // //                           filled: true,
-  // //                           border: OutlineInputBorder(),
-  // //                           contentPadding: EdgeInsets.symmetric(
-  // //                               horizontal: 10, vertical: 10)),
-  // //                       style: TextStyle(color: Colors.black),
-  // //                     ),
-  // //                   ),
-  // //                   Padding(
-  // //                     padding: const EdgeInsets.symmetric(vertical: 10),
-  // //                     child: SizedBox(
-  // //                       width: 240,
-  // //                       child: ElevatedButton(
-  // //                         onPressed: () {
-  // //                           print("Desktop Form Submitted");
-  // //                           _desktopContactNameController.clear();
-  // //                           _desktopContactEmailController.clear();
-  // //                           _desktopContactMobileController.clear();
-  // //                           _desktopContactMessageController.clear();
-  // //                         },
-  // //                         style: ElevatedButton.styleFrom(
-  // //                           backgroundColor: Color(0xFFE7A20E),
-  // //                           padding: EdgeInsets.symmetric(vertical: 15),
-  // //                           shape: RoundedRectangleBorder(
-  // //                             borderRadius: BorderRadius.circular(15),
-  // //                           ),
-  // //                         ),
-  // //                         child: Text(
-  // //                           'Submit',
-  // //                           style: TextStyle(
-  // //                             color: Colors.white,
-  // //                             fontSize: contactFormButtonSize,
-  // //                             fontWeight: FontWeight.bold,
-  // //                           ),
-  // //                         ),
-  // //                       ),
-  // //                     ),
-  // //                   ),
-  // //                 ],
-  // //               ),
-  // //             ),
-  // //           ),
-  // //         )
-  // //       ],
-  // //     ),
-  // //   );
-  // // }
-  //  Flexible(
-  //           flex: 1,
-  //           child: Padding(
-  //             padding: EdgeInsets.only(left: 20.0),
-  //             child: Form(
-  //               key: _desktopContactFormKey,
-  //               child: Column(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text(
-  //                     'Contact us',
-  //                     style: TextStyle(
-  //                       color: const Color.fromARGB(255, 15, 12, 12),
-  //                       fontSize: contactFormTitleSize,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                   SizedBox(height: 10),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  //                     child: TextFormField(
-  //                       controller: _desktopContactNameController,
-  //                       decoration: InputDecoration(labelText: 'Name:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-  //                       style: TextStyle(color: Colors.black),
-  //                       validator: (v) => v == null || v.isEmpty ? 'Name is required' : null,
-  //                     ),
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  //                     child: TextFormField(
-  //                       controller: _desktopContactEmailController,
-  //                       decoration: InputDecoration(labelText: 'Email:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-  //                       style: TextStyle(color: Colors.black),
-  //                       validator: (v) {
-  //                          if (v == null || v.isEmpty) return 'Email is required';
-  //                          if (!RegExp(r'^.+@.+\..+$').hasMatch(v)) return 'Enter a valid email';
-  //                          return null;
-  //                       },
-  //                     ),
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  //                     child: TextFormField(
-  //                       controller: _desktopContactMobileController,
-  //                       decoration: InputDecoration(labelText: 'Mobile Number:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-  //                       style: TextStyle(color: Colors.black),
-  //                       validator: (v) {
-  //                          if (v == null || v.isEmpty) return 'Mobile is required';
-  //                          if (!RegExp(r'^\d{10}$').hasMatch(v)) return 'Enter a valid 10-digit number';
-  //                          return null;
-  //                       },
-  //                     ),
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 5),
-  //                     child: TextFormField(
-  //                       controller: _desktopContactMessageController,
-  //                       maxLines: 4,
-  //                       decoration: InputDecoration(labelText: 'Message:', fillColor: Colors.white, filled: true, border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-  //                       style: TextStyle(color: Colors.black),
-  //                       validator: (v) => v == null || v.isEmpty ? 'Message is required' : null,
-  //                     ),
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 10),
-  //                     child: SizedBox(
-  //                       width: 240,
-  //                       child: ElevatedButton(
-  //                         onPressed: contactController.isLoading ? null : () async {
-  //                            if (_desktopContactFormKey.currentState!.validate()) {
-  //                               final inquiry = ContactInquiry(
-  //                                 name: _desktopContactNameController.text,
-  //                                 email: _desktopContactEmailController.text,
-  //                                 phone:_desktopContactMobileController.text,
-  //                                 message: _desktopContactMessageController.text,
-  //                               );
-  //                               final controller = context.read<ContactInquiryController>();
-  //                               await controller.submitContactInquiry(inquiry).then((success) {
-  //                                 if (success) {
-  //                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(controller.successMessage!), backgroundColor: Colors.green));
-  //                                   _desktopContactNameController.clear();
-  //                                  _desktopContactEmailController.clear();
-  //                                   _desktopContactMobileController.clear();
-  //                                  _desktopContactMessageController.clear();
-  //                                 } else {
-  //                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(controller.errorMessage!), backgroundColor: Colors.red));
-  //                                 }
-  //                               });
-  //                            }
-  //                         },
-  //                         style: ElevatedButton.styleFrom(
-  //                           backgroundColor: Color(0xFFE7A20E),
-  //                           padding: EdgeInsets.symmetric(vertical: 15),
-  //                           shape: RoundedRectangleBorder(
-  //                             borderRadius: BorderRadius.circular(15),
-  //                           ),
-  //                         ),
-  //                         child: contactController.isLoading
-  //                          ? CircularProgressIndicator(color: Colors.white)
-  //                          : Text(
-  //                           'Submit',
-  //                           style: TextStyle(
-  //                             color: Colors.white,
-  //                             fontSize: contactFormButtonSize,
-  //                             fontWeight: FontWeight.bold,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildSpecialitiesAndFormSectionDesktopOriginal(BuildContext context,
       double screenHeight, double screenWidth, double specialityFontSize) {
@@ -3221,15 +2899,17 @@ class _HighlandhomeState extends State<Highlandhome>
                         label: 'Phone Number :',
                         controller: _desktopBookPhoneController,
                         isMobile: isMobile,
-                        // CHANGE 1: Use number keyboard
                         keyboardType: TextInputType.number,
                         height: fieldHeight,
                         inputFontSize: inputFontSize,
-                        // CHANGE 2: Set max length to 10
+
+                        // 👇 ADD THESE LINES
                         maxLength: 10,
-                        // CHANGE 3: Allow digits only
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Allows only 0-9
+                          LengthLimitingTextInputFormatter(
+                              10), // Hard limit to 10 chars
                         ],
                       ),
                     ] else ...[
@@ -3283,12 +2963,21 @@ class _HighlandhomeState extends State<Highlandhome>
                       ),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Phone Number :',
-                          controller: _desktopBookPhoneController,
-                          isMobile: isMobile,
-                          keyboardType: TextInputType.phone,
-                          height: fieldHeight,
-                          inputFontSize: inputFontSize),
+                        label: 'Phone Number :',
+                        controller: _desktopBookPhoneController,
+                        isMobile: isMobile,
+                        // Change keyboardType to number
+                        keyboardType: TextInputType.number,
+                        height: fieldHeight,
+                        inputFontSize: inputFontSize,
+
+                        // 👇 ADD THESE LINES TO FIX DESKTOP/TABLET VIEW 👇
+                        maxLength: 10,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                      ),
                     ],
 
                     SizedBox(height: isMobile ? 20 : 25),
@@ -3441,6 +3130,7 @@ class _HighlandhomeState extends State<Highlandhome>
         // Apply the new constraints
         maxLength: maxLength,
         inputFormatters: inputFormatters,
+
         decoration: InputDecoration(
           labelText: label,
           // Hide the character counter (e.g., 5/10)
@@ -3469,57 +3159,6 @@ class _HighlandhomeState extends State<Highlandhome>
         },
       ),
     );
-  }
-
-  Widget _buildAppointmentButtonsResponsive(
-      BuildContext context, bool isMobile, double buttonSize) {
-    Widget requestCallbackButtonWidget = ElevatedButton(
-      onPressed: () {
-        // This is now handled inside _buildBookingAppointmentFormResponsive
-        // Kept for structure but logic is moved up
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFEE9821),
-        foregroundColor: Colors.black,
-        padding: EdgeInsets.symmetric(
-          vertical: isMobile ? 10 : 12,
-          horizontal: isMobile ? 20 : 40,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
-        ),
-        elevation: 3,
-      ),
-      child: Text(
-        'Request Callback',
-        style: TextStyle(
-          fontSize: buttonSize,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-
-    if (isMobile) {
-      return Center(
-        child: SizedBox(
-          width: 220,
-          child: requestCallbackButtonWidget,
-        ),
-      );
-    } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 250,
-            child: requestCallbackButtonWidget,
-          ),
-        ],
-      );
-    }
   }
 
   Widget _buildOutPatientSectionResponsive(
@@ -4130,42 +3769,6 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
-  // Widget _buildContactColumnResponsive(
-  //     {required bool isMobile,
-  //     required IconData icon,
-  //     required String title,
-  //     required String description,
-  //     required double iconSize,
-  //     required double titleSize,
-  //     required double descriptionSize}) {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     mainAxisAlignment:
-  //         isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
-  //     children: [
-  //       Icon(icon, color: Color(0xFFEE9821), size: iconSize),
-  //       SizedBox(width: 10),
-  //       Flexible(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(title,
-  //                 style: TextStyle(
-  //                     fontSize: titleSize,
-  //                     fontWeight: FontWeight.bold,
-  //                     color: Colors.white)),
-  //             SizedBox(height: 4),
-  //             Text(description,
-  //                 style: TextStyle(
-  //                     fontSize: descriptionSize,
-  //                     color: Colors.white.withOpacity(0.9),
-  //                     height: 1.3)),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
   Widget _buildContactColumnResponsive({
     required bool isMobile,
     required IconData icon,
@@ -4211,78 +3814,6 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
-  // Widget _buildSpecialitiesAndFormSectionResponsive(
-  //     BuildContext context,
-  //     Size screenSize,
-  //     bool isDesktop,
-  //     bool isTablet,
-  //     bool isMobile,
-  //     double headingSize,
-  //     double bodyTextMedium,
-  //     double buttonTextSize) {
-  //   double sectionPadding = isMobile ? 15 : 30;
-  //   double columnSpacing = isMobile ? 15 : 30;
-
-  //   Widget specialities1 = _buildSpecialitiesListResponsive(
-  //     context,
-  //     isMobile: isMobile,
-  //     title: 'Specialities',
-  //     specialties: [
-  //       'General Medicine',
-  //       'General Surgery',
-  //       'Orthopaedic & Trauma Care',
-  //       'Total Knee & Hip Replacement',
-  //       'Arthroscopy & Sports Medicine',
-  //       'Pediatric & Pediatric Surgery',
-  //       'Nephrology',
-  //       'Gastroenterology',
-  //     ],
-  //     headingSize: headingSize,
-  //     bodyTextMedium: bodyTextMedium,
-  //   );
-
-  //   Widget specialities2 = _buildSpecialitiesListResponsive(
-  //     context,
-  //     isMobile: isMobile,
-  //     title: '',
-  //     specialties: [
-  //       'Ophthalmology',
-  //       'E.N.T Micro Surgery',
-  //       'Neurology and Neuro Surgery',
-  //       'Plastic & Reconstructive Surgery',
-  //       'Maxillofacial Surgery',
-  //       'Microvascular Surgery',
-  //       'Endocrinology',
-  //       'Urology & Andrology',
-  //     ],
-  //     headingSize: headingSize,
-  //     bodyTextMedium: bodyTextMedium,
-  //   );
-
-  //   Widget contactForm = _buildContactUsFormResponsive(
-  //       context, isMobile, headingSize, bodyTextMedium, buttonTextSize);
-
-  //   return Container(
-  //     color: Color(0xFFEAEBED),
-  //     padding: EdgeInsets.symmetric(
-  //         vertical: sectionPadding, horizontal: sectionPadding),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Row(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Expanded(child: specialities1),
-  //             SizedBox(width: columnSpacing),
-  //             Expanded(child: specialities2),
-  //           ],
-  //         ),
-  //         SizedBox(height: columnSpacing),
-  //         contactForm,
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget _buildSpecialitiesAndFormSectionResponsive(
       BuildContext context,
       Size screenSize,
@@ -4451,11 +3982,15 @@ class _HighlandhomeState extends State<Highlandhome>
             }),
         SizedBox(height: 10),
         _buildContactTextFieldResponsive(
-            controller: _desktopContactMobileController, // Correct controller
+            controller: _desktopContactMobileController,
             label: 'Mobile Number:',
             isMobile: isMobile,
             keyboardType: TextInputType.phone,
             inputFontSize: bodyTextMedium,
+            maxLength: 10, // 🔹 Limit to 10 digits
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly, // 🔹 Allow digits only
+            ],
             validator: (v) {
               if (v == null || v.isEmpty) return 'Required';
               if (!RegExp(r'^\d{10}$').hasMatch(v))
@@ -4535,21 +4070,27 @@ class _HighlandhomeState extends State<Highlandhome>
     );
   }
 
-  Widget _buildContactTextFieldResponsive(
-      {required TextEditingController controller,
-      required String label,
-      required bool isMobile,
-      TextInputType keyboardType = TextInputType.text,
-      int maxLines = 1,
-      required double inputFontSize,
-      String? Function(String?)? validator}) {
+  Widget _buildContactTextFieldResponsive({
+    required TextEditingController controller,
+    required String label,
+    required bool isMobile,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+    required double inputFontSize,
+    String? Function(String?)? validator,
+    int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
+  }) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       maxLines: maxLines,
+      maxLength: maxLength,
+      inputFormatters: inputFormatters,
       style: TextStyle(fontSize: inputFontSize, color: Colors.black87),
       decoration: InputDecoration(
         labelText: label,
+        counterText: "",
         labelStyle: TextStyle(fontSize: inputFontSize, color: Colors.grey[700]),
         fillColor: Colors.white,
         filled: true,
