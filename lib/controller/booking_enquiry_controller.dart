@@ -14,7 +14,7 @@ class BookingEnquiryController with ChangeNotifier {
   String? get successMessage => _successMessage;
 
   // IMPORTANT: Replace this with your actual base URL
-  final String _baseURL = "https://hms.highlandhospitals.in/api/patientapp/api";
+  final String _baseURL = "http://192.168.220.56:8000/patientapp/api";
 
   Future<bool> submitEnquiry(BookingEnquiry enquiry) async {
     _isLoading = true;
@@ -32,14 +32,12 @@ class BookingEnquiryController with ChangeNotifier {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Success
         _successMessage =
             "Enquiry submitted successfully! Our team will call you back soon.";
         _isLoading = false;
         notifyListeners();
         return true;
       } else {
-        // Handle server errors
         final errorData = json.decode(response.body);
         _errorMessage = errorData['message'] ??
             'Failed to submit enquiry. Please try again.';
@@ -48,7 +46,6 @@ class BookingEnquiryController with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      // Handle network or other errors
       _errorMessage =
           'An error occurred. Please check your connection and try again.';
       _isLoading = false;

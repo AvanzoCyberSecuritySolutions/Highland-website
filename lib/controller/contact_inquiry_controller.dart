@@ -16,7 +16,7 @@ class ContactInquiryController with ChangeNotifier {
   String? get successMessage => _successMessage;
 
   // IMPORTANT: Replace this with your actual base URL
-  final String _baseURL = "https://hms.highlandhospitals.in/api/patientapp/api";
+  final String _baseURL = "http://192.168.220.56:8000/patientapp/api";
 
   Future<bool> submitContactInquiry(ContactInquiry inquiry) async {
     _isLoading = true;

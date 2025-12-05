@@ -835,18 +835,18 @@ class _HighlandhomeState extends State<Highlandhome>
                                     ),
                                   ),
                                   _bookAnAppointmentFieldsOriginal(
-                                    firstFieldLabel: 'First Name',
+                                    firstFieldLabel: 'First Name :',
                                     firstFieldController:
                                         _desktopBookFirstNameController,
-                                    secondFieldLabel: 'Last Name',
+                                    secondFieldLabel: 'Last Name :',
                                     secondFieldController:
                                         _desktopBookLastNameController,
                                   ),
                                   _bookAnAppointmentFieldsOriginal(
-                                    firstFieldLabel: 'Email',
+                                    firstFieldLabel: 'Email :',
                                     firstFieldController:
                                         _desktopBookEmailController,
-                                    secondFieldLabel: 'Address',
+                                    secondFieldLabel: 'Address :',
                                     secondFieldController:
                                         _desktopBookAddressController,
                                   ),
@@ -868,7 +868,7 @@ class _HighlandhomeState extends State<Highlandhome>
                                                   padding: EdgeInsets.only(
                                                       left: 8.0),
                                                   child: Text(
-                                                    'Phone Number',
+                                                    'Phone Number :',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -2281,7 +2281,7 @@ class _HighlandhomeState extends State<Highlandhome>
               Flexible(
                 // Added Flexible here to prevent text overflow inside the box
                 child: Text(
-                  "PATIENT COUNT+",
+                  "PATIENT COUNT",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -2293,7 +2293,7 @@ class _HighlandhomeState extends State<Highlandhome>
           ),
           SizedBox(height: 15),
           Text(
-            '1,30,000',
+            '1,30,000+',
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
@@ -3189,21 +3189,21 @@ class _HighlandhomeState extends State<Highlandhome>
                     // 🔹 Fields
                     if (isMobile) ...[
                       _buildAppointmentTextFieldResponsive(
-                          label: 'First Name',
+                          label: 'First Name :',
                           controller: _desktopBookFirstNameController,
                           isMobile: isMobile,
                           height: fieldHeight,
                           inputFontSize: inputFontSize),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Last Name',
+                          label: 'Last Name :',
                           controller: _desktopBookLastNameController,
                           isMobile: isMobile,
                           height: fieldHeight,
                           inputFontSize: inputFontSize),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Email',
+                          label: 'Email :',
                           controller: _desktopBookEmailController,
                           isMobile: isMobile,
                           keyboardType: TextInputType.emailAddress,
@@ -3211,14 +3211,14 @@ class _HighlandhomeState extends State<Highlandhome>
                           inputFontSize: inputFontSize),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Address',
+                          label: 'Address :',
                           controller: _desktopBookAddressController,
                           isMobile: isMobile,
                           height: fieldHeight,
                           inputFontSize: inputFontSize),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                        label: 'Phone Number',
+                        label: 'Phone Number :',
                         controller: _desktopBookPhoneController,
                         isMobile: isMobile,
                         // CHANGE 1: Use number keyboard
@@ -3237,7 +3237,7 @@ class _HighlandhomeState extends State<Highlandhome>
                         children: [
                           Expanded(
                             child: _buildAppointmentTextFieldResponsive(
-                              label: 'First Name',
+                              label: 'First Name :',
                               controller: _desktopBookFirstNameController,
                               isMobile: isMobile,
                               height: fieldHeight,
@@ -3247,7 +3247,7 @@ class _HighlandhomeState extends State<Highlandhome>
                           const SizedBox(width: 10),
                           Expanded(
                             child: _buildAppointmentTextFieldResponsive(
-                              label: 'Last Name',
+                              label: 'Last Name :',
                               controller: _desktopBookLastNameController,
                               isMobile: isMobile,
                               height: fieldHeight,
@@ -3261,7 +3261,7 @@ class _HighlandhomeState extends State<Highlandhome>
                         children: [
                           Expanded(
                             child: _buildAppointmentTextFieldResponsive(
-                              label: 'Email',
+                              label: 'Email :',
                               controller: _desktopBookEmailController,
                               isMobile: isMobile,
                               keyboardType: TextInputType.emailAddress,
@@ -3272,7 +3272,7 @@ class _HighlandhomeState extends State<Highlandhome>
                           const SizedBox(width: 10),
                           Expanded(
                             child: _buildAppointmentTextFieldResponsive(
-                              label: 'Address',
+                              label: 'Address :',
                               controller: _desktopBookAddressController,
                               isMobile: isMobile,
                               height: fieldHeight,
@@ -3283,7 +3283,7 @@ class _HighlandhomeState extends State<Highlandhome>
                       ),
                       const SizedBox(height: 10),
                       _buildAppointmentTextFieldResponsive(
-                          label: 'Phone Number',
+                          label: 'Phone Number :',
                           controller: _desktopBookPhoneController,
                           isMobile: isMobile,
                           keyboardType: TextInputType.phone,
@@ -3452,7 +3452,7 @@ class _HighlandhomeState extends State<Highlandhome>
           fillColor: Colors.white,
         ),
         style: TextStyle(
-          fontSize: inputFontSize ?? 16,
+          fontSize: inputFontSize ?? 19,
           color: Colors.black,
         ),
         validator: (value) {
