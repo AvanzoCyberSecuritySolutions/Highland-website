@@ -822,7 +822,7 @@ class _ContactsState extends State<Contacts> with TickerProviderStateMixin {
               ],
             ),
             child: Image.asset(
-              'assets/img/hospital-map.png',
+              'assets/img/highlandhospitalmap.png',
               fit: BoxFit.cover,
             ),
           ),
